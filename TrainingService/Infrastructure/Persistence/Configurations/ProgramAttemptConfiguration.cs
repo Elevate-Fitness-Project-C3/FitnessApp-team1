@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TrainingService.Domain.Entities;
 
 
-public class ProgramAttemptConfiguration : IEntityTypeConfiguration<ProgramAttempt>
+public class ProgramAttemptConfiguration : IEntityTypeConfiguration<UserTrainingProgram>
 {
-    public void Configure(EntityTypeBuilder<ProgramAttempt> builder)
+    public void Configure(EntityTypeBuilder<UserTrainingProgram> builder)
     {
         builder.HasKey(x => x.Id);
 

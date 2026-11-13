@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TrainingService.Domain.Entities;
 
-public class PlannedExerciseConfiguration : IEntityTypeConfiguration<PlannedExercise>
+public class PlannedExerciseConfiguration : IEntityTypeConfiguration<WorkoutExercise>
 {
-    public void Configure(EntityTypeBuilder<PlannedExercise> builder)
+    public void Configure(EntityTypeBuilder<WorkoutExercise> builder)
     {
         builder.HasKey(x => x.Id);
 

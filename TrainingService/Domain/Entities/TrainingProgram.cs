@@ -14,6 +14,6 @@ public class TrainingProgram : BaseEntity
     public AccessTier AccessTier { get; set; }
     public ProgramStatus Status { get; set; }
 
-    public ICollection<ProgramDay> Days { get; set; } = new List<ProgramDay>();
-    public ICollection<ProgramAttempt> Attempts { get; set; } = new List<ProgramAttempt>();
+    public ICollection<ProgramWorkoutSlot> ProgramWorkoutSlots { get; set; } = new List<ProgramWorkoutSlot>();
+    public ICollection<UserTrainingProgram> UserTrainingPrograms { get; set; } = new List<UserTrainingProgram>();
 }

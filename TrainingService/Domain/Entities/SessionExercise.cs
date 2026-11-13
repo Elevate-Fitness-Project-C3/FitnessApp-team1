@@ -3,15 +3,13 @@ namespace TrainingService.Domain.Entities;
 using TrainingService.Domain.Common;
 using TrainingService.Domain.Enums;
 
-
-//SessionExercise
-public class PerformedExercise : BaseEntity
+public class SessionExercise : BaseEntity
 {
-    public int TrainingSessionId { get; set; }
-    public TrainingSession TrainingSession { get; set; } = null!;
+    public int WorkoutSessionId { get; set; }
+    public WorkoutSession WorkoutSession { get; set; } = null!;
 
-    public int PlannedExerciseId { get; set; }
-    public PlannedExercise PlannedExercise { get; set; } = null!;
+    public int WorkoutExerciseId { get; set; }
+    public WorkoutExercise WorkoutExercise { get; set; } = null!;
 
     public PerformedStatus Status { get; set; }
     public int? CompletedSets { get; set; }

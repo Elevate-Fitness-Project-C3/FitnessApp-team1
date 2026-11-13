@@ -6,13 +6,13 @@ using TrainingService.Domain.Entities;
 public class TrainingDbContext(DbContextOptions<TrainingDbContext> options) : DbContext(options)
 {
     public DbSet<Exercise> Exercises { get; set; }
-    public DbSet<Workout> Workouts { get; set; }
-    public DbSet<PlannedExercise> PlannedExercises { get; set; }
+    public DbSet<WorkoutTemplate> Workouts { get; set; }
+    public DbSet<WorkoutExercise> PlannedExercises { get; set; }
     public DbSet<TrainingProgram> Programs { get; set; }
-    public DbSet<ProgramDay> ProgramDays { get; set; }
-    public DbSet<ProgramAttempt> ProgramAttempts { get; set; }
-    public DbSet<TrainingSession> TrainingSessions { get; set; }
-    public DbSet<PerformedExercise> PerformedExercises { get; set; }
+    public DbSet<ProgramWorkoutSlot> ProgramDays { get; set; }
+    public DbSet<UserTrainingProgram> ProgramAttempts { get; set; }
+    public DbSet<WorkoutSession> TrainingSessions { get; set; }
+    public DbSet<SessionExercise> PerformedExercises { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

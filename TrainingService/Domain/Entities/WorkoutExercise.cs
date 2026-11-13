@@ -2,11 +2,10 @@ namespace TrainingService.Domain.Entities;
 
 using TrainingService.Domain.Common;
 
-//WorkoutExercise
-public class PlannedExercise : BaseEntity
+public class WorkoutExercise : BaseEntity
 {
-    public int WorkoutId { get; set; }
-    public Workout Workout { get; set; } = null!;
+    public int WorkoutTemplateId { get; set; }
+    public WorkoutTemplate WorkoutTemplate { get; set; } = null!;
 
     public int ExerciseId { get; set; }
     public Exercise Exercise { get; set; } = null!;
@@ -16,5 +15,5 @@ public class PlannedExercise : BaseEntity
     public int? TargetReps { get; set; }
     public int? TargetDurationSeconds { get; set; }
 
-    public ICollection<PerformedExercise> PerformedExercises { get; set; } = new List<PerformedExercise>();
+    public ICollection<SessionExercise> SessionExercises { get; set; } = new List<SessionExercise>();
 }
