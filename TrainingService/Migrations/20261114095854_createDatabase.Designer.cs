@@ -12,7 +12,7 @@ using TrainingService.Infrastructure.Persistence;
 namespace TrainingService.Migrations
 {
     [DbContext(typeof(TrainingDbContext))]
-    [Migration("20261114083402_createDatabase")]
+    [Migration("20261114095854_createDatabase")]
     partial class createDatabase
     {
         /// <inheritdoc />
@@ -135,7 +135,8 @@ namespace TrainingService.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("WeightKg")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<Guid>("WorkoutExerciseId")
                         .HasColumnType("uniqueidentifier");

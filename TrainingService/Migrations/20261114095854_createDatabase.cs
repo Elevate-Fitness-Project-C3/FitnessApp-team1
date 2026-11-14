@@ -208,7 +208,7 @@ namespace TrainingService.Migrations
                     CompletedSets = table.Column<int>(type: "int", nullable: true),
                     CompletedReps = table.Column<int>(type: "int", nullable: true),
                     DurationSeconds = table.Column<int>(type: "int", nullable: true),
-                    WeightKg = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    WeightKg = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),

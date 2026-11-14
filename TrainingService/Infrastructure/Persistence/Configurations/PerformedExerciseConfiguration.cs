@@ -19,5 +19,7 @@ public class PerformedExerciseConfiguration : IEntityTypeConfiguration<SessionEx
             .WithMany(x => x.SessionExercises)
             .HasForeignKey(x => x.WorkoutExerciseId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(x=>x.WeightKg).HasPrecision(6, 2);
     }
 }

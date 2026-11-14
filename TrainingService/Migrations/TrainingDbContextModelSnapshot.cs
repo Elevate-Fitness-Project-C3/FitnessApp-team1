@@ -132,7 +132,8 @@ namespace TrainingService.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("WeightKg")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<Guid>("WorkoutExerciseId")
                         .HasColumnType("uniqueidentifier");

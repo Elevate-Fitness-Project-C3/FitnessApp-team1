@@ -19,5 +19,6 @@ public class TrainingSessionConfiguration : IEntityTypeConfiguration<WorkoutSess
             .WithMany(x => x.WorkoutSessions)
             .HasForeignKey(x => x.ProgramWorkoutSlotId)
             .OnDelete(DeleteBehavior.Restrict);
+
     }
 }
