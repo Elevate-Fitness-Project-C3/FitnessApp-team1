@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using TrainingService.Infrastructure.Persistence;
 
 namespace TrainingService.Extensions
@@ -14,6 +15,12 @@ namespace TrainingService.Extensions
             services.AddDbContext<TrainingDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            return services;
+        }
+
+        public static IServiceCollection AddMediatRConfiguration(this IServiceCollection services)
+        {
+            services.AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
             return services;
         }
     }
