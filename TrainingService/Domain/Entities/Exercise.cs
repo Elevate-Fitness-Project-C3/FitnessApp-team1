@@ -11,5 +11,5 @@ public class Exercise : BaseEntity
     public TrackingType TrackingType { get; set; }
     public bool IsActive { get; set; }
 
-    public ICollection<WorkoutTemplate> WorkoutTemplates { get; set; } = new List<WorkoutTemplate>();
+    public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
 }

@@ -11,12 +11,12 @@ public class ProgramDayConfiguration : IEntityTypeConfiguration<ProgramWorkoutSl
         builder.HasKey(x => x.Id);
 
         builder.HasOne(x => x.TrainingProgram)
-            .WithMany(x => x.Days)
+            .WithMany(x => x.ProgramWorkoutSlots)
             .HasForeignKey(x => x.ProgramId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Workout)
-            .WithMany(x => x.ProgramDays)
+        builder.HasOne(x => x.WorkoutTemplate)
+            .WithMany(x => x.ProgramWorkoutSlots)
             .HasForeignKey(x => x.WorkoutId)
             .OnDelete(DeleteBehavior.Restrict);
     }

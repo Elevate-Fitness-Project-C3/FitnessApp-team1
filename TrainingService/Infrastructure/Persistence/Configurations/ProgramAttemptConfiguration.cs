@@ -12,8 +12,8 @@ public class ProgramAttemptConfiguration : IEntityTypeConfiguration<UserTraining
         builder.HasKey(x => x.Id);
 
         builder.HasOne(x => x.TrainingProgram)
-            .WithMany(x => x.Attempts)
-            .HasForeignKey(x => x.ProgramId)
+            .WithMany(x => x.UserTrainingPrograms)
+            .HasForeignKey(x => x.TrainingProgramId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

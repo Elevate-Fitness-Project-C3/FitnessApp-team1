@@ -5,10 +5,10 @@ using TrainingService.Domain.Enums;
 
 public class SessionExercise : BaseEntity
 {
-    public int WorkoutSessionId { get; set; }
+    public Guid WorkoutSessionId { get; set; }
     public WorkoutSession WorkoutSession { get; set; } = null!;
 
-    public int WorkoutExerciseId { get; set; }
+    public Guid WorkoutExerciseId { get; set; }
     public WorkoutExercise WorkoutExercise { get; set; } = null!;
 
     public PerformedStatus Status { get; set; }

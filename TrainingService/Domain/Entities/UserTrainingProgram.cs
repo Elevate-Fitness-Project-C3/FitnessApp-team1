@@ -7,7 +7,7 @@ public class UserTrainingProgram : BaseEntity
 {
     public Guid UserId { get; set; }
 
-    public int TrainingProgramId { get; set; }
+    public Guid TrainingProgramId { get; set; }
     public TrainingProgram TrainingProgram { get; set; } = null!;
 
     public AttemptStatus Status { get; set; }

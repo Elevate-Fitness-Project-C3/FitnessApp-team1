@@ -4,10 +4,10 @@ using TrainingService.Domain.Common;
 
 public class WorkoutExercise : BaseEntity
 {
-    public int WorkoutTemplateId { get; set; }
+    public Guid WorkoutTemplateId { get; set; }
     public WorkoutTemplate WorkoutTemplate { get; set; } = null!;
 
-    public int ExerciseId { get; set; }
+    public Guid ExerciseId { get; set; }
     public Exercise Exercise { get; set; } = null!;
 
     public int OrderIndex { get; set; }

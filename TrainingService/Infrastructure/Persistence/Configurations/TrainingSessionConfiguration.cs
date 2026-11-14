@@ -10,14 +10,14 @@ public class TrainingSessionConfiguration : IEntityTypeConfiguration<WorkoutSess
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasOne(x => x.ProgramAttempt)
-            .WithMany(x => x.Sessions)
-            .HasForeignKey(x => x.ProgramAttemptId)
+        builder.HasOne(x => x.UserTrainingProgram)
+            .WithMany(x => x.WorkoutSessions)
+            .HasForeignKey(x => x.UserTrainingProgramId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.ProgramDay)
-            .WithMany(x => x.Sessions)
-            .HasForeignKey(x => x.ProgramDayId)
+        builder.HasOne(x => x.ProgramWorkoutSlot)
+            .WithMany(x => x.WorkoutSessions)
+            .HasForeignKey(x => x.ProgramWorkoutSlotId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

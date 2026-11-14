@@ -5,10 +5,10 @@ using TrainingService.Domain.Common;
 //ProgramWorkout ==> One day in a program
 public class ProgramWorkoutSlot : BaseEntity
 {
-    public int ProgramId { get; set; }
+    public Guid ProgramId { get; set; }
     public TrainingProgram TrainingProgram { get; set; } = null!;
 
-    public int WorkoutId { get; set; }
+    public Guid WorkoutId { get; set; }
     public WorkoutTemplate WorkoutTemplate { get; set; } = null!;
 
     public int WeekNumber { get; set; }

@@ -7,10 +7,10 @@ public class WorkoutSession : BaseEntity
 {
     public Guid UserId { get; set; }
 
-    public int UserTrainingProgramId { get; set; }
+    public Guid UserTrainingProgramId { get; set; }
     public UserTrainingProgram UserTrainingProgram { get; set; } = null!;
 
-    public int ProgramWorkoutSlotId { get; set; }
+    public Guid ProgramWorkoutSlotId { get; set; }
     public ProgramWorkoutSlot ProgramWorkoutSlot { get; set; } = null!;
 
     public SessionStatus Status { get; set; }
