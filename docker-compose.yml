@@ -13,7 +13,8 @@ services:
       dockerfile: TrainingService/Dockerfile
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    sqlserver:
+    image: mcr.microsoft.com/mssql/server@sha256:4525e3efac9f3e241cb003bb2ff2a82818b502f37e12049d788b1a9fa7e13b7f
     volumes:
       - sql-data:/var/opt/mssql
 
