@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TrainingService.Migrations
 {
     /// <inheritdoc />
-    public partial class createDatabase : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,7 @@ namespace TrainingService.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Programs",
+                name: "TrainingPrograms",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -51,11 +51,11 @@ namespace TrainingService.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Programs", x => x.Id);
+                    table.PrimaryKey("PK_TrainingPrograms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Workouts",
+                name: "WorkoutTemplates",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -70,11 +70,11 @@ namespace TrainingService.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Workouts", x => x.Id);
+                    table.PrimaryKey("PK_WorkoutTemplates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProgramAttempts",
+                name: "UserTrainingPrograms",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -91,17 +91,48 @@ namespace TrainingService.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProgramAttempts", x => x.Id);
+                    table.PrimaryKey("PK_UserTrainingPrograms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProgramAttempts_Programs_TrainingProgramId",
+                        name: "FK_UserTrainingPrograms_TrainingPrograms_TrainingProgramId",
                         column: x => x.TrainingProgramId,
-                        principalTable: "Programs",
+                        principalTable: "TrainingPrograms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlannedExercises",
+                name: "ProgramWorkoutSlots",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProgramId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WeekNumber = table.Column<int>(type: "int", nullable: false),
+                    DayNumber = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProgramWorkoutSlots", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProgramWorkoutSlots_TrainingPrograms_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "TrainingPrograms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProgramWorkoutSlots_WorkoutTemplates_WorkoutId",
+                        column: x => x.WorkoutId,
+                        principalTable: "WorkoutTemplates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkoutExercises",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -118,54 +149,23 @@ namespace TrainingService.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlannedExercises", x => x.Id);
+                    table.PrimaryKey("PK_WorkoutExercises", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PlannedExercises_Exercises_ExerciseId",
+                        name: "FK_WorkoutExercises_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PlannedExercises_Workouts_WorkoutTemplateId",
+                        name: "FK_WorkoutExercises_WorkoutTemplates_WorkoutTemplateId",
                         column: x => x.WorkoutTemplateId,
-                        principalTable: "Workouts",
+                        principalTable: "WorkoutTemplates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProgramDays",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProgramId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WeekNumber = table.Column<int>(type: "int", nullable: false),
-                    DayNumber = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProgramDays", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProgramDays_Programs_ProgramId",
-                        column: x => x.ProgramId,
-                        principalTable: "Programs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProgramDays_Workouts_WorkoutId",
-                        column: x => x.WorkoutId,
-                        principalTable: "Workouts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TrainingSessions",
+                name: "WorkoutSessions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -182,23 +182,23 @@ namespace TrainingService.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TrainingSessions", x => x.Id);
+                    table.PrimaryKey("PK_WorkoutSessions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TrainingSessions_ProgramAttempts_UserTrainingProgramId",
-                        column: x => x.UserTrainingProgramId,
-                        principalTable: "ProgramAttempts",
+                        name: "FK_WorkoutSessions_ProgramWorkoutSlots_ProgramWorkoutSlotId",
+                        column: x => x.ProgramWorkoutSlotId,
+                        principalTable: "ProgramWorkoutSlots",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TrainingSessions_ProgramDays_ProgramWorkoutSlotId",
-                        column: x => x.ProgramWorkoutSlotId,
-                        principalTable: "ProgramDays",
+                        name: "FK_WorkoutSessions_UserTrainingPrograms_UserTrainingProgramId",
+                        column: x => x.UserTrainingProgramId,
+                        principalTable: "UserTrainingPrograms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PerformedExercises",
+                name: "SessionExercises",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -208,7 +208,7 @@ namespace TrainingService.Migrations
                     CompletedSets = table.Column<int>(type: "int", nullable: true),
                     CompletedReps = table.Column<int>(type: "int", nullable: true),
                     DurationSeconds = table.Column<int>(type: "int", nullable: true),
-                    WeightKg = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: true),
+                    WeightKg = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -216,64 +216,64 @@ namespace TrainingService.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PerformedExercises", x => x.Id);
+                    table.PrimaryKey("PK_SessionExercises", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PerformedExercises_PlannedExercises_WorkoutExerciseId",
+                        name: "FK_SessionExercises_WorkoutExercises_WorkoutExerciseId",
                         column: x => x.WorkoutExerciseId,
-                        principalTable: "PlannedExercises",
+                        principalTable: "WorkoutExercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PerformedExercises_TrainingSessions_WorkoutSessionId",
+                        name: "FK_SessionExercises_WorkoutSessions_WorkoutSessionId",
                         column: x => x.WorkoutSessionId,
-                        principalTable: "TrainingSessions",
+                        principalTable: "WorkoutSessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PerformedExercises_WorkoutExerciseId",
-                table: "PerformedExercises",
-                column: "WorkoutExerciseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PerformedExercises_WorkoutSessionId",
-                table: "PerformedExercises",
-                column: "WorkoutSessionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlannedExercises_ExerciseId",
-                table: "PlannedExercises",
-                column: "ExerciseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlannedExercises_WorkoutTemplateId",
-                table: "PlannedExercises",
-                column: "WorkoutTemplateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProgramAttempts_TrainingProgramId",
-                table: "ProgramAttempts",
-                column: "TrainingProgramId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProgramDays_ProgramId",
-                table: "ProgramDays",
+                name: "IX_ProgramWorkoutSlots_ProgramId",
+                table: "ProgramWorkoutSlots",
                 column: "ProgramId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProgramDays_WorkoutId",
-                table: "ProgramDays",
+                name: "IX_ProgramWorkoutSlots_WorkoutId",
+                table: "ProgramWorkoutSlots",
                 column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TrainingSessions_ProgramWorkoutSlotId",
-                table: "TrainingSessions",
+                name: "IX_SessionExercises_WorkoutExerciseId",
+                table: "SessionExercises",
+                column: "WorkoutExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SessionExercises_WorkoutSessionId",
+                table: "SessionExercises",
+                column: "WorkoutSessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTrainingPrograms_TrainingProgramId",
+                table: "UserTrainingPrograms",
+                column: "TrainingProgramId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutExercises_ExerciseId",
+                table: "WorkoutExercises",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutExercises_WorkoutTemplateId",
+                table: "WorkoutExercises",
+                column: "WorkoutTemplateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutSessions_ProgramWorkoutSlotId",
+                table: "WorkoutSessions",
                 column: "ProgramWorkoutSlotId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TrainingSessions_UserTrainingProgramId",
-                table: "TrainingSessions",
+                name: "IX_WorkoutSessions_UserTrainingProgramId",
+                table: "WorkoutSessions",
                 column: "UserTrainingProgramId");
         }
 
@@ -281,28 +281,28 @@ namespace TrainingService.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PerformedExercises");
+                name: "SessionExercises");
 
             migrationBuilder.DropTable(
-                name: "PlannedExercises");
+                name: "WorkoutExercises");
 
             migrationBuilder.DropTable(
-                name: "TrainingSessions");
+                name: "WorkoutSessions");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
 
             migrationBuilder.DropTable(
-                name: "ProgramAttempts");
+                name: "ProgramWorkoutSlots");
 
             migrationBuilder.DropTable(
-                name: "ProgramDays");
+                name: "UserTrainingPrograms");
 
             migrationBuilder.DropTable(
-                name: "Programs");
+                name: "WorkoutTemplates");
 
             migrationBuilder.DropTable(
-                name: "Workouts");
+                name: "TrainingPrograms");
         }
     }
 }

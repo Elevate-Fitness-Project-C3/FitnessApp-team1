@@ -12,8 +12,8 @@ using TrainingService.Infrastructure.Persistence;
 namespace TrainingService.Migrations
 {
     [DbContext(typeof(TrainingDbContext))]
-    [Migration("20261114095854_createDatabase")]
-    partial class createDatabase
+    [Migration("20261114171400_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,7 +101,7 @@ namespace TrainingService.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("ProgramDays");
+                    b.ToTable("ProgramWorkoutSlots");
                 });
 
             modelBuilder.Entity("TrainingService.Domain.Entities.SessionExercise", b =>
@@ -135,8 +135,7 @@ namespace TrainingService.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("WeightKg")
-                        .HasPrecision(6, 2)
-                        .HasColumnType("decimal(6,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("WorkoutExerciseId")
                         .HasColumnType("uniqueidentifier");
@@ -150,7 +149,7 @@ namespace TrainingService.Migrations
 
                     b.HasIndex("WorkoutSessionId");
 
-                    b.ToTable("PerformedExercises");
+                    b.ToTable("SessionExercises");
                 });
 
             modelBuilder.Entity("TrainingService.Domain.Entities.TrainingProgram", b =>
@@ -198,7 +197,7 @@ namespace TrainingService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Programs");
+                    b.ToTable("TrainingPrograms");
                 });
 
             modelBuilder.Entity("TrainingService.Domain.Entities.UserTrainingProgram", b =>
@@ -241,7 +240,7 @@ namespace TrainingService.Migrations
 
                     b.HasIndex("TrainingProgramId");
 
-                    b.ToTable("ProgramAttempts");
+                    b.ToTable("UserTrainingPrograms");
                 });
 
             modelBuilder.Entity("TrainingService.Domain.Entities.WorkoutExercise", b =>
@@ -286,7 +285,7 @@ namespace TrainingService.Migrations
 
                     b.HasIndex("WorkoutTemplateId");
 
-                    b.ToTable("PlannedExercises");
+                    b.ToTable("WorkoutExercises");
                 });
 
             modelBuilder.Entity("TrainingService.Domain.Entities.WorkoutSession", b =>
@@ -331,7 +330,7 @@ namespace TrainingService.Migrations
 
                     b.HasIndex("UserTrainingProgramId");
 
-                    b.ToTable("TrainingSessions");
+                    b.ToTable("WorkoutSessions");
                 });
 
             modelBuilder.Entity("TrainingService.Domain.Entities.WorkoutTemplate", b =>
@@ -367,7 +366,7 @@ namespace TrainingService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Workouts");
+                    b.ToTable("WorkoutTemplates");
                 });
 
             modelBuilder.Entity("TrainingService.Domain.Entities.ProgramWorkoutSlot", b =>
