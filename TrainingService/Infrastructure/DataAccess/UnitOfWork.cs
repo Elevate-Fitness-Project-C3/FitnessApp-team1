@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using TrainingService.Domain.IRepositories;
+using TrainingService.Infrastructure.Persistence;
 
 namespace TrainingService.Infrastructure.DataAccess
 {
-    public class UnitOfWork
+    public class UnitOfWork:IUnitOfWork
     {
-
-        private readonly AppDbContext _context;
+        private readonly TrainingDbContext _context;
         private IDbContextTransaction? _transaction;
 
-        public UnitOfWork(AppDbContext context)
+        public UnitOfWork(TrainingDbContext context)
         {
             _context = context;
         }
