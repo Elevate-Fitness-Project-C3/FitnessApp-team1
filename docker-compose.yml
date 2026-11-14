@@ -4,3 +4,17 @@ services:
     build:
       context: .
       dockerfile: IdentityService/Dockerfile
+
+  trainingservice:
+    image: ${DOCKER_REGISTRY-}trainingservice
+    build:
+      context: .
+      dockerfile: TrainingService/Dockerfile
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    volumes:
+      - sqldata:/var/opt/mssql
+
+volumes:
+  sqldata:
