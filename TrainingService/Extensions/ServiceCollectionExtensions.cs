@@ -16,7 +16,7 @@ namespace TrainingService.Extensions
 
             services.AddDbContext<TrainingDbContext>(options =>
                 options.UseSqlServer(connectionString));
-
+            
             return services;
         }
 

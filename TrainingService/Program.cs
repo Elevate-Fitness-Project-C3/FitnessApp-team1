@@ -1,4 +1,5 @@
 using TrainingService.Extensions;
+using TrainingService.Features.ExerciseFeature.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+app.MapCreateExerciseEndpoint();
 
 app.Run();
 
