@@ -22,4 +22,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Workouts\CreateWorkout\Dtos\" />
+    <Folder Include="Features\Workouts\CreateWorkout\Queries\" />
+    <Folder Include="Features\Workouts\GetWorkout\" />
+    <Folder Include="Features\Workouts\DeleteWorkout\" />
+    <Folder Include="Features\Workouts\UpdateWorkout\" />
+  </ItemGroup>
+
 </Project>
