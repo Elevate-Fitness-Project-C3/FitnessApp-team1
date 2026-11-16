@@ -23,10 +23,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="Features\" />
+    <Folder Include="DTOs\CompletedWorkoutRecord\" />
+    <Folder Include="Features\completedworkoutRecordFeature\Commands\" />
+    <Folder Include="Features\completedworkoutRecordFeature\Consumers\" />
+    <Folder Include="Features\completedworkoutRecordFeature\EndPoints\" />
+    <Folder Include="Features\completedworkoutRecordFeature\Handlers\" />
+    <Folder Include="Features\completedworkoutRecordFeature\Queries\" />
     <Folder Include="Messaging\" />
-    <Folder Include="ViewModels\" />
+    <Folder Include="ViewModels\CompletedWorkoutRecord\" />
   </ItemGroup>
 
 </Project>
