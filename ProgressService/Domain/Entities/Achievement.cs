@@ -1,8 +1,9 @@
-﻿namespace ProgressService.Domain.Entities
+﻿using ProgressService.Domain.Common;
+
+namespace ProgressService.Domain.Entities
 {
-    public class Achievement
+    public class Achievement : BaseEntity
     {
-        public Guid Id { get; set; } = Guid.CreateVersion7();
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string RuleCode { get; set; } = string.Empty;

@@ -1,8 +1,9 @@
-﻿namespace ProgressService.Domain.Entities
+﻿using ProgressService.Domain.Common;
+
+namespace ProgressService.Domain.Entities
 {
-    public class CompletedWorkoutRecord
+    public class CompletedWorkoutRecord : BaseEntity
     {
-        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid WorkoutSessionId { get; set; }
         public Guid TrainingProgramId { get; set; }
