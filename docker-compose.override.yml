@@ -21,6 +21,17 @@ services:
     depends_on:
       sqlserver:
         condition: service_healthy
+  
+  progressservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=ProgressDb;User Id=sa;Password=${SQL_SA_PASSWORD};TrustServerCertificate=True
+    ports:
+      - "5005:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
 
   sqlserver:
     environment:
