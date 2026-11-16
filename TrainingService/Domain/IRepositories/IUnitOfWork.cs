@@ -6,7 +6,6 @@ namespace TrainingService.Domain.IRepositories
         Task ExecuteAsync(Func<Task> action);
         Task AddSavePointAsync(string name);
         Task RollbackToSavePointAsync(string name);
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     }
 }

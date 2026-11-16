@@ -9,11 +9,9 @@ namespace TrainingService.Features.Workouts.UpdateWorkout.Handlers
     public class UpdateWorkoutHandler : IRequestHandler<UpdateWorkoutCommand, RequestResponse<Unit>>
     {
         private readonly IGenericRepository<WorkoutTemplate> _workoutRepo;
-        private readonly IUnitOfWork _unitOfWork;
-        public UpdateWorkoutHandler(IGenericRepository<WorkoutTemplate> workoutRepo, IUnitOfWork unitOfWork)
+        public UpdateWorkoutHandler(IGenericRepository<WorkoutTemplate> workoutRepo)
         {
             _workoutRepo = workoutRepo;
-            _unitOfWork = unitOfWork;   
         }
 
         public async Task<RequestResponse<Unit>> Handle(UpdateWorkoutCommand request, CancellationToken cancellationToken)
@@ -35,7 +33,7 @@ namespace TrainingService.Features.Workouts.UpdateWorkout.Handlers
                 nameof(WorkoutTemplate.EstimatedDurationMinutes)
             );
 
-            await _unitOfWork.sa(cancellationToken);
+            await _workoutRepo.SaveChangesAsync(cancellationToken);
 
             return RequestResponse<Unit>.Ok(Unit.Value, "Workout updated successfully.");
         }

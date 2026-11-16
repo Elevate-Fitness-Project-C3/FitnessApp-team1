@@ -9,13 +9,9 @@ namespace TrainingService.Features.Workouts.CreateWorkout.Handlers
     public class CreateWorkoutHandler : IRequestHandler<CreateWorkoutCommand, RequestResponse<Unit>>
     {
         private readonly IGenericRepository<WorkoutTemplate> _workoutRepo;
-        private readonly IUnitOfWork _unitOfWork;
-
-
-        public CreateWorkoutHandler(IGenericRepository<WorkoutTemplate> workoutRepo, IUnitOfWork unitOfWork)
+        public CreateWorkoutHandler(IGenericRepository<WorkoutTemplate> workoutRepo)
         {
             _workoutRepo = workoutRepo;
-            _unitOfWork = unitOfWork;
         }
         public async Task<RequestResponse<Unit>> Handle(CreateWorkoutCommand command, CancellationToken cancellationToken)
         {
@@ -29,7 +25,7 @@ namespace TrainingService.Features.Workouts.CreateWorkout.Handlers
 
             _workoutRepo.Add(workout);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _workoutRepo.SaveChangesAsync(cancellationToken);
             return RequestResponse<Unit>.Created(Unit.Value);
         }
     }

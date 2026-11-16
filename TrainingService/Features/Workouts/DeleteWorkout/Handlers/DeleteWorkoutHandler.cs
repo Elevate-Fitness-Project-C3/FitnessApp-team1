@@ -10,12 +10,10 @@ namespace TrainingService.Features.Workouts.DeleteWorkout.Handlers;
 public class DeleteWorkoutHandler : IRequestHandler<DeleteWorkoutCommand, RequestResponse<Unit>>
 {
     private readonly IGenericRepository<WorkoutTemplate> _workoutRepo;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteWorkoutHandler(IGenericRepository<WorkoutTemplate> workoutRepo, IUnitOfWork unitOfWork)
+    public DeleteWorkoutHandler(IGenericRepository<WorkoutTemplate> workoutRepo)
     {
         _workoutRepo = workoutRepo;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<RequestResponse<Unit>> Handle(DeleteWorkoutCommand request, CancellationToken cancellationToken)
@@ -28,7 +26,7 @@ public class DeleteWorkoutHandler : IRequestHandler<DeleteWorkoutCommand, Reques
 
         await _workoutRepo.DeleteAsync(request.WorkoutId, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _workoutRepo.SaveChangesAsync(cancellationToken);
 
         return RequestResponse<Unit>.Ok(Unit.Value, "Workout deleted successfully.");
     }

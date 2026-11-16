@@ -72,7 +72,5 @@ namespace TrainingService.Infrastructure.DataAccess
             _transaction?.Dispose();
         }
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-            => _context.SaveChangesAsync(cancellationToken);
     }
 }
