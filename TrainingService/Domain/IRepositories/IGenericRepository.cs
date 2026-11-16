@@ -1,4 +1,6 @@
-﻿using TrainingService.Domain.Common;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
+using TrainingService.Domain.Common;
 
 namespace TrainingService.Domain.IRepositories
 {
@@ -11,6 +13,15 @@ namespace TrainingService.Domain.IRepositories
         void Update(T entity);
         void Delete(T entity);
         void SaveInclude(T entity, params string[] includedProperties);
+
+        Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken);
+        Task<int> CountAsync(Expression<Func<T, bool>>? criteria = null);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+
+        Task UpdateAsync(
+         Expression<Func<T, bool>> predicate,
+         Action<UpdateSettersBuilder<T>> setters,
+         CancellationToken cancellationToken);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

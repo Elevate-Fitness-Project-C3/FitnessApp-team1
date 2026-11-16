@@ -4,74 +4,75 @@ using TrainingService.Infrastructure.Persistence;
 
 namespace TrainingService.Infrastructure.DataAccess
 {
-    public class UnitOfWork:IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private readonly TrainingDbContext _context;
+
+        private readonly TrainingDbContext _context;    
         private IDbContextTransaction? _transaction;
+        private int _depth = 0;
 
-        public UnitOfWork(TrainingDbContext context)
-        {
-            _context = context;
-        }
+        public UnitOfWork(TrainingDbContext  context) => _context = context;
 
-        // Transaction methods
-        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
+        public async Task ExecuteAsync(Func<Task> action)
         {
-            _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-        }
+            var isOuterTransaction = _depth == 0;
 
-        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
-        {
+            if (isOuterTransaction)
+                _transaction = await _context.Database.BeginTransactionAsync();
+
+            _depth++;
+
             try
             {
-                if (_transaction != null)
+                await action();
+
+                if (isOuterTransaction)
                 {
-                    await _transaction.CommitAsync(cancellationToken);
+                    await _context.SaveChangesAsync();
+                    await _transaction.CommitAsync();
                 }
             }
+            catch
+            {
+                if (isOuterTransaction)
+                {
+                    await _transaction.RollbackAsync();
+                }
+
+                throw;
+            }
+
             finally
             {
-                if (_transaction != null)
+                _depth--;
+                if (isOuterTransaction)
                 {
                     await _transaction.DisposeAsync();
                     _transaction = null;
                 }
             }
+
         }
 
-        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+
+        public async Task AddSavePointAsync(string name)
         {
-            try
-            {
-                if (_transaction != null)
-                {
-                    await _transaction.RollbackAsync(cancellationToken);
-                }
-            }
-            finally
-            {
-                if (_transaction != null)
-                {
-                    await _transaction.DisposeAsync();
-                    _transaction = null;
-                }
-            }
+            await _context.SaveChangesAsync();
+            await _transaction.CreateSavepointAsync(name);
+        }
+
+        public async Task RollbackToSavePointAsync(string name)
+        {
+            await _transaction.RollbackToSavepointAsync(name);
+
         }
 
         public void Dispose()
         {
             _transaction?.Dispose();
-            _context?.Dispose();
         }
 
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
-        {
-            return await _context.SaveChangesAsync(cancellationToken);
-        }
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+            => _context.SaveChangesAsync(cancellationToken);
     }
 }

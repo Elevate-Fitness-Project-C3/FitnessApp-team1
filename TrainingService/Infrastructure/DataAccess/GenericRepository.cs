@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 using TrainingService.Domain.Common;
 using TrainingService.Domain.IRepositories;
 using TrainingService.Infrastructure.Persistence;
@@ -39,6 +41,29 @@ namespace TrainingService.Infrastructure.DataAccess
         {
             _context.Set<T>().Remove(entity);
         }
+
+        public Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
+    => _context.Set<T>().AnyAsync(predicate, cancellationToken);
+
+        public Task<int> CountAsync(Expression<Func<T, bool>>? criteria = null)
+            => criteria is null
+                ? _context.Set<T>().CountAsync()
+                : _context.Set<T>().CountAsync(criteria);
+        public Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+            => UpdateAsync(
+                e => e.Id == id,
+                setters => setters
+                    .SetProperty(e => e.IsDeleted, true)
+                    .SetProperty(e => e.DeletedAt, DateTime.UtcNow),
+                cancellationToken);
+
+        public Task<int> UpdateAsync(
+            Expression<Func<T, bool>> predicate,
+            Action<UpdateSettersBuilder<T>> setters,
+            CancellationToken cancellationToken)
+            => _context.Set<T>()
+                .Where(predicate)
+                .ExecuteUpdateAsync(setters, cancellationToken);
 
         public void SaveInclude(T entity, params string[] includedProperties)
         {
