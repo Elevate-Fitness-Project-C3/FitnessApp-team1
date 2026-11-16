@@ -1,0 +1,32 @@
+﻿using MediatR;
+using TrainingService.Features.Shared;
+using TrainingService.Features.Workouts.UpdateWorkout.Commands;
+using TrainingService.Features.Workouts.UpdateWorkout.Controllers.ViewModels;
+
+namespace TrainingService.Features.Workouts.UpdateWorkout.Controllers
+{
+    public static class UpdateWorkoutEndpoint
+    {
+        public static void MapUpdateWorkoutEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapPut("/api/workouts/{id}", async (Guid id, UpdateWorkoutVM vm, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                var command = new UpdateWorkoutCommand(
+                    id,
+                    vm.Title,
+                    vm.Description,
+                    vm.Difficulty,
+                    vm.EstimatedDurationMinutes
+                );
+
+                var result = await mediator.Send(command, cancellationToken);
+
+                var response = EndpointResponse<RequestResponse<Unit>>.FromResult(RequestResponse<RequestResponse<Unit>>.Ok(result));
+
+                return Results.Json(response, statusCode: response.StatusCode);
+            })
+            .WithTags("Workouts")
+            .WithName("UpdateWorkout");
+        }
+    }
+}

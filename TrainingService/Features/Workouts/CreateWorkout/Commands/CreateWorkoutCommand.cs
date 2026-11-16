@@ -9,5 +9,6 @@ namespace TrainingService.Features.Workouts.CreateWorkout.Commands
         string? Description,
         ExperienceLevel Difficulty,
         int EstimatedDurationMinutes
-    ) : IRequest<RequestResponse>;
+    ) : IRequest<RequestResponse<Unit>>;
+
 }

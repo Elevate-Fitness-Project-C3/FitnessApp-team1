@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using TrainingService.Features.Shared;
 using TrainingService.Features.Workouts.CreateWorkout.Commands;
+using TrainingService.Features.Workouts.CreateWorkout.Controllers.ViewModels;
 
 namespace TrainingService.Features.Workouts.CreateWorkout.Controllers
 {
@@ -8,9 +9,8 @@ namespace TrainingService.Features.Workouts.CreateWorkout.Controllers
     {
         public static void MapCreateWorkoutEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapPost("/api/workouts", async (CreateWorkoutRequest request, IMediator mediator) =>
+            app.MapPost("/api/workouts", async (CreateWorkoutVM request, IMediator mediator, CancellationToken cancellationToken) =>
             {
-                // 1. تحويل الـ View Model إلى Command
                 var command = new CreateWorkoutCommand(
                     request.Title,
                     request.Description,
@@ -18,15 +18,12 @@ namespace TrainingService.Features.Workouts.CreateWorkout.Controllers
                     request.EstimatedDurationMinutes
                 );
 
-                var result = await mediator.Send(command);
-
-                if (!result.Success)
-                    return Results.Json(EndpointResponse.Fail(result.Message, result.StatusCode, result.Errors), statusCode: result.StatusCode);
-
-                return Results.Json(EndpointResponse.Ok(result.Message, result.StatusCode), statusCode: result.StatusCode);
+                var result = await mediator.Send(command, cancellationToken);
+                var response = EndpointResponse<RequestResponse<Unit>>.FromResult(RequestResponse<RequestResponse<Unit>>.Ok(result));
+                return Results.Json(response, statusCode: response.StatusCode);
             })
-                  .WithTags("Workouts")
-                  .WithName("CreateWorkout");
+            .WithTags("Workouts")
+            .WithName("CreateWorkout");
         }
     }
 }
