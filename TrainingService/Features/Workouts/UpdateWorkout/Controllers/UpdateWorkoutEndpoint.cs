@@ -20,9 +20,7 @@ namespace TrainingService.Features.Workouts.UpdateWorkout.Controllers
                 );
 
                 var result = await mediator.Send(command, cancellationToken);
-
-                var response = EndpointResponse<RequestResponse<Unit>>.FromResult(RequestResponse<RequestResponse<Unit>>.Ok(result));
-
+                var response = EndpointResponse<Unit>.FromResult(result);
                 return Results.Json(response, statusCode: response.StatusCode);
             })
             .WithTags("Workouts")

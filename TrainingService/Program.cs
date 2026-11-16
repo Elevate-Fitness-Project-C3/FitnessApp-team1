@@ -1,4 +1,5 @@
 using TrainingService.Extensions;
+using TrainingService.Features.Workouts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapWorkoutsEndpoints();
 
 
 

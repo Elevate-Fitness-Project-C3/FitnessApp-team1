@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Workouts\CreateWorkout\Queries\" />
-    <Folder Include="Features\Workouts\GetWorkout\" />
   </ItemGroup>
 
 </Project>
