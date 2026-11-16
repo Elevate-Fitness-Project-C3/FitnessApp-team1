@@ -1,6 +1,63 @@
 @NutritionService_HostAddress = http://localhost:5290
 
-GET {{NutritionService_HostAddress}}/weatherforecast/
+### 1. Get current nutrition preference (unconfigured returns prompt)
+GET {{NutritionService_HostAddress}}/api/nutrition/preferences/me
 Accept: application/json
+
+###
+
+### 2. Set nutrition goal to Maintain (FIT-162)
+PUT {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Content-Type: application/json
+
+{
+  "goal": "Maintain"
+}
+
+###
+
+### 3. Get current nutrition preference after setting (FIT-163)
+GET {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Accept: application/json
+
+###
+
+### 4. Update nutrition goal to GradualLoss
+PUT {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Content-Type: application/json
+
+{
+  "goal": "GradualLoss"
+}
+
+###
+
+### 5. Update nutrition goal to GradualGain
+PUT {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Content-Type: application/json
+
+{
+  "goal": "GradualGain"
+}
+
+###
+
+### 6. Test Validation - Invalid Goal
+PUT {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Content-Type: application/json
+
+{
+  "goal": 999
+}
+
+###
+
+### 7. Test POST alias endpoint
+POST {{NutritionService_HostAddress}}/api/nutrition/preferences
+Content-Type: application/json
+
+{
+  "goal": "Maintain"
+}
 
 ###
