@@ -18,20 +18,13 @@ namespace TrainingService.Infrastructure.DataAccess
 
         public IQueryable<T> GetAll()
         {
-            return _context.Set<T>();
+            return _context.Set<T>().AsNoTracking();
         }
 
-        //public IQueryable<T> GetAllFilter(bool includeDeleted = false)
-        //{
-        //    var query = _context.Set<T>().AsQueryable();
-
-        //    if (!includeDeleted)
-        //    {
-        //        query = query.Where(e => !e.IsDeleted);
-        //    }
-
-        //    return query;
-        //}
+        public IQueryable<T> GetAllIncludingDeleted()
+        {
+            return _context.Set<T>().IgnoreQueryFilters().AsNoTracking();
+        }
 
         public async Task<IEnumerable<T>> GetAllAsync()
             => await _context.Set<T>().ToListAsync();
@@ -94,6 +87,9 @@ namespace TrainingService.Infrastructure.DataAccess
             return await _context.SaveChangesAsync(cancellationToken);
         }
 
-
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

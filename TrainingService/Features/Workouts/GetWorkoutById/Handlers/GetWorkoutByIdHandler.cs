@@ -19,9 +19,7 @@ namespace TrainingService.Features.Workouts.GetWorkoutById.Handlers
 
         public async Task<RequestResponse<WorkoutByIdDto>> Handle(GetWorkoutByIdQuery request, CancellationToken cancellationToken)
         {
-            var workout = await _workoutRepo.GetAll()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(w => w.Id == request.WorkoutId, cancellationToken);
+            var workout = await _workoutRepo.GetByIdAsync(request.WorkoutId);
 
             if (workout == null)
             {

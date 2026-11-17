@@ -7,8 +7,8 @@ namespace TrainingService.Domain.IRepositories
     public interface IGenericRepository<T> where T : BaseEntity
     {
         IQueryable<T> GetAll();
-        //IQueryable<T> GetAllFilter(bool includeDeleted = false);
 
+        IQueryable<T> GetAllIncludingDeleted(); 
         Task<IEnumerable<T>> GetAllAsync();
         Task<T?> GetByIdAsync(Guid id);
         void Add(T entity);
