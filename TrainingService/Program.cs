@@ -1,3 +1,4 @@
+using Scalar.AspNetCore;
 using TrainingService.Extensions;
 using TrainingService.Features.ExerciseFeature.Endpoints;
 
@@ -17,11 +18,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
-
-app.MapCreateExerciseEndpoint();
+app.MapExercisesEndpoints();
 
 app.Run();
 

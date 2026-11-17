@@ -17,7 +17,8 @@ namespace TrainingService.Features.ExerciseFeature.Endpoints
                 return Results.Created($"api/exercises/{response.Data}", EndpointResponse<Guid>.Created(response.Data));
             })
             .WithName("CreateExercise")
-            .WithTags("Exercises");
+            .WithTags("Exercises")
+            .RequireAuthorization("AdminPolicy");
         }
     }
 }
