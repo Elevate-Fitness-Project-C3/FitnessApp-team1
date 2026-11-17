@@ -46,11 +46,10 @@ namespace TrainingService.Extensions
         public static IEndpointRouteBuilder MapExercisesEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapCreateExerciseEndpoint();
-            app.MapUpdateExerciseDescriptionEndpoint();
-            //app.MapGetExercises();
+            app.MapBrowseExercisesEndpoint();
             //app.MapGetExercise();
+            app.MapUpdateExerciseDescriptionEndpoint();
             app.MapDeactivateExerciseEndpoint();
-            //app.MapIsExerciseNameTakenEndpoint();
             return app;
         }
     }
