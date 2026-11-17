@@ -1,7 +1,9 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProgressService.Domain.IRepositories;
 using ProgressService.Infrastrucure.DataAccess;
 using ProgressService.Infrastrucure.Persistence.Configurations;
+using ProgressService.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ProgressDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddMediatR(typeof(Program).Assembly);
+builder.Services.AddMessaging(builder.Configuration);
 
 var app = builder.Build();
 

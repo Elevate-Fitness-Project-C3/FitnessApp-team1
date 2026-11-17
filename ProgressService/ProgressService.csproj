@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.3.6" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.15">
       <PrivateAssets>all</PrivateAssets>
@@ -24,12 +28,8 @@
 
   <ItemGroup>
     <Folder Include="DTOs\CompletedWorkoutRecord\" />
-    <Folder Include="Features\completedworkoutRecordFeature\Commands\" />
-    <Folder Include="Features\completedworkoutRecordFeature\Consumers\" />
     <Folder Include="Features\completedworkoutRecordFeature\EndPoints\" />
-    <Folder Include="Features\completedworkoutRecordFeature\Handlers\" />
     <Folder Include="Features\completedworkoutRecordFeature\Queries\" />
-    <Folder Include="Messaging\" />
     <Folder Include="ViewModels\CompletedWorkoutRecord\" />
   </ItemGroup>
 
