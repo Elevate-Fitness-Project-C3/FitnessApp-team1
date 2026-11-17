@@ -27,11 +27,33 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=ProgressDb;User Id=sa;Password=${SQL_SA_PASSWORD};TrustServerCertificate=True
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__VHost=Elevate
+      - RabbitMq__Username=guest
+      - RabbitMq__Password=guest
     ports:
       - "5005:8080"
     depends_on:
       sqlserver:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  rabbitmq:
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=Elevate
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
 
   sqlserver:
     environment:
