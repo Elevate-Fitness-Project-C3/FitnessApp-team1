@@ -7,7 +7,7 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Contro
 {
     public static class CreateExerciseToWorkoutEndpoint
     {
-        public static void MapAddExerciseToWorkoutEndpoint(this IEndpointRouteBuilder app)
+        public static void MapCreateExerciseToWorkoutEndpoint(this IEndpointRouteBuilder app)
         {
             app.MapPost("/api/workouts/{workoutId:guid}/exercises", async (Guid workoutId, AddExerciseToWorkoutVM vm, IMediator mediator, CancellationToken ct) =>
             {

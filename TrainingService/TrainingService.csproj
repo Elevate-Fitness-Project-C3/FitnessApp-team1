@@ -43,13 +43,6 @@
   <ItemGroup>
     <Folder Include="Features\WorkoutExercises\Common\" />
     <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Commands\" />
-    <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Commands\" />
-    <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Controllers\" />
-    <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Handlers\" />
-    <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Commands\" />
-    <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Controllers\ViewModels\" />
-    <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Handlers\" />
-    <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Validators\" />
   </ItemGroup>
 
 </Project>

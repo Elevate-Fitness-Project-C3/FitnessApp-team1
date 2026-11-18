@@ -1,4 +1,5 @@
 ﻿using TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Controllers;
+using TrainingService.Features.Workouts.GetWorkoutExercises.Controllers;
 
 namespace TrainingService.Features.WorkoutExercises
 {
@@ -6,7 +7,8 @@ namespace TrainingService.Features.WorkoutExercises
     {
         public static IEndpointRouteBuilder MapWorkoutExerciseEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapAddExerciseToWorkoutEndpoint();
+            app.MapCreateExerciseToWorkoutEndpoint();
+            app.MapGetWorkoutExercisesEndpoint();
 
             return app;
         }
