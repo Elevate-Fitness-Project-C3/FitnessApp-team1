@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using TrainingService.Extensions;
+using TrainingService.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    // Dev only: apply migrations automatically so docker compose up creates TrainingDb.
+    using var scope = app.Services.CreateScope();
+    scope.ServiceProvider.GetRequiredService<TrainingDbContext>().Database.Migrate();
 }
 
 app.UseHttpsRedirection();

@@ -1,3 +1,4 @@
+name: fitnessapp-team1
 
 services:
   identityservice:
@@ -5,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: IdentityService/Dockerfile
+    environment:
+      - Verification__HmacKey=${VERIFICATION_HMAC_KEY:?VERIFICATION_HMAC_KEY is required}
 
   trainingservice:
     image: ${DOCKER_REGISTRY-}trainingservice

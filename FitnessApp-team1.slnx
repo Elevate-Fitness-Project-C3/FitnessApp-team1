@@ -4,6 +4,7 @@
   </Project>
   <Project Path="Fitness_Profile_Service/FitnessProfileService.csproj" />
   <Project Path="IdentityService/IdentityService.csproj" />
+  <Project Path="IdentityService.Tests/IdentityService.Tests.csproj" />
   <Project Path="NutritionService/NutritionService.csproj" />
   <Project Path="PaymentService/PaymentService.csproj" />
   <Project Path="ProgressService/ProgressService.csproj" />
