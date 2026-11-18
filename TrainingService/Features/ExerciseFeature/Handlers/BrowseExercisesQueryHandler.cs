@@ -6,6 +6,7 @@ using TrainingService.Domain.IRepositories;
 using TrainingService.DTOs;
 using TrainingService.Features.ExerciseFeature.Queries;
 using TrainingService.Features.Shared;
+using TrainingService.Infrastructure.Persistence;
 using TrainingService.Mapping;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -14,17 +15,26 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
     public class BrowseExercisesQueryHandlerL : IRequestHandler<BrowseExercisesQuery, RequestResponse<PaginatedResult<ExerciseDto>>>
     {
         private readonly IGenericRepository<Exercise> _exerciseRepository;
-        public BrowseExercisesQueryHandlerL(IGenericRepository<Exercise> exerciseRepository)
+        private readonly TrainingDbContext _context;
+        public BrowseExercisesQueryHandlerL(IGenericRepository<Exercise> exerciseRepository, TrainingDbContext context)
         {
             _exerciseRepository = exerciseRepository;
+            _context = context;
         }
         public async Task<RequestResponse<PaginatedResult<ExerciseDto>>> Handle(
     BrowseExercisesQuery request,
     CancellationToken ct)
         {
-            var query = _exerciseRepository.GetAll();
+            var connection = _context.Database.GetDbConnection();
+            var serverName = connection.DataSource;
+            var databaseName = connection.Database;
 
-            // Apply name filter only when a name is provided.
+            var query = _exerciseRepository.GetAll(); //why here don't read I have one exercise in my database
+            var count = await query.CountAsync(ct);
+
+            var exercises = await query.ToListAsync(ct);
+
+            //Apply name filter only when a name is provided.
             if (!string.IsNullOrWhiteSpace(request.Name))
             {
                 query = query.Where(e =>
@@ -60,7 +70,7 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
             }
 
             // Get total count before applying pagination.
-            var totalCount = await query.CountAsync(ct);
+            var totalCount = await query.CountAsync();
 
             // Normalize pagination values.
             var pageIndex = Math.Max(1, request.PageNumber);
@@ -69,7 +79,7 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
                 : request.PageSize;
 
             // Apply pagination and retrieve only the requested page.
-            var exercises = await query
+             exercises = await query
                 .OrderBy(e => e.Name)
                 .ThenBy(e=>e.Id)
                 .Skip((pageIndex - 1) * pageSize)
