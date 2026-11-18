@@ -47,7 +47,7 @@ namespace TrainingService.Extensions
         {
             app.MapCreateExerciseEndpoint();
             app.MapBrowseExercisesEndpoint();
-            //app.MapGetExercise();
+            app.MapGetExerciseByIdEndpoint();
             app.MapUpdateExerciseDescriptionEndpoint();
             app.MapDeactivateExerciseEndpoint();
             return app;
