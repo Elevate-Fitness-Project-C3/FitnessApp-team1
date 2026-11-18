@@ -20,10 +20,8 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
         {
             var isExerciseActiveResponse = await _mediator.Send(new ExerciseExistsQuery(request.ExerciseId), cancellationToken);
             if(!isExerciseActiveResponse.Data)
-                return RequestResponse<Unit>.Fail("Exercise not found", 404);
-            var isExerciseActive = await _mediator.Send(new IsExerciseActiveQuery(request.ExerciseId), cancellationToken);
-            if(!isExerciseActive.Data)
-                return RequestResponse<Unit>.Fail("Exercise is already deactivated", 400);
+                return RequestResponse<Unit>.Fail("Exercise not found or already deactivated", 404);
+           
             await _exerciseRepo.DeleteAsync(request.ExerciseId,cancellationToken);
             return RequestResponse<Unit>.Ok(Unit.Value);
         }
