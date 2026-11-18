@@ -8,7 +8,7 @@ namespace TrainingService.Features.Workouts.DeleteWorkout.Controllers
     {
         public static void MapDeleteWorkoutEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapDelete("/api/workouts/{workoutId}", async (Guid workoutId, IMediator mediator, CancellationToken cancellationToken) =>
+            app.MapDelete("/api/workouts/{workoutId:guid}", async (Guid workoutId, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 var result = await mediator.Send(new DeleteWorkoutCommand(workoutId), cancellationToken);
                 var response = EndpointResponse<Unit>.FromResult(result);

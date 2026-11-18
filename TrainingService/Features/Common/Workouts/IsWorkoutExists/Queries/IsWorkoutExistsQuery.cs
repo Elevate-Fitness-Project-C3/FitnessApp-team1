@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TrainingService.Features.Shared;
 
-namespace TrainingService.Features.Workouts.DeleteWorkout.Queries
+namespace TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries
 {
     public record IsWorkoutExistsQuery(Guid WorkoutId) : IRequest<RequestResponse<bool>>;
 

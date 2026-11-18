@@ -9,10 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <Compile Remove="Features\Workouts\CreateWorkout\Dtos\**" />
+    <Compile Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <Content Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <Content Remove="Features\Workouts\CreateWorkout\Dtos\**" />
+    <Content Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <EmbeddedResource Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <EmbeddedResource Remove="Features\Workouts\CreateWorkout\Dtos\**" />
+    <EmbeddedResource Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <None Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <None Remove="Features\Workouts\CreateWorkout\Dtos\**" />
+    <None Remove="Features\Workouts\CreateWorkout\Queries\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,22 +43,13 @@
   <ItemGroup>
     <Folder Include="Features\WorkoutExercises\Common\" />
     <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Commands\" />
-    <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Controllers\ViewModels\" />
-    <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\" />
-    <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Handlers\" />
-    <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Validators\" />
     <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Commands\" />
     <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Controllers\" />
     <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Handlers\" />
-    <Folder Include="Features\WorkoutExercises\GetWorkoutExercises\Controllers\" />
-    <Folder Include="Features\WorkoutExercises\GetWorkoutExercises\Dtos\" />
-    <Folder Include="Features\WorkoutExercises\GetWorkoutExercises\Handlers\" />
-    <Folder Include="Features\WorkoutExercises\GetWorkoutExercises\Queries\" />
     <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Commands\" />
     <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Controllers\ViewModels\" />
     <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Handlers\" />
     <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Validators\" />
-    <Folder Include="Features\Workouts\CreateWorkout\Queries\" />
   </ItemGroup>
 
 </Project>

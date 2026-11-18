@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using TrainingService.Domain.Entities;
 using TrainingService.Domain.IRepositories;
+using TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries;
 using TrainingService.Features.Shared;
-using TrainingService.Features.Workouts.DeleteWorkout.Queries;
 using TrainingService.Features.Workouts.UpdateWorkout.Commands;
 
 namespace TrainingService.Features.Workouts.UpdateWorkout.Handlers

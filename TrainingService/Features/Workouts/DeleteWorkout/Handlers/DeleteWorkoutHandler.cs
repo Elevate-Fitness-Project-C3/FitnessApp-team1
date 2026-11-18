@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using TrainingService.Domain.Entities;
 using TrainingService.Domain.IRepositories;
+using TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries;
 using TrainingService.Features.Shared;
 using TrainingService.Features.Workouts.DeleteWorkout.Commands;
-using TrainingService.Features.Workouts.DeleteWorkout.Queries;
 
 namespace TrainingService.Features.Workouts.DeleteWorkout.Handlers;
 

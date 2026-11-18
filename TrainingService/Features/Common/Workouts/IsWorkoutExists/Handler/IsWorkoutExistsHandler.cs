@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using TrainingService.Domain.Entities;
 using TrainingService.Domain.IRepositories;
+using TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries;
 using TrainingService.Features.Shared;
-using TrainingService.Features.Workouts.DeleteWorkout.Queries;
 
-namespace TrainingService.Features.Workouts.DeleteWorkout.Handlers
+namespace TrainingService.Features.Common.Workouts.IsWorkoutExists.Handler
 {
     public class IsWorkoutExistsHandler : IRequestHandler<IsWorkoutExistsQuery, RequestResponse<bool>>
     {
