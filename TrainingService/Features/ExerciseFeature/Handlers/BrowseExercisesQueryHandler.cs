@@ -15,24 +15,15 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
     public class BrowseExercisesQueryHandlerL : IRequestHandler<BrowseExercisesQuery, RequestResponse<PaginatedResult<ExerciseDto>>>
     {
         private readonly IGenericRepository<Exercise> _exerciseRepository;
-        private readonly TrainingDbContext _context;
         public BrowseExercisesQueryHandlerL(IGenericRepository<Exercise> exerciseRepository, TrainingDbContext context)
         {
             _exerciseRepository = exerciseRepository;
-            _context = context;
         }
         public async Task<RequestResponse<PaginatedResult<ExerciseDto>>> Handle(
     BrowseExercisesQuery request,
     CancellationToken ct)
         {
-            var connection = _context.Database.GetDbConnection();
-            var serverName = connection.DataSource;
-            var databaseName = connection.Database;
-
-            var query = _exerciseRepository.GetAll(); //why here don't read I have one exercise in my database
-            var count = await query.CountAsync(ct);
-
-            var exercises = await query.ToListAsync(ct);
+            var query = _exerciseRepository.GetAll(); 
 
             //Apply name filter only when a name is provided.
             if (!string.IsNullOrWhiteSpace(request.Name))
@@ -79,7 +70,7 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
                 : request.PageSize;
 
             // Apply pagination and retrieve only the requested page.
-             exercises = await query
+             var exercises = await query
                 .OrderBy(e => e.Name)
                 .ThenBy(e=>e.Id)
                 .Skip((pageIndex - 1) * pageSize)
