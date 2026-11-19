@@ -8,12 +8,19 @@ services:
       dockerfile: IdentityService/Dockerfile
     environment:
       - Verification__HmacKey=${VERIFICATION_HMAC_KEY:?VERIFICATION_HMAC_KEY is required}
+      - Jwt__Issuer=fitnessapp-team1
+      - Jwt__Audience=fitnessapp-team1-clients
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
 
   trainingservice:
     image: ${DOCKER_REGISTRY-}trainingservice
     build:
       context: .
       dockerfile: TrainingService/Dockerfile
+    environment:
+      - Jwt__Issuer=fitnessapp-team1
+      - Jwt__Audience=fitnessapp-team1-clients
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server@sha256:4525e3efac9f3e241cb003bb2ff2a82818b502f37e12049d788b1a9fa7e13b7f

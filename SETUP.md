@@ -116,3 +116,79 @@ Note: the fake user store is in memory, so restarting the container forgets user
 - Sending failure doesn't fail registration; it's logged (without the code) and the user can resend.
 - `EmailVerificationService` uses the DbContext directly because atomic `ExecuteUpdate` is what makes "use once" safe.
 - Not included: per-IP rate limiting (add ASP.NET Core `AddRateLimiter` on `/api/auth/*`), and a cleanup job for old challenges.
+
+## Authorization (ID-06)
+
+### JWT contract
+
+All protected services use the same HS256 JWT contract and the shared `FitnessApp.Auth` library:
+
+| Claim | Value |
+|---|---|
+| `sub` | Guid user id (parsed by `ICurrentUser`) |
+| `role` | Exactly one role: `User` or `Admin` (missing/invalid role => 403 on admin endpoints) |
+| `iss` | `Jwt:Issuer` |
+| `aud` | `Jwt:Audience` |
+| `exp` | Expiry (missing/invalid/expired token => 401) |
+
+`MapInboundClaims = false`, so claim names stay exactly as above. `RoleClaimType = "role"` and
+`NameClaimType = "sub"`. Clock skew is 30 seconds. The fallback policy requires an authenticated
+user; the `AdminOnly` policy additionally requires `role == "Admin"`.
+
+Configuration is validated at startup:
+
+```bash
+# .env (git-ignored) - at least 32 characters
+JWT_SIGNING_KEY=<generate with: openssl rand -base64 48>
+```
+
+`docker-compose.yml` passes `Jwt__Issuer=fitnessapp-team1`,
+`Jwt__Audience=fitnessapp-team1-clients` and `Jwt__SigningKey=${JWT_SIGNING_KEY:?...}` to
+IdentityService and TrainingService. When running outside Docker, set `Jwt__Issuer`,
+`Jwt__Audience` and `Jwt__SigningKey` with environment variables or user-secrets. No secret is
+committed.
+
+### Dev token (Development only)
+
+Because ID-01/ID-03 do not exist yet, IdentityService exposes a temporary token issuer:
+
+```bash
+curl -s -X POST http://localhost:5190/api/dev/token \
+  -H 'Content-Type: application/json' \
+  -d '{"userId":"00000000-0000-0000-0000-000000000001","role":"Admin"}'
+# use the returned access_token as: Authorization: Bearer <access_token>
+```
+
+Omit `userId` to get a random Guid; omit `role` to get `User`. Tokens last one hour.
+**TODO: remove `/api/dev/token` when ID-03 login issues real tokens.**
+
+### Endpoint policy map
+
+| Endpoint | Policy |
+|---|---|
+| IdentityService `POST /api/dev/token` (Development only) | Anonymous (temporary) |
+| TrainingService OpenAPI JSON (Development only) | Anonymous |
+| TrainingService `GET /api/authz/admin-ping` (Development/Test only) | AdminOnly |
+| TrainingService `GET /api/authz/user-ping` (Development/Test only) | Authenticated |
+| TrainingService `GET /api/dev/catalog/exercises` (Development/Test only) | Authenticated |
+| TrainingService `POST /api/dev/catalog/exercises` (Development/Test only) | AdminOnly |
+| TrainingService `GET /api/dev/sessions`, `GET/PUT/DELETE /api/dev/sessions/{id}` (Development/Test only) | Authenticated + current-user filter |
+| Catalog GETs (exercises, workout templates, programs) when implemented | Authenticated |
+| Catalog mutations and publish/archive when implemented | AdminOnly |
+
+TrainingService has no product endpoints yet. The `/api/authz/*` and `/api/dev/*` routes are
+**authorization-only test endpoints**, not new product features. Real endpoints must apply the
+same policies.
+
+Personal data (`WorkoutSession`, `UserTrainingProgram`, derived history) must never trust a user
+id from a route/query/body. Use `OwnedQueries.ForCurrentUser(ICurrentUser)` for every query and
+load by id through that filter; a missing row returns 404. Admin does **not** get cross-user
+access. Rejections happen before any write.
+
+### Notes for future work
+
+- ID-01/ID-03: create new accounts with role `Roles.Default` (`"User"`) and include `sub` and
+  `role` claims in issued tokens. Do not add registration or login here.
+- PaymentService, ProgressService, NutritionService and Fitness_Profile_Service are still empty.
+  When they gain endpoints they must call `builder.Services.AddFitnessAuth(builder.Configuration)`
+  and add `app.UseAuthentication()` / `app.UseAuthorization()` before endpoint mapping.
