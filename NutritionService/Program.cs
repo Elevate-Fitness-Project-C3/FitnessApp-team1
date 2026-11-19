@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NutritionService.API.Endpoints;
 using NutritionService.Application.Common.Interfaces;
 using NutritionService.Infrastructure.Persistence;
+using NutritionService.Infrastructure.Persistence.Repositories;
 using NutritionService.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,10 @@ var connectionString = builder.Configuration.GetConnectionString("Elevate_Nutrit
 
 builder.Services.AddDbContext<NutritionDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+// Add Repository & Unit of Work
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add HttpContextAccessor and CurrentUserService
 builder.Services.AddHttpContextAccessor();

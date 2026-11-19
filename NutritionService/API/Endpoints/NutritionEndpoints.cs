@@ -34,8 +34,8 @@ public static class NutritionEndpoints
                 return Results.ValidationProblem(validationResult.ToDictionary());
             }
 
-            var response = await mediator.Send(command, cancellationToken);
-            return Results.Ok(response);
+            var success = await mediator.Send(command, cancellationToken);
+            return Results.Ok(new { success, message = "Nutrition goal preference updated successfully." });
         })
         .WithName("SetMyNutritionPreference")
         .WithSummary("Set or update the current user's nutrition goal preference");
@@ -49,8 +49,8 @@ public static class NutritionEndpoints
                 return Results.ValidationProblem(validationResult.ToDictionary());
             }
 
-            var response = await mediator.Send(command, cancellationToken);
-            return Results.Ok(response);
+            var success = await mediator.Send(command, cancellationToken);
+            return Results.Ok(new { success, message = "Nutrition goal preference updated successfully." });
         })
         .WithName("CreateOrUpdateNutritionPreference")
         .WithSummary("Create or update the current user's nutrition goal preference");

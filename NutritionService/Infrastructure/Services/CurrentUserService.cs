@@ -23,24 +23,47 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            var user = _httpContextAccessor.HttpContext?.User;
-            if (user?.Identity?.IsAuthenticated == true)
+            var httpContext = _httpContextAccessor.HttpContext;
+
+            if (_environment.IsDevelopment())
             {
-                var claim = user.FindFirst(ClaimTypes.NameIdentifier)
-                            ?? user.FindFirst("sub")
-                            ?? user.FindFirst("id")
-                            ?? user.FindFirst("userId");
+                if (httpContext != null &&
+                    httpContext.Request.Headers.TryGetValue("X-User-Id", out var headerVal) &&
+                    Guid.TryParse(headerVal, out var headerGuid))
+                {
+                    return headerGuid;
+                }
+
+                var user = httpContext?.User;
+                if (user?.Identity?.IsAuthenticated == true)
+                {
+                    var claim = user.FindFirst(ClaimTypes.NameIdentifier)
+                                ?? user.FindFirst("sub")
+                                ?? user.FindFirst("id")
+                                ?? user.FindFirst("userId");
+
+                    if (claim != null && Guid.TryParse(claim.Value, out var guid))
+                    {
+                        return guid;
+                    }
+                }
+
+                return FallbackDevUserId;
+            }
+
+            // Outside development: strictly require authenticated JWT claims
+            var authenticatedUser = httpContext?.User;
+            if (authenticatedUser?.Identity?.IsAuthenticated == true)
+            {
+                var claim = authenticatedUser.FindFirst(ClaimTypes.NameIdentifier)
+                            ?? authenticatedUser.FindFirst("sub")
+                            ?? authenticatedUser.FindFirst("id")
+                            ?? authenticatedUser.FindFirst("userId");
 
                 if (claim != null && Guid.TryParse(claim.Value, out var guid))
                 {
                     return guid;
                 }
-            }
-
-            // Fallback Dev User ID strictly in development environment
-            if (_environment.IsDevelopment())
-            {
-                return FallbackDevUserId;
             }
 
             return null;
