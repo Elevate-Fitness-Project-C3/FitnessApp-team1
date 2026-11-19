@@ -13,7 +13,7 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
         private readonly IGenericRepository<Exercise> _exerciseRepo;
         private readonly IMediator _mediator;
 
-        public CreateExerciseCommandHandler(IGenericRepository<Exercise> exerciseRepo, IMediator mediator   )
+        public CreateExerciseCommandHandler(IGenericRepository<Exercise> exerciseRepo, IMediator mediator)
         {
             _exerciseRepo = exerciseRepo;
             _mediator = mediator;
@@ -36,9 +36,9 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
             {
                 Name = request.Name,
                 Description = request.Description ?? string.Empty,
-                TargetMuscle = Enum.Parse<MuscleGroup>(request.TargetMuscle),
-                TrackingType = Enum.Parse<TrackingType>(request.TrackingType),
-                IsActive = request.IsActive
+                TargetMuscle = targetMuscle,
+                TrackingType = trackingType,
+                IsActive= true
             };
             _exerciseRepo.Add(exercise);
             await _exerciseRepo.SaveChangesAsync(cancellationToken);

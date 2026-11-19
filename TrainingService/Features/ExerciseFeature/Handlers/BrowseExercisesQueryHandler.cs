@@ -70,15 +70,21 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
                 : request.PageSize;
 
             // Apply pagination and retrieve only the requested page.
-             var exercises = await query
+             var exerciseDtos = await query
                 .OrderBy(e => e.Name)
                 .ThenBy(e=>e.Id)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
+                .Select(e=>e.ToExerciseDto())
+                //.Select(e => new ExerciseDto
+                //{
+                //    Id = e.Id,
+                //    Name = e.Name,
+                //    Description = e.Description,
+                //    TargetMuscle = e.TargetMuscle,
+                //    TrackingType = e.TrackingType
+                //})
                 .ToListAsync(ct);
-
-            var exerciseDtos = exercises.Select(e => e.ToExerciseDto())
-                .ToList();
 
             var result = new PaginatedResult<ExerciseDto>(
                 exerciseDtos,

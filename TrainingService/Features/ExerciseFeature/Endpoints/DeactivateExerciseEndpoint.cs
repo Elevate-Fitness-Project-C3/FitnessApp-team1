@@ -9,8 +9,10 @@ namespace TrainingService.Features.ExerciseFeature.Endpoints
     {
         public static void MapDeactivateExerciseEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapDelete("/api/exercises/{exerciseId:guid}/deactivate", async ([FromServices] IMediator mediator,[FromRoute] Guid exerciseId, CancellationToken ct
-                ) =>
+            app.MapPatch("/api/exercises/{exerciseId:guid}/deactivate", async (
+                [FromServices] IMediator mediator,
+                [FromRoute] Guid exerciseId,
+                CancellationToken ct) =>
             {
                 var result = await mediator.Send(new DeactivateExerciseCommand(exerciseId), ct);
                 var response = EndpointResponse<Unit>.FromResult(result);

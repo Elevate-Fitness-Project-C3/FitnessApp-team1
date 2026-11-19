@@ -13,17 +13,10 @@ namespace TrainingService.Features.ExerciseFeature.Endpoints
         {
             app.MapGet("/api/exercises", async (
                 [FromServices] IMediator mediator,
-                [FromQuery] string? name,
-                [FromQuery] string? targetMuscle,
-                [FromQuery] string? trackingType,
-                [FromQuery] int pageIndex = 1,
-                [FromQuery] int pageSize = 10,
+                BrowseExercisesQuery request,
                 CancellationToken ct = default) =>
             {
-                var result = await mediator.Send(
-                    new BrowseExercisesQuery(
-                        name, targetMuscle, trackingType, pageIndex, pageSize),
-                    ct);
+                var result = await mediator.Send(request,ct);
 
                 var response = result.Success
                     ? EndpointResponse<BrowseExercisesViewModel>.Ok(

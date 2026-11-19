@@ -9,7 +9,7 @@ public class Exercise : BaseEntity
     public string Description { get; set; } = null!;
     public MuscleGroup TargetMuscle { get; set; }
     public TrackingType TrackingType { get; set; }
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
 
     public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
 }

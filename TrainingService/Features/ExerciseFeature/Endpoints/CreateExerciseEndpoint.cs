@@ -10,11 +10,10 @@ namespace TrainingService.Features.ExerciseFeature.Endpoints
         {
             app.MapPost("/api/exercises", async (IMediator mediator, CreateExerciseCommand request) =>
             {
-                var response = await mediator.Send(request);
-                if (!response.Success)
-                    return Results.BadRequest(EndpointResponse<Guid>.Fail(response.Message));
-
-                return Results.Created($"api/exercises/{response.Data}", EndpointResponse<Guid>.Created(response.Data));
+                var result = await mediator.Send(request);
+                var response = EndpointResponse<Guid>.FromResult(result);
+                
+                return Results.Json(response, statusCode: result.StatusCode);
             })
             .WithName("CreateExercise")
             .WithTags("Exercises")

@@ -18,11 +18,17 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
         }
         public async Task<RequestResponse<Unit>> Handle(DeactivateExerciseCommand request, CancellationToken cancellationToken)
         {
-            var isExerciseActiveResponse = await _mediator.Send(new ExerciseExistsQuery(request.ExerciseId), cancellationToken);
-            if(!isExerciseActiveResponse.Data)
+            var exercise = await _exerciseRepo.GetByIdAsync(request.ExerciseId);
+            if (exercise == null)
                 return RequestResponse<Unit>.Fail("Exercise not found or already deactivated", 404);
-           
-            await _exerciseRepo.DeleteAsync(request.ExerciseId,cancellationToken);
+            
+            if (!exercise.IsActive)
+                return RequestResponse<Unit>.Ok(Unit.Value);
+            
+            exercise.IsActive = false;
+            _exerciseRepo.SaveInclude(exercise, nameof(Exercise.IsActive));
+            await _exerciseRepo.SaveChangesAsync(cancellationToken);
+            
             return RequestResponse<Unit>.Ok(Unit.Value);
         }
     }
