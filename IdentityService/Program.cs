@@ -1,3 +1,4 @@
+using FitnessApp.Auth;
 using IdentityService.Api;
 using IdentityService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEmailVerification(builder.Configuration);
+builder.Services.AddFitnessAuth(builder.Configuration);
 
 var app = builder.Build();
 
@@ -29,6 +31,8 @@ app.MapEmailVerificationEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.MapDevFakeRegistration();
+    // TODO: remove when ID-03 login issues real tokens.
+    app.MapDevTokenEndpoint();
 }
 
 app.Run();
