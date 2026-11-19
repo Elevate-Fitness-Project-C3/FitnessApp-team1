@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using TrainingService.Features.ExerciseFeature.Queries;
 using TrainingService.Features.Shared;
 using TrainingService.Mapping;
@@ -12,8 +11,8 @@ namespace TrainingService.Features.ExerciseFeature.Endpoints
         public static void MapGetExerciseByIdEndpoint(this IEndpointRouteBuilder app)
         {
             app.MapGet("/api/exercises/{id:guid}", async (
-                [FromServices] IMediator mediator,
-                [FromRoute] Guid id,
+                IMediator mediator,
+                Guid id,
                 CancellationToken ct) =>
             {
                 var result = await mediator.Send(new GetExerciseByIdQuery(id), ct);

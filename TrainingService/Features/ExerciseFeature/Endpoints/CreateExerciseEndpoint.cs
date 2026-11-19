@@ -12,12 +12,12 @@ namespace TrainingService.Features.ExerciseFeature.Endpoints
             {
                 var result = await mediator.Send(request);
                 var response = EndpointResponse<Guid>.FromResult(result);
-                
+
                 return Results.Json(response, statusCode: result.StatusCode);
             })
             .WithName("CreateExercise")
-            .WithTags("Exercises")
-            .RequireAuthorization("AdminPolicy");
+            .WithTags("Exercises");
+            //.RequireAuthorization("AdminPolicy");
         }
     }
 }

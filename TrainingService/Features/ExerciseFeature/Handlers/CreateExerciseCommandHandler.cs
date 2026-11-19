@@ -24,7 +24,7 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
             if(isNameTakenResponse.Data)
                 return RequestResponse<Guid>.Fail("Exercise name is already taken.", 409);
             
-            if(!Enum.TryParse<MuscleGroup>(request.TargetMuscle, out var targetMuscle)
+            if(!Enum.TryParse<MuscleGroup>(request.TargetMuscle,true, out var targetMuscle)
                  || !Enum.IsDefined(typeof(MuscleGroup), targetMuscle))
                 return RequestResponse<Guid>.Fail("Invalid target muscle.", 400);
 

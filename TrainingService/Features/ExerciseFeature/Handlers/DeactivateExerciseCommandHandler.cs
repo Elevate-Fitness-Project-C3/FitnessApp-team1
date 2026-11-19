@@ -20,7 +20,7 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
         {
             var exercise = await _exerciseRepo.GetByIdAsync(request.ExerciseId);
             if (exercise == null)
-                return RequestResponse<Unit>.Fail("Exercise not found or already deactivated", 404);
+                return RequestResponse<Unit>.Fail("Exercise not found.", 404);
             
             if (!exercise.IsActive)
                 return RequestResponse<Unit>.Ok(Unit.Value);

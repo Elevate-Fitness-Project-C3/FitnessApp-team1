@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using TrainingService.Features.ExerciseFeature.Commands;
 using TrainingService.Features.Shared;
 
@@ -11,7 +10,7 @@ namespace TrainingService.Features.ExerciseFeature.Endpoints
         {
             //exerciseId is passed in the URL
             //the request body contains the new description in the form of UpdateExerciseDescriptionCommand
-            app.MapPut("/api/exercises/{exerciseId:guid}/description", async (IMediator mediator,[FromRoute] Guid exerciseId,[FromBody] string description) =>
+            app.MapPut("/api/exercises/{exerciseId:guid}/description", async (IMediator mediator, Guid exerciseId, string description) =>
             {
                 var result = await mediator.Send(new UpdateExerciseDescriptionCommand(exerciseId, description));
 
@@ -19,8 +18,8 @@ namespace TrainingService.Features.ExerciseFeature.Endpoints
                 return Results.Json(response, statusCode: result.StatusCode);
             })
             .WithName("UpdateExerciseDescription")
-            .WithTags("Exercises")
-            .RequireAuthorization("AdminPolicy");
+            .WithTags("Exercises");
+            //.RequireAuthorization("AdminPolicy");
       
         }
     }
