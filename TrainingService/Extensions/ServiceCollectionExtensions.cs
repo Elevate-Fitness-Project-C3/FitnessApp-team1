@@ -1,5 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TrainingService.Domain.IRepositories;
+using TrainingService.Features.TrainingProgramFeature.Endpoints;
+using TrainingService.Infrastructure.DataAccess;
 using TrainingService.Infrastructure.Persistence;
 
 namespace TrainingService.Extensions
@@ -22,6 +25,38 @@ namespace TrainingService.Extensions
         {
             services.AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
             return services;
+        }
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            return services;
+        }
+        public static IEndpointRouteBuilder MapWorkoutsEndpoints(this IEndpointRouteBuilder app)
+        {
+            //app.MapCreateWorkoutEndpoint();
+            //app.MapGetWorkouts();      
+            //app.MapGetWorkout();        
+            //app.MapUpdateWorkoutEndpoint();
+            //app.MapDeleteWorkoutEndpoint();
+
+            return app;
+        }
+        //public static IEndpointRouteBuilder MapExercisesEndpoints(this IEndpointRouteBuilder app)
+        //{
+        //    app.MapCreateExerciseEndpoint();
+        //    app.MapBrowseExercisesEndpoint();
+        //    app.MapGetExerciseByIdEndpoint();
+        //    app.MapUpdateExerciseDescriptionEndpoint();
+        //    app.MapDeactivateExerciseEndpoint();
+        //    return app;
+        //}
+
+        public static IEndpointRouteBuilder MapTrainingProgramEndpoints(this IEndpointRouteBuilder app)
+        {
+            app.MapCreateTrainingProgramEndpoint();
+            return app;
         }
     }
 }
