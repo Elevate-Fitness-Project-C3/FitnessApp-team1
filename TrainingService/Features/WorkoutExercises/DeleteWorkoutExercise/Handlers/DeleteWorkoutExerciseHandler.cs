@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using TrainingService.Domain.Entities;
 using TrainingService.Domain.IRepositories;
+using TrainingService.Features.Common.Workouts.IsWorkoutInPublishedTrainingProgram.Queries;
 using TrainingService.Features.Shared;
+using TrainingService.Features.WorkoutExercises.Common.GetWorkoutExerciseById.Queries;
 using TrainingService.Features.WorkoutExercises.DeleteWorkoutExercise.Commands;
 
 namespace TrainingService.Features.WorkoutExercises.DeleteWorkoutExercise.Handlers
@@ -9,18 +11,31 @@ namespace TrainingService.Features.WorkoutExercises.DeleteWorkoutExercise.Handle
     public class DeleteWorkoutExerciseHandler : IRequestHandler<DeleteWorkoutExerciseCommand, RequestResponse<Unit>>
     {
         private readonly IGenericRepository<WorkoutExercise> _workoutExerciseRepo;
+        private readonly IMediator _mediator;
         private readonly IUnitOfWork _unitOfWork;
-        public DeleteWorkoutExerciseHandler(IGenericRepository<WorkoutExercise> workoutExerciseRepo, IUnitOfWork unitOfWork)
+        public DeleteWorkoutExerciseHandler(IGenericRepository<WorkoutExercise> workoutExerciseRepo, IMediator mediator, IUnitOfWork unitOfWork)
         {
             _workoutExerciseRepo = workoutExerciseRepo;
+            _mediator = mediator;
             _unitOfWork = unitOfWork;
         }
         public async Task<RequestResponse<Unit>> Handle(DeleteWorkoutExerciseCommand request, CancellationToken cancellationToken)
         {
-            var exists = await _workoutExerciseRepo.ExistsAsync(we => we.Id == request.WorkoutExerciseId,cancellationToken);
+            var workoutExerciseResult = await _mediator.Send(
+                      new GetWorkoutExerciseByIdQuery(request.WorkoutExerciseId),cancellationToken);
 
-            if (!exists)
-                return RequestResponse<Unit>.Fail("WorkoutExercise not found.", 404);
+            if (workoutExerciseResult.Data == null)
+                return RequestResponse<Unit>.Fail(workoutExerciseResult.Message, workoutExerciseResult.StatusCode);
+
+            var workoutExercise = workoutExerciseResult.Data;
+
+            var isUsedInPublished = await _mediator.Send(
+                new IsWorkoutUsedInPublishedProgramQuery(workoutExercise.WorkoutTemplateId),
+                cancellationToken);
+
+            if (isUsedInPublished.Data)
+                return RequestResponse<Unit>.Fail("Cannot delete this exercise because its workout is used in a published program.",400);
+
 
             var workoutExerciseToDelete = new WorkoutExercise
             {

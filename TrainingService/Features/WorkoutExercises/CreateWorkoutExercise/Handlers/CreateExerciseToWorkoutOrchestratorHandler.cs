@@ -3,6 +3,7 @@ using TrainingService.Domain.Entities;
 using TrainingService.Domain.IRepositories;
 using TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries;
 using TrainingService.Features.Shared;
+using TrainingService.Features.WorkoutExercises.Common.IsWorkoutExerciseOrderDuplicate.Queries;
 using TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Orchestrators;
 
 namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Handlers
@@ -40,11 +41,15 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Handle
             if (!exerciseExists)
                 return RequestResponse<Unit>.Fail("Exercise not found or inactive.", 404);
 
-            var orderIndexExists = await _workoutExerciseRepo.ExistsAsync(
-                we => we.WorkoutTemplateId == request.WorkoutId && we.OrderIndex == request.OrderIndex,
+            var duplicateOrderResult = await _mediator.Send(
+                new IsWorkoutExerciseOrderDuplicateQuery(
+                    request.OrderIndex,
+                    request.WorkoutId,
+                    null               
+                ),
                 cancellationToken);
 
-            if (orderIndexExists)
+            if ( duplicateOrderResult.Data)
                 return RequestResponse<Unit>.Fail("Duplicate order index for this workout.", 400);
 
             var workoutExercise = new WorkoutExercise

@@ -10,7 +10,7 @@ namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Contro
     {
         public static void MapUpdateWorkoutExerciseEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapPut("/api/workouts/exercises/{id:guid}", async (Guid id, UpdateWorkoutExerciseVM vm, IMediator mediator, CancellationToken ct) =>
+            app.MapPut("/api/workouts/exercises/{id:guid}", async ([FromRoute] Guid id, UpdateWorkoutExerciseVM vm, IMediator mediator, CancellationToken ct) =>
             {
                 var command = new UpdateWorkoutExerciseCommand(
                     id,

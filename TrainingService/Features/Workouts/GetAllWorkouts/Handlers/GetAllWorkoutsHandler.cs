@@ -19,20 +19,29 @@ namespace TrainingService.Features.Workouts.GetAllWorkouts.Handlers
 
         public async Task<RequestResponse<PagedResult<WorkoutDto>>> Handle(GetAllWorkoutsQuery request, CancellationToken cancellationToken)
         {
-            var query = _workoutRepo.GetAll()
-                         .AsNoTracking()
-                         .OrderBy(w => w.Title) 
-                         .Select(w => new WorkoutDto(
-                             w.Id,
-                             w.Title,
-                             w.Description,
-                             w.Difficulty,
-                             w.EstimatedDurationMinutes
-                         ));
+            var query = _workoutRepo.GetAll();
 
-            var pagedResult = await query.ToPagedResultAsync(request.PageIndex,request.PageSize, cancellationToken);
+            if (!string.IsNullOrWhiteSpace(request.Title))
+            {
+                var title = request.Title.Trim().ToLower();
+                query = query.Where(w => w.Title.ToLower().Contains(title));
+            }
 
-            return RequestResponse<PagedResult<WorkoutDto>>.Ok(pagedResult, "Workouts retrieved successfully.");
+            if (request.Difficulty.HasValue)
+
+                query = query.Where(w => w.Difficulty == request.Difficulty.Value);
+
+            var pagedResult = await query   
+                .OrderBy(w => w.Title)
+                .Select(w => new WorkoutDto(
+                    w.Id,
+                    w.Title,
+                    w.Description,
+                    w.Difficulty,
+                    w.EstimatedDurationMinutes
+                )).ToPagedResultAsync(request.PageIndex, request.PageSize, cancellationToken);
+
+            return RequestResponse<PagedResult<WorkoutDto>>.Ok(pagedResult, "Workouts retrieved successfully."); 
         }
     }
 }

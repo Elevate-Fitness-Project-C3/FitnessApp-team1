@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TrainingService.Domain.Entities;
 using TrainingService.Domain.IRepositories;
 using TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries;
+using TrainingService.Features.Common.Workouts.IsWorkoutInPublishedTrainingProgram.Queries;
 using TrainingService.Features.Shared;
 using TrainingService.Features.Workouts.DeleteWorkout.Commands;
 
@@ -30,6 +31,11 @@ public class DeleteWorkoutHandler : IRequestHandler<DeleteWorkoutCommand, Reques
         if (!checkResult.Success)
             return RequestResponse<Unit>.Fail(checkResult.Message, checkResult.StatusCode);
 
+        var isUsedResult = await _mediator.Send(new IsWorkoutUsedInPublishedProgramQuery(request.WorkoutId), cancellationToken);
+        if (isUsedResult.Success && isUsedResult.Data == true)
+        
+            return RequestResponse<Unit>.Fail("Cannot delete this workout because it is used in a published program.", 400);
+        
         var workoutToDelete = new WorkoutTemplate
         {
             Id = request.WorkoutId,
