@@ -11,4 +11,5 @@
   <Project Path="PaymentService/PaymentService.csproj" />
   <Project Path="ProgressService/ProgressService.csproj" />
   <Project Path="TrainingService/TrainingService.csproj" />
+  <Project Path="TrainingService.Tests/TrainingService.Tests.csproj" />
 </Solution>
