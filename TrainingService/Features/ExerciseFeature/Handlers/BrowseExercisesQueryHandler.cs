@@ -76,14 +76,6 @@ namespace TrainingService.Features.ExerciseFeature.Handlers
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(e=>e.ToExerciseDto())
-                //.Select(e => new ExerciseDto
-                //{
-                //    Id = e.Id,
-                //    Name = e.Name,
-                //    Description = e.Description,
-                //    TargetMuscle = e.TargetMuscle,
-                //    TrackingType = e.TrackingType
-                //})
                 .ToListAsync(ct);
 
             var result = new PaginatedResult<ExerciseDto>(
