@@ -55,7 +55,9 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Handle
                 OrderIndex = request.OrderIndex,
                 TargetSets = request.TargetSets,
                 TargetReps = request.TargetReps,
-                TargetDurationSeconds = request.TargetDurationSeconds
+                TargetDurationSeconds = request.TargetDurationSeconds,
+                CreatedAt = DateTime.UtcNow,
+
             };
 
             _workoutExerciseRepo.Add(workoutExercise);

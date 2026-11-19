@@ -44,7 +44,8 @@ namespace TrainingService.Features.Workouts.UpdateWorkout.Handlers
                 Title = request.Title,
                 Description = request.Description,
                 Difficulty = request.Difficulty,
-                EstimatedDurationMinutes = request.EstimatedDurationMinutes
+                EstimatedDurationMinutes = request.EstimatedDurationMinutes,
+                UpdatedAt = DateTime.UtcNow
             };
 
             _workoutRepo.SaveInclude(
@@ -52,7 +53,8 @@ namespace TrainingService.Features.Workouts.UpdateWorkout.Handlers
                 nameof(WorkoutTemplate.Title),
                 nameof(WorkoutTemplate.Description),
                 nameof(WorkoutTemplate.Difficulty),
-                nameof(WorkoutTemplate.EstimatedDurationMinutes)
+                nameof(WorkoutTemplate.EstimatedDurationMinutes),
+                nameof(WorkoutTemplate.UpdatedAt)
             );
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);

@@ -1,13 +1,13 @@
 
 services:
   identityservice:
-    image: ${DOCKER_REGISTRY-}identityservice
+    image: identityservice
     build:
       context: .
       dockerfile: IdentityService/Dockerfile
 
   trainingservice:
-    image: ${DOCKER_REGISTRY-}trainingservice
+    image: trainingservice
     build:
       context: .
       dockerfile: TrainingService/Dockerfile

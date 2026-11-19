@@ -52,7 +52,9 @@ namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Handle
                 OrderIndex = request.OrderIndex,
                 TargetSets = request.TargetSets,
                 TargetReps = request.TargetReps,
-                TargetDurationSeconds = request.TargetDurationSeconds
+                TargetDurationSeconds = request.TargetDurationSeconds,
+                UpdatedAt = DateTime.UtcNow
+
             };
 
             _workoutExerciseRepo.SaveInclude(
@@ -60,7 +62,8 @@ namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Handle
                 nameof(WorkoutExercise.OrderIndex),
                 nameof(WorkoutExercise.TargetSets),
                 nameof(WorkoutExercise.TargetReps),
-                nameof(WorkoutExercise.TargetDurationSeconds)
+                nameof(WorkoutExercise.TargetDurationSeconds),
+                nameof(WorkoutExercise.UpdatedAt)
             );
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
