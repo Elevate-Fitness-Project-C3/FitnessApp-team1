@@ -53,7 +53,9 @@ namespace ProgressService.Features.completedworkoutRecordFeature.Handlers
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
             {
-                //The record already exists" and not a failure :
+                // Duplicate delivery of an already-recorded WorkoutSessionId.
+                // Handled idempotently: return false (not a failure, no retry needed).
+                // Any other exception propagates so MassTransit can retry / move to _error.
                 return false;
             }
         }

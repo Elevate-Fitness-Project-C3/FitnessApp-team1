@@ -39,15 +39,8 @@ namespace ProgressService.Infrastrucure.DataAccess
             {
                 if (isOutermost)
                 {
-                    if (_currentSavePoint is not null)
-                    {
-                        await _transaction!.RollbackToSavepointAsync(_currentSavePoint, CancellationToken.None);
-                        _context.ChangeTracker.Clear();
-                        await _transaction.CommitAsync(CancellationToken.None);
-                        return;
-                    }
-
                     await _transaction!.RollbackAsync(CancellationToken.None);
+                    _context.ChangeTracker.Clear();
                 }
                 throw;
             }
