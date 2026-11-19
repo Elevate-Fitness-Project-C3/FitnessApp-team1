@@ -52,7 +52,7 @@ public static class DevTokenEndpoints
                 userId,
                 role
             });
-        });
+        }).AllowAnonymous();
 
         return app;
     }
