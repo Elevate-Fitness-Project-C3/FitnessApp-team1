@@ -22,9 +22,8 @@ namespace TrainingService.Features.Workouts.GetWorkoutById.Handlers
             var workout = await _workoutRepo.GetByIdAsync(request.WorkoutId);
 
             if (workout == null)
-            {
                 return RequestResponse<WorkoutByIdDto>.Fail("Workout not found.", 404);
-            }
+            
 
             var dto = new WorkoutByIdDto(
                 workout.Id,

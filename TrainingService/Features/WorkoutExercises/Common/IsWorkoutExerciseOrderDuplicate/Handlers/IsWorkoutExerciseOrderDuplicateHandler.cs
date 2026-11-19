@@ -27,7 +27,6 @@ namespace TrainingService.Features.WorkoutExercises.Common.IsWorkoutExerciseOrde
                     return RequestResponse<bool>.Fail("WorkoutId or WorkoutExerciseId is required.", 400);
 
                 workoutId = await _workoutExerciseRepo.GetAll()
-                    .AsNoTracking()
                     .Where(we => we.Id == request.WorkoutExerciseId)
                     .Select(we => (Guid?)we.WorkoutTemplateId)
                     .FirstOrDefaultAsync(cancellationToken);

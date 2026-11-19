@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TrainingService.Features.Shared;
-using TrainingService.Features.WorkoutExercises.DeleteWorkoutExercise.Commands;
+using TrainingService.Features.WorkoutExercises.DeleteWorkoutExercise.Orchestrator;
 
 namespace TrainingService.Features.WorkoutExercises.DeleteWorkoutExercise.Controllers
 {
@@ -11,7 +11,7 @@ namespace TrainingService.Features.WorkoutExercises.DeleteWorkoutExercise.Contro
         {
             app.MapDelete("/api/workouts/exercises/{id:guid}", async ([FromRoute] Guid id, IMediator mediator, CancellationToken ct) =>
             {
-                var result = await mediator.Send(new DeleteWorkoutExerciseCommand(id), ct);
+                var result = await mediator.Send(new DeleteWorkoutExerciseOrchestrator(id), ct);
 
                 var response = EndpointResponse<RequestResponse<Unit>>.FromResult(RequestResponse<RequestResponse<Unit>>.Ok(result));
                 return Results.Json(response, statusCode: response.StatusCode);

@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using TrainingService.Features.Workouts.DeleteWorkout.Commands;
+using TrainingService.Features.Workouts.DeleteWorkout.Orchestrator;
 
 namespace TrainingService.Features.Workouts.DeleteWorkout.Validators
 {
-    public class DeleteWorkoutCommandValidator : AbstractValidator<DeleteWorkoutCommand>
+    public class DeleteWorkoutOrchestratorValidator : AbstractValidator<DeleteWorkoutOrchestrator>
     {
-        public DeleteWorkoutCommandValidator()
+        public DeleteWorkoutOrchestratorValidator()
         {
             RuleFor(x => x.WorkoutId)
                 .NotEmpty().WithMessage("Workout ID is required.");

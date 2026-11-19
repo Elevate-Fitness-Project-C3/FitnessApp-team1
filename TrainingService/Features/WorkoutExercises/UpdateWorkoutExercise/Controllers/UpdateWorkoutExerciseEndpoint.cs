@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TrainingService.Features.Shared;
-using TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Commands;
+using TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Orchestrator;
 using TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Controllers.ViewModels;
 
 namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Controllers
@@ -12,7 +12,7 @@ namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Contro
         {
             app.MapPut("/api/workouts/exercises/{id:guid}", async ([FromRoute] Guid id, UpdateWorkoutExerciseVM vm, IMediator mediator, CancellationToken ct) =>
             {
-                var command = new UpdateWorkoutExerciseCommand(
+                var command = new UpdateWorkoutExerciseOrchestrator(
                     id,
                     vm.OrderIndex,
                     vm.TargetSets,

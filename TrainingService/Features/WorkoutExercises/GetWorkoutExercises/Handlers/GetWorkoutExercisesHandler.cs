@@ -19,29 +19,25 @@ namespace TrainingService.Features.WorkoutExercises.GetWorkoutExercises.Handlers
         public async Task<RequestResponse<WorkoutWithExercisesDto>> Handle(GetWorkoutExercisesQuery request, CancellationToken cancellationToken)
         {
             var workout = await _workoutRepo.GetAll()
-             .AsNoTracking()
-             .Include(w => w.WorkoutExercises)
-                 .ThenInclude(we => we.Exercise)
-             .Where(w => w.Id == request.WorkoutId)
-             .Select(w => new WorkoutWithExercisesDto(
-                 w.Id,
-                 w.Title,
-                 w.WorkoutExercises
-                     .OrderBy(we => we.OrderIndex)
-                     .Select(we => new WorkoutExerciseDto(
-                         we.ExerciseId,
-                         we.Exercise.Name,
-                         we.OrderIndex,
-                         we.TargetSets,
-                         we.TargetReps,
-                         we.TargetDurationSeconds
-                     )).ToList()
-             ))
-             .FirstOrDefaultAsync(cancellationToken);
+              .Where(w => w.Id == request.WorkoutId)
+              .Select(w => new WorkoutWithExercisesDto(
+                  w.Id,
+                  w.Title,
+                  w.WorkoutExercises
+                      .OrderBy(we => we.OrderIndex)
+                      .Select(we => new WorkoutExerciseDto(
+                          we.ExerciseId,
+                          we.Exercise.Name, 
+                          we.OrderIndex,
+                          we.TargetSets,
+                          we.TargetReps,
+                          we.TargetDurationSeconds
+                      )).ToList()
+              ))
+              .FirstOrDefaultAsync(cancellationToken);
 
             if (workout == null)
                 return RequestResponse<WorkoutWithExercisesDto>.Fail("Workout not found.", 404);
-            
 
             return RequestResponse<WorkoutWithExercisesDto>.Ok(workout, "Workout exercises retrieved successfully.");
         }

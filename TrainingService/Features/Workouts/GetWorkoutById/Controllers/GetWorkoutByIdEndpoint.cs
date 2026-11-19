@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TrainingService.Features.Shared;
 using TrainingService.Features.Workouts.GetWorkoutById.Controllers.ViewModels;
 using TrainingService.Features.Workouts.GetWorkoutById.Queries;
@@ -9,7 +10,7 @@ namespace TrainingService.Features.Workouts.GetWorkoutById.Controllers
     {
         public static void MapGetWorkoutByIdEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/api/workouts/{id:guid}", async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
+            app.MapGet("/api/workouts/{id:guid}", async ([FromRoute] Guid id, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 var result = await mediator.Send(new GetWorkoutByIdQuery(id), cancellationToken);
 

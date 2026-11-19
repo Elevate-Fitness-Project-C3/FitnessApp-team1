@@ -20,7 +20,8 @@ namespace TrainingService.Features.Workouts.CreateWorkout.Handlers
                 Title = command.Title,
                 Description = command.Description,
                 Difficulty = command.Difficulty,
-                EstimatedDurationMinutes = command.EstimatedDurationMinutes
+                EstimatedDurationMinutes = command.EstimatedDurationMinutes,
+                CreatedAt = DateTime.UtcNow
             };
 
             _workoutRepo.Add(workout);

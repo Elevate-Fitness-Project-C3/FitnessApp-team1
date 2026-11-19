@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using TrainingService.Features.Shared;
-using TrainingService.Features.Workouts.UpdateWorkout.Commands;
+using TrainingService.Features.Workouts.UpdateWorkout.Orchestrator;
 using TrainingService.Features.Workouts.UpdateWorkout.Controllers.ViewModels;
 
 namespace TrainingService.Features.Workouts.UpdateWorkout.Controllers
@@ -11,7 +11,7 @@ namespace TrainingService.Features.Workouts.UpdateWorkout.Controllers
         {
             app.MapPut("/api/workouts/{id}", async (Guid id, UpdateWorkoutVM vm, IMediator mediator, CancellationToken cancellationToken) =>
             {
-                var command = new UpdateWorkoutCommand(
+                var command = new UpdateWorkoutOrchestrator(
                     id,
                     vm.Title,
                     vm.Description,

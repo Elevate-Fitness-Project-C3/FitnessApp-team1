@@ -11,7 +11,7 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Contro
         {
             app.MapPost("/api/workouts/{workoutId:guid}/exercises", async (Guid workoutId, AddExerciseToWorkoutVM vm, IMediator mediator, CancellationToken ct) =>
             {
-                var command = new CreateExerciseToWorkoutOrchestrator   (
+                var command = new CreateExerciseToWorkoutOrchestrator(
                     workoutId,
                     vm.ExerciseId,
                     vm.OrderIndex,

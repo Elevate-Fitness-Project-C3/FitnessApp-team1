@@ -2,6 +2,7 @@ namespace TrainingService.Infrastructure.Persistence.Configurations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 using TrainingService.Domain.Entities;
 
 public class WorkoutExerciseConfiguration : IEntityTypeConfiguration<WorkoutExercise>
@@ -19,5 +20,9 @@ public class WorkoutExerciseConfiguration : IEntityTypeConfiguration<WorkoutExer
             .WithMany(e => e.WorkoutExercises)
             .HasForeignKey(x => x.ExerciseId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(we => new { we.WorkoutTemplateId, we.OrderIndex })
+                   .IsUnique()
+                   .HasDatabaseName("IX_WorkoutExercises_WorkoutTemplateId_OrderIndex");
     }
 }

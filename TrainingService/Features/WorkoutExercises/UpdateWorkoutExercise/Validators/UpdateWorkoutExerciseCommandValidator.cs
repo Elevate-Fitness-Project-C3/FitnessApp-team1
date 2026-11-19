@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Commands;
+using TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Orchestrator;
 
 namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Validators
 {
-    public class UpdateWorkoutExerciseCommandValidator : AbstractValidator<UpdateWorkoutExerciseCommand>
+    public class UpdateWorkoutExerciseCommandValidator : AbstractValidator<UpdateWorkoutExerciseOrchestrator>
     {
         public UpdateWorkoutExerciseCommandValidator()
         {

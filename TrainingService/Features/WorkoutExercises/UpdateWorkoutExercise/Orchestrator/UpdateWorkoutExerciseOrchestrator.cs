@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using TrainingService.Features.Shared;
 
-namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Commands
+namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Orchestrator
 {
-    public record UpdateWorkoutExerciseCommand(    
+    public record UpdateWorkoutExerciseOrchestrator(    
         Guid WorkoutExerciseId,   // The ID of the workout exercise to update
         int OrderIndex,
         int? TargetSets,

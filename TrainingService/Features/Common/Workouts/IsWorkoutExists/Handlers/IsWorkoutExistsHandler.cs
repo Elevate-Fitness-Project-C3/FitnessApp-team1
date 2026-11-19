@@ -4,7 +4,7 @@ using TrainingService.Domain.IRepositories;
 using TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries;
 using TrainingService.Features.Shared;
 
-namespace TrainingService.Features.Common.Workouts.IsWorkoutExists.Handler
+namespace TrainingService.Features.Common.Workouts.IsWorkoutExists.Handlers
 {
     public class IsWorkoutExistsHandler : IRequestHandler<IsWorkoutExistsQuery, RequestResponse<bool>>
     {

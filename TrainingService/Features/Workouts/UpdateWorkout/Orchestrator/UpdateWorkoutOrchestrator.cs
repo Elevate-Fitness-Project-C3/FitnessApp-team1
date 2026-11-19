@@ -2,9 +2,9 @@
 using TrainingService.Domain.Enums;
 using TrainingService.Features.Shared;
 
-namespace TrainingService.Features.Workouts.UpdateWorkout.Commands
+namespace TrainingService.Features.Workouts.UpdateWorkout.Orchestrator
 {
-    public record UpdateWorkoutCommand(
+    public record UpdateWorkoutOrchestrator(
         Guid WorkoutId,
         string Title,
         string? Description,

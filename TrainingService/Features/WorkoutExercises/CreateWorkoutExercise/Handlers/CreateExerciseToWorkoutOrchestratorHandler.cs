@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using TrainingService.Domain.Entities;
 using TrainingService.Domain.IRepositories;
+using TrainingService.Features.Common.Exercises.IsExerciseExists.Queries;
 using TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries;
 using TrainingService.Features.Shared;
 using TrainingService.Features.WorkoutExercises.Common.IsWorkoutExerciseOrderDuplicate.Queries;
@@ -11,19 +12,16 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Handle
     public class CreateExerciseToWorkoutOrchestratorHandler : IRequestHandler<CreateExerciseToWorkoutOrchestrator, RequestResponse<Unit>>
     {
         private readonly IGenericRepository<WorkoutExercise> _workoutExerciseRepo;
-        private readonly IGenericRepository<Exercise> _exerciseRepo;
         private readonly IMediator _mediator;
         private readonly IUnitOfWork _unitOfWork;
 
 
         public CreateExerciseToWorkoutOrchestratorHandler(
         IGenericRepository<WorkoutExercise> workoutExerciseRepo,
-        IGenericRepository<Exercise> exerciseRepo,
         IMediator mediator,
         IUnitOfWork unitOfWork)
         {
             _workoutExerciseRepo = workoutExerciseRepo;
-            _exerciseRepo = exerciseRepo;
             _mediator = mediator;
             _unitOfWork = unitOfWork;
         }
@@ -34,23 +32,21 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Handle
             if (!workoutExists.Success)
                 return RequestResponse<Unit>.Fail(workoutExists.Message, workoutExists.StatusCode);
 
-            var exerciseExists = await _exerciseRepo.ExistsAsync(
-                e => e.Id == request.ExerciseId && e.IsActive,
-                cancellationToken);
+            var exerciseExists = await _mediator.Send(new IsExerciseExistsQuery(request.ExerciseId),cancellationToken);
 
-            if (!exerciseExists)
-                return RequestResponse<Unit>.Fail("Exercise not found or inactive.", 404);
+            if (!exerciseExists.Success)
+                return RequestResponse<Unit>.Fail(exerciseExists.Message, exerciseExists.StatusCode);
 
-            var duplicateOrderResult = await _mediator.Send(
-                new IsWorkoutExerciseOrderDuplicateQuery(
+            var duplicateOrderResult = await _mediator.Send(new IsWorkoutExerciseOrderDuplicateQuery(
                     request.OrderIndex,
                     request.WorkoutId,
                     null               
-                ),
-                cancellationToken);
+                ), cancellationToken);
 
-            if ( duplicateOrderResult.Data)
+            if (duplicateOrderResult.Success && duplicateOrderResult.Data)
                 return RequestResponse<Unit>.Fail("Duplicate order index for this workout.", 400);
+
+
 
             var workoutExercise = new WorkoutExercise
             {

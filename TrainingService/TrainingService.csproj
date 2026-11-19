@@ -42,6 +42,10 @@
 
   <ItemGroup>
     <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Commands\" />
+    <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Commands\" />
+    <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Commands\" />
+    <Folder Include="Features\Workouts\DeleteWorkout\Commands\" />
+    <Folder Include="Features\Workouts\UpdateWorkout\Commands\" />
   </ItemGroup>
 
 </Project>
