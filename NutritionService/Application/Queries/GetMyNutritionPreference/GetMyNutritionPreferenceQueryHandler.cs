@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NutritionService.Application.Common.Interfaces;
 using NutritionService.Application.DTOs;
 using NutritionService.Domain.Entities;
@@ -21,8 +22,15 @@ public class GetMyNutritionPreferenceQueryHandler : IRequestHandler<GetMyNutriti
     public async Task<NutritionPreferenceResponse> Handle(GetMyNutritionPreferenceQuery request, CancellationToken cancellationToken)
     {
         var userId = _currentUserService.GetRequiredUserId();
-        var preference = await _repository
-            .FirstOrDefaultAsync(p => p.UserId == userId, asNoTracking: true, cancellationToken);
+        var preference = await _repository.GetTableNoTracking()
+            .Where(p => p.UserId == userId)
+            .Select(p => new NutritionPreferenceResponse(
+                true,
+                p.Goal,
+                p.UpdatedAtUtc,
+                null
+            ))
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (preference is null)
         {
@@ -34,11 +42,6 @@ public class GetMyNutritionPreferenceQueryHandler : IRequestHandler<GetMyNutriti
             );
         }
 
-        return new NutritionPreferenceResponse(
-            HasPreference: true,
-            Goal: preference.Goal,
-            UpdatedAtUtc: preference.UpdatedAtUtc,
-            Message: null
-        );
+        return preference;
     }
 }

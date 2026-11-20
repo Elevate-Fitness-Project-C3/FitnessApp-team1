@@ -1,4 +1,6 @@
 using MediatR;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using NutritionService.Application.Common.Interfaces;
 using NutritionService.Domain.Entities;
 
@@ -38,8 +40,28 @@ public class SetNutritionGoalCommandHandler : IRequestHandler<SetNutritionGoalCo
             preference.UpdateGoal(request.Goal, utcNow);
         }
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex) when (IsUniqueConstraintViolation(ex))
+        {
+            _unitOfWork.ClearTracker();
+            var existing = await _repository
+                .FirstOrDefaultAsync(p => p.UserId == userId, asNoTracking: false, cancellationToken);
+
+            if (existing != null)
+            {
+                existing.UpdateGoal(request.Goal, utcNow);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+        }
 
         return true;
+    }
+
+    private static bool IsUniqueConstraintViolation(DbUpdateException ex)
+    {
+        return ex.InnerException is SqlException sqlEx && (sqlEx.Number == 2601 || sqlEx.Number == 2627);
     }
 }
