@@ -2,7 +2,7 @@
 namespace IdentityService.Persistence.Seeding
 {
     
-        public  class RoleSeeder
+        public class RoleSeeder
         {
         private readonly RoleManager<IdentityRole> _roleManager;
         public RoleSeeder(RoleManager<IdentityRole> roleManager)
