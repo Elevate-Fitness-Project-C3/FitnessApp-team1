@@ -29,7 +29,7 @@ using (var scope = app.Services.CreateScope())
     var roleManager = scope.ServiceProvider
         .GetRequiredService<RoleManager<IdentityRole>>();
 
-    await RoleSeeder.SeedRolesAsync(roleManager);
+    //await RoleSeeder.SeedRolesAsync(roleManager);
 }
 
 // Configure the HTTP request pipeline.
