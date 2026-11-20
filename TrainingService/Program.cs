@@ -1,4 +1,5 @@
 using TrainingService.Extensions;
+using TrainingService.Features.ProgramWorkoutSlotFeature.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,5 +23,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 //app.MapExercisesEndpoints();
 app.MapTrainingProgramEndpoints();
+app.MapCreateProgramWorkoutSlotEndpoint();
 
 app.Run();

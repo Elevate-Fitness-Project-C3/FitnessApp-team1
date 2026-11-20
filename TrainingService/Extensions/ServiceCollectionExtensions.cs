@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TrainingService.Domain.IRepositories;
+using TrainingService.Features.ProgramWorkoutSlotFeature.Endpoints;
 using TrainingService.Features.TrainingProgramFeature.Endpoints;
 using TrainingService.Infrastructure.DataAccess;
 using TrainingService.Infrastructure.Persistence;
@@ -56,6 +57,11 @@ namespace TrainingService.Extensions
         public static IEndpointRouteBuilder MapTrainingProgramEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapCreateTrainingProgramEndpoint();
+            return app;
+        }
+        public static IEndpointRouteBuilder MapProgramWorkoutSlotEndpoints(this IEndpointRouteBuilder app)
+        {
+            app.MapCreateProgramWorkoutSlotEndpoint();
             return app;
         }
     }

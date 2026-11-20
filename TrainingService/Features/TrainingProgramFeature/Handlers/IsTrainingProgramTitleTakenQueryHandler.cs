@@ -10,9 +10,8 @@ namespace TrainingService.Features.TrainingProgramFeature.Handlers
     {
         private readonly IGenericRepository<TrainingProgram> _trainingProgramRepo;
         public IsTrainingProgramTitleTakenQueryHandler(IGenericRepository<TrainingProgram> trainingProgramRepo)
-        {
-            _trainingProgramRepo = trainingProgramRepo;
-        }
+        => _trainingProgramRepo = trainingProgramRepo;
+
         public async Task<RequestResponse<bool>> Handle(IsTrainingProgramTitleTakenQuery request, CancellationToken cancellationToken)
         {
             var isTitleTaken = await _trainingProgramRepo.ExistsAsync(tp => tp.Title == request.Title, cancellationToken);
