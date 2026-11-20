@@ -44,7 +44,7 @@ namespace TrainingService.Features.TrainingProgramFeature.Handlers
                 DurationWeeks = request.DurationWeeks,
                 DaysPerWeek = request.DaysPerWeek,
                 AccessTier = request.AccessTier,
-                Status = ProgramStatus.Draft //published by default, which is better when creating a new program
+                Status = ProgramStatus.Draft 
             };
             _trainingProgramRepo.Add(trainingProgram);
             await _trainingProgramRepo.SaveChangesAsync(ct);

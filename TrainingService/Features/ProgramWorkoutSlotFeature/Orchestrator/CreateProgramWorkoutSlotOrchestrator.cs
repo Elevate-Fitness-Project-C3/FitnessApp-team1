@@ -7,5 +7,5 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Orchestrator
         Guid ProgramId,
         Guid WorkoutId,
         int WeekNumber,
-        int DayOfWeek) : IRequest<RequestResponse<Guid>>;
+        int DayNumber) : IRequest<RequestResponse<Guid>>;
 }

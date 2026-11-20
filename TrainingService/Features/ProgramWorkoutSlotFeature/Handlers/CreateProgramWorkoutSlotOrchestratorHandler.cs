@@ -22,7 +22,7 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Handlers
             if (trainingProgramDto.Data == null)
                 return RequestResponse<Guid>.Fail(trainingProgramDto.Message, trainingProgramDto.StatusCode);
 
-            if (trainingProgramDto.Data.DurationWeeks < 1 || request.WeekNumber > trainingProgramDto.Data.DurationWeeks)
+            if (trainingProgramDto.Data.DurationWeeks < 1 || request.WeekNumber > trainingProgramDto.Data.DurationWeeks|| request.WeekNumber < 1)
                 return RequestResponse<Guid>.Fail($"Week number must be between 1 and {trainingProgramDto.Data.DurationWeeks}.", 400);
 
             if (request.DayOfWeek < 1 || request.DayOfWeek > trainingProgramDto.Data.DaysPerWeek)
@@ -41,7 +41,7 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Handlers
                     request.DayOfWeek), cancellationToken);
 
             if (programWorkoutSlotExists.Data)
-                return RequestResponse<Guid>.Fail("Program workout slot already exists for the given week and day.", 400);
+                return RequestResponse<Guid>.Fail("Program workout slot already exists for the given week and day.", 409);
 
             var command = await _mediator.Send(new CreateProgramWorkoutSlotCommand(
                 request.ProgramId,

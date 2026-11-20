@@ -15,14 +15,14 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Handlers
         }
         public async Task<RequestResponse<Guid>> Handle(CreateProgramWorkoutSlotCommand request, CancellationToken cancellationToken)
         {
-            if(request.DayOfWeek < 1 || request.DayOfWeek > 7)
+            if(request.DayNumber < 1 || request.DayNumber > 7)
                 return RequestResponse<Guid>.Fail("Day of week must be between 1 and 7.", 400);
            
             var programWorkoutSlot = new ProgramWorkoutSlot
             {
                 ProgramId = request.ProgramId,
                 WorkoutId = request.WorkoutId,
-                DayNumber = request.DayOfWeek,
+                DayNumber = request.DayNumber,
                 WeekNumber = request.WeekNumber
             };
             _programWorkoutSlotRepo.Add(programWorkoutSlot);

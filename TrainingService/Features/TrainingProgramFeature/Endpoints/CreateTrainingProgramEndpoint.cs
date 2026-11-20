@@ -16,7 +16,7 @@ namespace TrainingService.Features.TrainingProgramFeature.Endpoints
             })
             .WithName("CreateTrainingProgram")
             .WithTags("Training Programs");
-            //.RequireAuthorization("AdminPolicy"); 
+            //.RequireAuthorization("Admin"); 
         }
     }
 }
