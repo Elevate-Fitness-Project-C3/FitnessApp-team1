@@ -3,6 +3,7 @@ using TrainingService.Domain.Entities;
 using TrainingService.Domain.IRepositories;
 using TrainingService.Features.Common.Exercises.IsExerciseExists.Queries;
 using TrainingService.Features.Common.Workouts.IsWorkoutExists.Queries;
+using TrainingService.Features.Common.Workouts.IsWorkoutInPublishedTrainingProgram.Queries;
 using TrainingService.Features.Shared;
 using TrainingService.Features.WorkoutExercises.Common.IsWorkoutExerciseOrderDuplicate.Queries;
 using TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Orchestrators;
@@ -37,16 +38,22 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Handle
             if (!exerciseExists.Success)
                 return RequestResponse<Unit>.Fail(exerciseExists.Message, exerciseExists.StatusCode);
 
+            var isUsedInPublished = await _mediator.Send( new IsWorkoutUsedInPublishedProgramQuery(request.WorkoutId),cancellationToken);
+
+            if (isUsedInPublished.Success && isUsedInPublished.Data)
+                return RequestResponse<Unit>.Fail("Cannot add exercises to a workout used in a published program.", 400);
+
             var duplicateOrderResult = await _mediator.Send(new IsWorkoutExerciseOrderDuplicateQuery(
                     request.OrderIndex,
                     request.WorkoutId,
                     null               
                 ), cancellationToken);
 
-            if (duplicateOrderResult.Success && duplicateOrderResult.Data)
+            if (!duplicateOrderResult.Success)
+                return RequestResponse<Unit>.Fail(duplicateOrderResult.Message, duplicateOrderResult.StatusCode);
+
+            if (duplicateOrderResult.Data)
                 return RequestResponse<Unit>.Fail("Duplicate order index for this workout.", 400);
-
-
 
             var workoutExercise = new WorkoutExercise
             {

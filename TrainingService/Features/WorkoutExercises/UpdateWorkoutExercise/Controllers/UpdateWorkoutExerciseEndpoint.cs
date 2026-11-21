@@ -22,8 +22,10 @@ namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Contro
 
                 var result = await mediator.Send(command, ct);
 
-                var response = EndpointResponse<RequestResponse<Unit>>.FromResult(RequestResponse<RequestResponse<Unit>>.Ok(result));
-                return Results.Json(response, statusCode: response.StatusCode);
+                if (!result.Success)
+                    return Results.Json(EndpointResponse<object>.Fail(result.Message, result.StatusCode), statusCode: result.StatusCode);
+
+                return Results.Json(EndpointResponse<object>.Ok(result.Message), statusCode: result.StatusCode);
             })
                 .WithTags("Workouts")
                 .WithName("UpdateWorkoutExercise");

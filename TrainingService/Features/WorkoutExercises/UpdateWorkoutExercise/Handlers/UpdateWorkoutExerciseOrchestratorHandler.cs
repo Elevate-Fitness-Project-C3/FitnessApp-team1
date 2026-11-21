@@ -43,7 +43,10 @@ namespace TrainingService.Features.WorkoutExercises.UpdateWorkoutExercise.Handle
             var duplicateOrderResult = await _mediator.Send(new IsWorkoutExerciseOrderDuplicateQuery
                 (OrderIndex: request.OrderIndex,WorkoutExerciseId: request.WorkoutExerciseId),cancellationToken);
 
-            if (duplicateOrderResult.Success && duplicateOrderResult.Data)
+            if (!duplicateOrderResult.Success)
+                return RequestResponse<Unit>.Fail(duplicateOrderResult.Message, duplicateOrderResult.StatusCode);
+
+            if (duplicateOrderResult.Data)
                 return RequestResponse<Unit>.Fail("Duplicate order index for this workout.", 400);
 
             var workoutExercise = new WorkoutExercise

@@ -282,7 +282,8 @@ namespace TrainingService.Migrations
 
                     b.HasIndex("WorkoutTemplateId", "OrderIndex")
                         .IsUnique()
-                        .HasDatabaseName("IX_WorkoutExercises_WorkoutTemplateId_OrderIndex");
+                        .HasDatabaseName("IX_WorkoutExercises_WorkoutTemplateId_OrderIndex")
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("WorkoutExercises");
                 });

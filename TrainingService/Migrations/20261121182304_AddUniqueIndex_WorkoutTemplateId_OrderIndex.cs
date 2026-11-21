@@ -5,7 +5,7 @@
 namespace TrainingService.Migrations
 {
     /// <inheritdoc />
-    public partial class addIndex_OrderIndexWithWorkoutTemplate : Migration
+    public partial class AddUniqueIndex_WorkoutTemplateId_OrderIndex : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,8 @@ namespace TrainingService.Migrations
                 name: "IX_WorkoutExercises_WorkoutTemplateId_OrderIndex",
                 table: "WorkoutExercises",
                 columns: new[] { "WorkoutTemplateId", "OrderIndex" },
-                unique: true);
+                unique: true,
+                filter: "[IsDeleted] = 0");
         }
 
         /// <inheritdoc />
