@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProgressService.Domain.IRepositories;
+using ProgressService.Features.WorkoutHistoryFeature.EndPoints;
+using ProgressService.Features.WorkoutStatisticsFeature.EndPoints;
 using ProgressService.Infrastrucure.DataAccess;
 using ProgressService.Infrastrucure.Persistence.Configurations;
 using ProgressService.Messaging;
@@ -17,16 +19,27 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddMessaging(builder.Configuration);
 
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
+app.MapGetWorkoutHistory();
+app.MapGetProgressSummary();
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"

@@ -24,13 +24,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\CompletedWorkoutRecord\" />
     <Folder Include="Features\completedworkoutRecordFeature\EndPoints\" />
     <Folder Include="Features\completedworkoutRecordFeature\Queries\" />
-    <Folder Include="ViewModels\CompletedWorkoutRecord\" />
   </ItemGroup>
 
 </Project>
