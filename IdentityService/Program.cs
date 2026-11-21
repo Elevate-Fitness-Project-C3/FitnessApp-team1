@@ -20,11 +20,17 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     scope.ServiceProvider.GetRequiredService<EmailVerificationDbContext>().Database.Migrate();
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapSwagger().AllowAnonymous();
+    app.MapSwaggerUI().AllowAnonymous();
 }
 
-app.UseHttpsRedirection();
+// Local dev runs use HTTP (Swagger/MailHog). The https launch profile advertises
+// port 7127 but does not bind it without a dev certificate, so redirecting there
+// breaks POSTs from Swagger UI. Only redirect outside Development.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.MapEmailVerificationEndpoints();
 

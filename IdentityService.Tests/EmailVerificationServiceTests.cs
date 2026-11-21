@@ -1,3 +1,4 @@
+using Xunit;
 using IdentityService.Application.EmailVerification;
 using IdentityService.Infrastructure.Email;
 using IdentityService.Infrastructure.Persistence;

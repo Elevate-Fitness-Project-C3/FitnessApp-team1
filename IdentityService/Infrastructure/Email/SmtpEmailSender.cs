@@ -27,7 +27,7 @@ public sealed class SmtpEmailSender(IOptions<EmailOptions> email, IOptions<Verif
         using var client = new SmtpClient();
         await client.ConnectAsync(o.Smtp.Host, o.Smtp.Port, SecureSocketOptions.Auto, ct);
         if (!string.IsNullOrEmpty(o.Smtp.Username))
-            await client.AuthenticateAsync(o.Smtp.Username, o.Smtp.Password, ct);
+            await client.AuthenticateAsync(o.Smtp.Username, o.Smtp.Password ?? string.Empty, ct);
         await client.SendAsync(FormatOptions.Default, message, ct);
         await client.DisconnectAsync(true, ct);
     }

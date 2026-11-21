@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using IdentityService.Application.EmailVerification;
 using IdentityService.Infrastructure.Email;
 
@@ -5,13 +6,13 @@ namespace IdentityService.Api;
 
 public sealed record VerifyEmailRequest(string? Email, string? Code);
 public sealed record ResendVerificationRequest(string? Email);
-public sealed record FakeRegisterRequest(string Email);
+public sealed record FakeRegisterRequest([property: Required] string Email);
 
 public static class EmailVerificationEndpoints
 {
     public static IEndpointRouteBuilder MapEmailVerificationEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/auth");
+        var group = app.MapGroup("/api/auth").AllowAnonymous();
 
         group.MapPost("/verify-email", async (VerifyEmailRequest req, IEmailVerificationService svc, CancellationToken ct) =>
         {
@@ -45,10 +46,13 @@ public static class EmailVerificationEndpoints
         app.MapPost("/api/dev/fake-register", async (FakeRegisterRequest req, InMemoryUserEmailStore store,
             IEmailVerificationService svc, CancellationToken ct) =>
         {
+            if (req is null || string.IsNullOrWhiteSpace(req.Email))
+                return Results.BadRequest(new { error = "email_required", detail = "A non-empty email is required." });
+
             var userId = store.Add(req.Email);
             await svc.IssueAsync(userId, req.Email, ct);
             return Results.Accepted();
-        });
+        }).AllowAnonymous();
         return app;
     }
 
