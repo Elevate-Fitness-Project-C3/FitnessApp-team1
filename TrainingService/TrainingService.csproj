@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -9,6 +9,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
+    <Compile Remove="Features\Workouts\CreateWorkout\Dtos\**" />
+    <Compile Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <Content Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
+    <Content Remove="Features\Workouts\CreateWorkout\Dtos\**" />
+    <Content Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <EmbeddedResource Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
+    <EmbeddedResource Remove="Features\Workouts\CreateWorkout\Dtos\**" />
+    <EmbeddedResource Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <None Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
+    <None Remove="Features\Workouts\CreateWorkout\Dtos\**" />
+    <None Remove="Features\Workouts\CreateWorkout\Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.2.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.2.0" />
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
@@ -20,6 +37,15 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Commands\" />
+    <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Commands\" />
+    <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Commands\" />
+    <Folder Include="Features\Workouts\DeleteWorkout\Commands\" />
+    <Folder Include="Features\Workouts\UpdateWorkout\Commands\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 using TrainingService.Domain.Common;
 using TrainingService.Domain.IRepositories;
 using TrainingService.Infrastructure.Persistence;
@@ -16,7 +18,12 @@ namespace TrainingService.Infrastructure.DataAccess
 
         public IQueryable<T> GetAll()
         {
-            return _context.Set<T>();
+            return _context.Set<T>().AsNoTracking();
+        }
+
+        public IQueryable<T> GetAllIncludingDeleted()
+        {
+            return _context.Set<T>().IgnoreQueryFilters().AsNoTracking();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
@@ -39,6 +46,14 @@ namespace TrainingService.Infrastructure.DataAccess
         {
             _context.Set<T>().Remove(entity);
         }
+
+        public Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
+    => _context.Set<T>().AnyAsync(predicate, cancellationToken);
+
+        public Task<int> CountAsync(Expression<Func<T, bool>>? criteria = null)
+            => criteria is null
+                ? _context.Set<T>().CountAsync()
+                : _context.Set<T>().CountAsync(criteria);
 
         public void SaveInclude(T entity, params string[] includedProperties)
         {
@@ -72,6 +87,9 @@ namespace TrainingService.Infrastructure.DataAccess
             return await _context.SaveChangesAsync(cancellationToken);
         }
 
-
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
