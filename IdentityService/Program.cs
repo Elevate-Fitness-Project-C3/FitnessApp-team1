@@ -1,10 +1,44 @@
+using FluentValidation;
+using IdentityService.Identity.User_Registration.Commands;
+using IdentityService.Identity.User_Registration.EndPoint;
+using IdentityService.Identity.User_Registration.Validation;
+using IdentityService.Persistence;
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+//Register Fluent Validation 
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterViewModelValidation>();
+builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
+
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
 var app = builder.Build();
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<AppDbContext>();
+
+    if (app.Configuration.GetValue<bool>(
+        "Database:ApplyMigrationsOnStartup"))
+    {
+        //await dbContext.Database.MigrateAsync();
+    }
+
+    var roleManager = scope.ServiceProvider
+        .GetRequiredService<RoleManager<IdentityRole>>();
+
+    //await RoleSeeder.SeedRolesAsync(roleManager);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -33,6 +67,7 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+app.RegisterUser();
 app.Run();
 
 internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

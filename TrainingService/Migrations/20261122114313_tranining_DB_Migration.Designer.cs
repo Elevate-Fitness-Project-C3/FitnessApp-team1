@@ -12,8 +12,8 @@ using TrainingService.Infrastructure.Persistence;
 namespace TrainingService.Migrations
 {
     [DbContext(typeof(TrainingDbContext))]
-    [Migration("20261114171400_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20261122114313_tranining_DB_Migration")]
+    partial class tranining_DB_Migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,9 +97,10 @@ namespace TrainingService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProgramId");
-
                     b.HasIndex("WorkoutId");
+
+                    b.HasIndex("ProgramId", "WeekNumber", "DayNumber")
+                        .IsUnique();
 
                     b.ToTable("ProgramWorkoutSlots");
                 });
