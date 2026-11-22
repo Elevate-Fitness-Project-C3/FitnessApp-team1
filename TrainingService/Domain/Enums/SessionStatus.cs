@@ -2,7 +2,7 @@ namespace TrainingService.Domain.Enums;
 
 public enum SessionStatus
 {
-    InProgress,
-    Completed,
-    Cancelled
+    InProgress = 0,
+    Completed = 1,
+    Cancelled = 2
 }

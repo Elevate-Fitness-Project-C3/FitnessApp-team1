@@ -8,6 +8,17 @@ services:
     build:
       context: .
       dockerfile: IdentityService/Dockerfile
+    environment:
+      - Verification__HmacKey=${VERIFICATION_HMAC_KEY:?VERIFICATION_HMAC_KEY is required}
+      - Jwt__Issuer=fitnessapp-team1
+      - Jwt__Audience=fitnessapp-team1-clients
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+
+  fitnessprofileservice:
+    image: fitness-team1-fitnessprofileservice
+    build:
+      context: .
+      dockerfile: Fitness_Profile_Service/Dockerfile
 
   fitnessprofileservice:
     image: fitness-team1-fitnessprofileservice
@@ -20,6 +31,37 @@ services:
     build:
       context: .
       dockerfile: TrainingService/Dockerfile
+    environment:
+      - Jwt__Issuer=fitnessapp-team1
+      - Jwt__Audience=fitnessapp-team1-clients
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+
+  progressservice:
+    image: fitness-team1-progressservice
+    build:
+      context: .
+      dockerfile: ProgressService/Dockerfile
+
+  nutritionservice:
+    image: fitness-team1-nutritionservice
+    build:
+      context: .
+      dockerfile: NutritionService/Dockerfile
+
+  paymentservice:
+    image: fitness-team1-paymentservice
+    build:
+      context: .
+      dockerfile: PaymentService/Dockerfile
+
+  progressservice:
+    image: ${DOCKER_REGISTRY-}progressservice
+    build:
+      context: .
+      dockerfile: ProgressService/Dockerfile
+
+  rabbitmq:
+    image: rabbitmq:4-management
 
   progressservice:
     image: fitness-team1-progressservice

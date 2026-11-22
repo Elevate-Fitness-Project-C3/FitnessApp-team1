@@ -1,68 +1,95 @@
 using FluentValidation;
+using FitnessApp.Auth;
+using IdentityService.Api;
+using IdentityService.Identity.User_Login.Endpoints;
 using IdentityService.Identity.User_Registration.Commands;
 using IdentityService.Identity.User_Registration.EndPoint;
 using IdentityService.Identity.User_Registration.Validation;
+using IdentityService.Infrastructure.Persistence;
 using IdentityService.Persistence;
 using IdentityService.Persistence.Seeding;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddEmailVerification(builder.Configuration);
+builder.Services.AddFitnessAuth(builder.Configuration);
 
-//Register Fluent Validation 
+builder.Services.AddRateLimiter(config =>
+{
+    config.AddFixedWindowLimiter("fixed", options =>
+    {
+        options.Window = TimeSpan.FromMinutes(10);
+        options.PermitLimit = 5;
+    });
+});
+
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterViewModelValidation>();
 builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
-
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddScoped<RoleSeeder>();
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.AllowedForNewUsers = true;
+    options.SignIn.RequireConfirmedEmail = true;
+})
+.AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider
-        .GetRequiredService<RoleManager<IdentityRole>>();
 
-    await RoleSeeder.SeedRolesAsync(roleManager);
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<AppDbContext>();
+
+    if (app.Configuration.GetValue<bool>(
+        "Database:ApplyMigrationsOnStartup"))
+    {
+        //await dbContext.Database.MigrateAsync();
+    }
+
+    var roleSeeder = scope.ServiceProvider
+        .GetRequiredService<RoleSeeder>();
+
+    await roleSeeder.SeedRolesAsync();
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    using var scope = app.Services.CreateScope();
+    scope.ServiceProvider.GetRequiredService<EmailVerificationDbContext>().Database.Migrate();
+
+    app.MapSwagger().AllowAnonymous();
+    app.MapSwaggerUI().AllowAnonymous();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+if (!app.Environment.IsDevelopment())
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    app.UseHttpsRedirection();
+}
 
-app.MapGet("/weatherforecast", () =>
+app.UseRateLimiter();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapEmailVerificationEndpoints();
+
+if (app.Environment.IsDevelopment())
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    app.MapDevFakeRegistration();
+    app.MapDevTokenEndpoint();
+}
 
-app.RegisterUser();
+await app.RegisterUser();
+app.UserLogin();
+
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

@@ -3,7 +3,7 @@ namespace TrainingService.Domain.Entities;
 using TrainingService.Domain.Common;
 using TrainingService.Domain.Enums;
 
-public class WorkoutSession : BaseEntity
+public class WorkoutSession : BaseEntity, IUserOwned
 {
     public Guid UserId { get; set; }
 
