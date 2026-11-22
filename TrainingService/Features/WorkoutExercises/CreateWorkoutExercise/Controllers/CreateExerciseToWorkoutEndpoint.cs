@@ -22,7 +22,7 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Contro
 
                 var result = await mediator.Send(command, ct);
 
-                var response = EndpointResponse<RequestResponse<Unit>>.FromResult(RequestResponse<RequestResponse<Unit>>.Ok(result));
+                var response = EndpointResponse<Unit>.FromResult(result);
                 return Results.Json(response, statusCode: response.StatusCode);
             })
             .WithTags("Workouts")
