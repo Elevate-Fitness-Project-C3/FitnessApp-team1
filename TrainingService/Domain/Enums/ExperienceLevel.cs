@@ -2,7 +2,7 @@ namespace TrainingService.Domain.Enums;
 
 public enum ExperienceLevel
 {
-    Beginner,
-    Intermediate,
-    Advanced
+    Beginner = 0,
+    Intermediate = 1,
+    Advanced=2
 }

@@ -19,5 +19,8 @@ public class ProgramWorkoutSlotConfiguration : IEntityTypeConfiguration<ProgramW
             .WithMany(w => w.ProgramWorkoutSlots)
             .HasForeignKey(x => x.WorkoutId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => new { x.ProgramId, x.WeekNumber, x.DayNumber })
+            .IsUnique();
     }
 }

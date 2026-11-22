@@ -12,8 +12,8 @@ using TrainingService.Infrastructure.Persistence;
 namespace TrainingService.Migrations
 {
     [DbContext(typeof(TrainingDbContext))]
-    [Migration("20261114171400_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20261121182304_AddUniqueIndex_WorkoutTemplateId_OrderIndex")]
+    partial class AddUniqueIndex_WorkoutTemplateId_OrderIndex
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -283,7 +283,10 @@ namespace TrainingService.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.HasIndex("WorkoutTemplateId");
+                    b.HasIndex("WorkoutTemplateId", "OrderIndex")
+                        .IsUnique()
+                        .HasDatabaseName("IX_WorkoutExercises_WorkoutTemplateId_OrderIndex")
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("WorkoutExercises");
                 });

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TrainingService.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class tranining_DB_Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -232,9 +232,10 @@ namespace TrainingService.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProgramWorkoutSlots_ProgramId",
+                name: "IX_ProgramWorkoutSlots_ProgramId_WeekNumber_DayNumber",
                 table: "ProgramWorkoutSlots",
-                column: "ProgramId");
+                columns: new[] { "ProgramId", "WeekNumber", "DayNumber" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProgramWorkoutSlots_WorkoutId",
