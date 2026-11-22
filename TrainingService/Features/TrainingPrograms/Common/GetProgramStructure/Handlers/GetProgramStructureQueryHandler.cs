@@ -16,20 +16,19 @@ namespace TrainingService.Features.TrainingPrograms.Common.GetProgramStructure.H
         {
            var data = await _programRepo.GetAll()
              .Where(p => p.Id == request.ProgramId)
-             .Select(p => new ProgramStructureDto(
-                 p.Id,
-                 p.DurationWeeks,
-                 p.DaysPerWeek,
-                 p.Title,
-                 p.ProgramWorkoutSlots.Select(s => new ProgramSlotDto(
-                     s.WeekNumber,
-                     s.DayNumber,
-                     s.WorkoutTemplate != null,
-                     s.WorkoutTemplate != null
-                         ? s.WorkoutTemplate.WorkoutExercises.Count
-                         : 0
-                 )).ToList()
-             ))
+                .Select(p => new ProgramStructureDto(
+                    p.Id,
+                    p.DurationWeeks,
+                    p.DaysPerWeek,
+                    p.Title,
+                    p.Status,                              
+                    p.ProgramWorkoutSlots.Select(s => new ProgramSlotDto(
+                        s.WeekNumber,
+                        s.DayNumber,
+                        s.WorkoutTemplate != null,
+                        s.WorkoutTemplate != null ? s.WorkoutTemplate.WorkoutExercises.Count : 0
+                    )).ToList()
+                ))
              .FirstOrDefaultAsync(cancellationToken);
 
              if (data == null)

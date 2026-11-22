@@ -9,27 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Features\TrainingPrograms\Common\IsProgramInDraftStatus\**" />
     <Compile Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <Compile Remove="Features\Workouts\CreateWorkout\Dtos\**" />
     <Compile Remove="Features\Workouts\CreateWorkout\Queries\**" />
-    <Content Remove="Features\TrainingPrograms\Common\IsProgramInDraftStatus\**" />
     <Content Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <Content Remove="Features\Workouts\CreateWorkout\Dtos\**" />
     <Content Remove="Features\Workouts\CreateWorkout\Queries\**" />
-    <EmbeddedResource Remove="Features\TrainingPrograms\Common\IsProgramInDraftStatus\**" />
     <EmbeddedResource Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <EmbeddedResource Remove="Features\Workouts\CreateWorkout\Dtos\**" />
     <EmbeddedResource Remove="Features\Workouts\CreateWorkout\Queries\**" />
-    <None Remove="Features\TrainingPrograms\Common\IsProgramInDraftStatus\**" />
     <None Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <None Remove="Features\Workouts\CreateWorkout\Dtos\**" />
     <None Remove="Features\Workouts\CreateWorkout\Queries\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Features\TrainingPrograms\Common\IsProgramInDraftStatus\Handlers\IsProgramInDraftStatusHandler.cs" />
-    <Compile Include="Features\TrainingPrograms\Common\IsProgramInDraftStatus\Queries\IsProgramInDraftStatusQuery.cs" />
   </ItemGroup>
 
   <ItemGroup>

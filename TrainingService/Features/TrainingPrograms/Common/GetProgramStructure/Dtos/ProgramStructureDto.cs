@@ -1,10 +1,13 @@
-﻿namespace TrainingService.Features.TrainingPrograms.Common.GetProgramStructure.Dtos
+﻿using TrainingService.Domain.Enums;
+
+namespace TrainingService.Features.TrainingPrograms.Common.GetProgramStructure.Dtos
 {
     public record ProgramStructureDto(
        Guid ProgramId,
        int DurationWeeks,
        int DaysPerWeek,
        string Title,
+       ProgramStatus Status,
        List<ProgramSlotDto> Slots
    );
 

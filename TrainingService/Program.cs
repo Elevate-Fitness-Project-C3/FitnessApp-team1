@@ -1,4 +1,5 @@
 using TrainingService.Extensions;
+using TrainingService.Features.TrainingPrograms;
 using TrainingService.Features.WorkoutExercises;
 using TrainingService.Features.Workouts;
 
@@ -27,6 +28,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapWorkoutsEndpoints();
 app.MapWorkoutExerciseEndpoints();
+
+app.MapTrainingProgramsEndpoints();
 
 
 
