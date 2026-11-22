@@ -27,6 +27,6 @@ public static class LoginUserEndpoint
 
             return Results.Ok(result.Response);
         })
-        .WithTags("Account").RequireRateLimiting("fixed");
+        .WithTags("Account").RequireRateLimiting("fixed").AllowAnonymous();
     }
 }

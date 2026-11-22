@@ -1,21 +1,67 @@
+# All 6 ASP.NET Core APIs + SQL Server. No Compose profiles: F5 can find every service.
+# Local development only. Override contains ports, environment and SQL readiness.
+name: fitnessapp-team1
 
 services:
   identityservice:
-    image: ${DOCKER_REGISTRY-}identityservice
+    image: fitness-team1-identityservice
     build:
       context: .
       dockerfile: IdentityService/Dockerfile
+    environment:
+      - Verification__HmacKey=${VERIFICATION_HMAC_KEY:?VERIFICATION_HMAC_KEY is required}
+      - Jwt__Issuer=fitnessapp-team1
+      - Jwt__Audience=fitnessapp-team1-clients
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+
+  fitnessprofileservice:
+    image: fitness-team1-fitnessprofileservice
+    build:
+      context: .
+      dockerfile: Fitness_Profile_Service/Dockerfile
 
   trainingservice:
-    image: ${DOCKER_REGISTRY-}trainingservice
+    image: fitness-team1-trainingservice
     build:
       context: .
       dockerfile: TrainingService/Dockerfile
+    environment:
+      - Jwt__Issuer=fitnessapp-team1
+      - Jwt__Audience=fitnessapp-team1-clients
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+
+  progressservice:
+    image: fitness-team1-progressservice
+    build:
+      context: .
+      dockerfile: ProgressService/Dockerfile
+
+  nutritionservice:
+    image: fitness-team1-nutritionservice
+    build:
+      context: .
+      dockerfile: NutritionService/Dockerfile
+
+  paymentservice:
+    image: fitness-team1-paymentservice
+    build:
+      context: .
+      dockerfile: PaymentService/Dockerfile
+
+  progressservice:
+    image: ${DOCKER_REGISTRY-}progressservice
+    build:
+      context: .
+      dockerfile: ProgressService/Dockerfile
+
+  rabbitmq:
+    image: rabbitmq:4-management
 
   sqlserver:
+    # Original Team 1 pinned SQL Server 2022 image.
     image: mcr.microsoft.com/mssql/server@sha256:4525e3efac9f3e241cb003bb2ff2a82818b502f37e12049d788b1a9fa7e13b7f
     volumes:
       - sql-data:/var/opt/mssql
 
 volumes:
-  sql-data:                 
+  sql-data:

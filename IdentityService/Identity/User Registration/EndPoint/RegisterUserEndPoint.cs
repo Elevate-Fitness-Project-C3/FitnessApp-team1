@@ -22,7 +22,7 @@ namespace IdentityService.Identity.User_Registration.EndPoint
                     return Results.BadRequest("User registration failed. Please check the provided information.");
                 }
                 return Results.Ok("User registered successfully."); 
-            }).WithTags("Account").RequireRateLimiting("fixed");
+            }).WithTags("Account").RequireRateLimiting("fixed").AllowAnonymous();
         }
     }
 }

@@ -1,0 +1,18 @@
+# User-owned override for Visual Studio Regular/Release mode.
+# VS mounts tools, Hot Reload files, and NuGet fallback packages from Program Files,
+# which Docker Desktop cannot read on this machine. Mount readable local copies instead.
+# Recreate the copies after a VS upgrade with:
+#   Copy-Item 'C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\linux-x64\net6.0\*' .vs\DockerTools\net6.0 -Recurse -Force
+#   Copy-Item 'C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\extensions\Microsoft\managedprojectsystem\HotReload\*' .vs\HotReload -Recurse -Force
+#   Copy-Item 'C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\*' .vs\NuGetFallbackPackages -Recurse -Force
+services:
+  identityservice:
+    volumes:
+      - ./.vs/DockerTools/net6.0:/VSTools:ro
+      - ./.vs/HotReload:/HotReloadAgent:ro
+      - ./.vs/NuGetFallbackPackages:/.nuget/fallbackpackages:ro
+  trainingservice:
+    volumes:
+      - ./.vs/DockerTools/net6.0:/VSTools:ro
+      - ./.vs/HotReload:/HotReloadAgent:ro
+      - ./.vs/NuGetFallbackPackages:/.nuget/fallbackpackages:ro
