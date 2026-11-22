@@ -17,6 +17,14 @@ namespace TrainingService.Infrastructure.DataAccess
         }
 
         public IQueryable<T> GetAll()
+        {
+            return _context.Set<T>().AsNoTracking();
+        }
+
+        public IQueryable<T> GetAllIncludingDeleted()
+        {
+            return _context.Set<T>().IgnoreQueryFilters().AsNoTracking();
+        }
             => _context.Set<T>();
 
         public IQueryable<T> GetAllIncludingDeleted()
@@ -41,6 +49,14 @@ namespace TrainingService.Infrastructure.DataAccess
         {
             _context.Set<T>().Remove(entity);
         }
+
+        public Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
+    => _context.Set<T>().AnyAsync(predicate, cancellationToken);
+
+        public Task<int> CountAsync(Expression<Func<T, bool>>? criteria = null)
+            => criteria is null
+                ? _context.Set<T>().CountAsync()
+                : _context.Set<T>().CountAsync(criteria);
 
         public void SaveInclude(T entity, params string[] includedProperties)
         {
@@ -99,6 +115,9 @@ namespace TrainingService.Infrastructure.DataAccess
             return await _context.SaveChangesAsync(cancellationToken);
         }
 
-
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

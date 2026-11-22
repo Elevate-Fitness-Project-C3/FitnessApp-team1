@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using TrainingService.Domain.Common;
 

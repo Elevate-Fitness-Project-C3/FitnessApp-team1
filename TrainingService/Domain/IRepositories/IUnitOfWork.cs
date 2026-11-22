@@ -1,4 +1,5 @@
-﻿namespace TrainingService.Domain.IRepositories
+﻿
+namespace TrainingService.Domain.IRepositories
 {
     public interface IUnitOfWork : IDisposable
     {
@@ -12,7 +13,10 @@
         Task CommitTransactionAsync(CancellationToken cancellationToken = default);
         Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
+}
+
+
 }
