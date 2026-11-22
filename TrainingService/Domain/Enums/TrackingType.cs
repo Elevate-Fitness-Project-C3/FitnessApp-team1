@@ -2,6 +2,6 @@ namespace TrainingService.Domain.Enums;
 
 public enum TrackingType
 {
-    Reps,
-    Duration
+    Reps = 1,
+    Duration = 2
 }

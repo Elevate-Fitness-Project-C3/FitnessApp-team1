@@ -11,7 +11,33 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddEmailVerification(builder.Configuration);
 builder.Services.AddFitnessAuth(builder.Configuration);
 
+//Register Fluent Validation 
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterViewModelValidation>();
+builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
+
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
 var app = builder.Build();
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<AppDbContext>();
+
+    if (app.Configuration.GetValue<bool>(
+        "Database:ApplyMigrationsOnStartup"))
+    {
+        //await dbContext.Database.MigrateAsync();
+    }
+
+    var roleManager = scope.ServiceProvider
+        .GetRequiredService<RoleManager<IdentityRole>>();
+
+    //await RoleSeeder.SeedRolesAsync(roleManager);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

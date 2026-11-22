@@ -1,3 +1,5 @@
+using TrainingService.ViewModels.TrainingProgram;
+
 namespace TrainingService.Features.Shared;
 
 public class EndpointResponse<T> : ApiResponse<T>
@@ -19,6 +21,7 @@ public class EndpointResponse<T> : ApiResponse<T>
             result.Errors
         );
     }
+
 }
 
 public class EndpointResponse : ApiResponse

@@ -94,9 +94,10 @@ namespace TrainingService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProgramId");
-
                     b.HasIndex("WorkoutId");
+
+                    b.HasIndex("ProgramId", "WeekNumber", "DayNumber")
+                        .IsUnique();
 
                     b.ToTable("ProgramWorkoutSlots");
                 });
@@ -280,7 +281,10 @@ namespace TrainingService.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.HasIndex("WorkoutTemplateId");
+                    b.HasIndex("WorkoutTemplateId", "OrderIndex")
+                        .IsUnique()
+                        .HasDatabaseName("IX_WorkoutExercises_WorkoutTemplateId_OrderIndex")
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("WorkoutExercises");
                 });
