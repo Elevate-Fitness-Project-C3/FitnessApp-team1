@@ -8,6 +8,11 @@ services:
     build:
       context: .
       dockerfile: IdentityService/Dockerfile
+    environment:
+      - Verification__HmacKey=${VERIFICATION_HMAC_KEY:?VERIFICATION_HMAC_KEY is required}
+      - Jwt__Issuer=fitnessapp-team1
+      - Jwt__Audience=fitnessapp-team1-clients
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
 
   fitnessprofileservice:
     image: fitness-team1-fitnessprofileservice
@@ -20,6 +25,10 @@ services:
     build:
       context: .
       dockerfile: TrainingService/Dockerfile
+    environment:
+      - Jwt__Issuer=fitnessapp-team1
+      - Jwt__Audience=fitnessapp-team1-clients
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
 
   progressservice:
     image: fitness-team1-progressservice

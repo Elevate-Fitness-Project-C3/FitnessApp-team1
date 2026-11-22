@@ -3,7 +3,7 @@ namespace TrainingService.Domain.Entities;
 using TrainingService.Domain.Common;
 using TrainingService.Domain.Enums;
 
-public class UserTrainingProgram : BaseEntity
+public class UserTrainingProgram : BaseEntity, IUserOwned
 {
     public Guid UserId { get; set; }
 
