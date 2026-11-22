@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using FluentValidation;
+using FitnessApp.Auth;
 using Microsoft.EntityFrameworkCore;
 using NutritionService.API.Endpoints;
 using NutritionService.Application.Common.Interfaces;
@@ -26,8 +27,8 @@ builder.Services.AddDbContext<NutritionDbContext>(options =>
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// Add HttpContextAccessor and CurrentUserService
-builder.Services.AddHttpContextAccessor();
+// Add FitnessApp.Auth and CurrentUserService
+builder.Services.AddFitnessAuth(builder.Configuration);
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 // Add MediatR
@@ -37,11 +38,6 @@ builder.Services.AddMediatR(cfg =>
 // Add FluentValidation
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-// Add Authentication & Authorization
-builder.Services.AddAuthentication()
-    .AddJwtBearer();
-builder.Services.AddAuthorization();
-
 // Add OpenAPI / Swagger
 builder.Services.AddOpenApi();
 
@@ -50,7 +46,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.MapOpenApi().AllowAnonymous();
 }
 
 app.UseHttpsRedirection();
@@ -60,5 +56,6 @@ app.UseAuthorization();
 
 // Map Nutrition Minimal API Endpoints
 app.MapNutritionEndpoints();
+app.MapMealEndpoints();
 
 app.Run();
