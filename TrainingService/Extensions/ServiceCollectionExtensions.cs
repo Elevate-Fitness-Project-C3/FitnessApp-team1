@@ -17,7 +17,11 @@ namespace TrainingService.Extensions
                     "Connection string 'DefaultConnection' is missing.");
 
             services.AddDbContext<TrainingDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString, sql =>
+                    sql.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(5),
+                        errorNumbersToAdd: null)));
 
             return services;
         }
