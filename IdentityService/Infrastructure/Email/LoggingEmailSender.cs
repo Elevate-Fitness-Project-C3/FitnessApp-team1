@@ -8,7 +8,7 @@ public sealed class LoggingEmailSender(ILogger<LoggingEmailSender> logger) : IEm
 {
     public Task SendVerificationCodeAsync(string toEmail, string code, CancellationToken ct = default)
     {
-        logger.LogInformation("Verification email would be sent to {Email} (code not logged)", toEmail);
+        logger.LogInformation("Verification email would be sent (recipient and code not logged)");
         return Task.CompletedTask;
     }
 }
