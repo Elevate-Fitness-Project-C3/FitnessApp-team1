@@ -1,24 +1,29 @@
-﻿//using Microsoft.AspNetCore.Identity;
+namespace IdentityService.Persistence.Seeding;
 
-//namespace IdentityService.Persistence.Seeding;
+public class RoleSeeder
+{
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-//public static class RoleSeeder
-//{
-//    public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
-//    {
-//        string[] roles = { "User", "Admin" };
+    public RoleSeeder(RoleManager<IdentityRole> roleManager)
+    {
+        _roleManager = roleManager;
+    }
 
-//        foreach (var role in roles)
-//        {
-//            if (await roleManager.RoleExistsAsync(role))
-//                continue;
+    public async Task SeedRolesAsync()
+    {
+        string[] roles = { "User", "Admin" };
 
-//            var result = await roleManager.CreateAsync(new IdentityRole(role));
-//            if (!result.Succeeded)
-//            {
-//                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-//                throw new InvalidOperationException($"Failed to seed role '{role}': {errors}");
-//            }
-//        }
-//    }
-//}
+        foreach (var role in roles)
+        {
+            if (await _roleManager.RoleExistsAsync(role))
+                continue;
+
+            var result = await _roleManager.CreateAsync(new IdentityRole(role));
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new InvalidOperationException($"Failed to seed role '{role}': {errors}");
+            }
+        }
+    }
+}

@@ -10,6 +10,10 @@ namespace IdentityService.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<AppUser>()
+                .Property(user => user.IsEnabled)
+                .HasDefaultValue(true);
         }
     }
 }
