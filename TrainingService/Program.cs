@@ -38,7 +38,7 @@ if (app.Environment.IsDevelopment())
             "Fitness API v1");
     });
 }
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 //app.MapExercisesEndpoints();
 app.MapTrainingProgramEndpoints();
 app.MapCreateProgramWorkoutSlotEndpoint();
