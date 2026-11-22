@@ -56,7 +56,7 @@ namespace TrainingService.Extensions
 
         public static IEndpointRouteBuilder MapTrainingProgramEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapCreateTrainingProgramEndpoint();
+            app.MapBrowsePublishedProgramsEndpoint();
             return app;
         }
         public static IEndpointRouteBuilder MapProgramWorkoutSlotEndpoints(this IEndpointRouteBuilder app)

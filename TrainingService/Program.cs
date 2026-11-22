@@ -25,4 +25,5 @@ app.UseHttpsRedirection();
 app.MapTrainingProgramEndpoints();
 app.MapCreateProgramWorkoutSlotEndpoint();
 
+
 app.Run();

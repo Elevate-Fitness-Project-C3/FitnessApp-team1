@@ -25,7 +25,7 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Handlers
             if (trainingProgramDto.Data.DurationWeeks < 1 || request.WeekNumber > trainingProgramDto.Data.DurationWeeks|| request.WeekNumber < 1)
                 return RequestResponse<Guid>.Fail($"Week number must be between 1 and {trainingProgramDto.Data.DurationWeeks}.", 400);
 
-            if (request.DayOfWeek < 1 || request.DayOfWeek > trainingProgramDto.Data.DaysPerWeek)
+            if (request.DayNumber < 1 || request.DayNumber > trainingProgramDto.Data.DaysPerWeek)
                 return RequestResponse<Guid>.Fail($"Day of week must be between 1 and {trainingProgramDto.Data.DaysPerWeek}.", 400);
 
 
@@ -38,7 +38,7 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Handlers
                 new ProgramWorkoutSlotExistsQuery(
                     request.ProgramId,
                     request.WeekNumber,
-                    request.DayOfWeek), cancellationToken);
+                    request.DayNumber), cancellationToken);
 
             if (programWorkoutSlotExists.Data)
                 return RequestResponse<Guid>.Fail("Program workout slot already exists for the given week and day.", 409);
@@ -47,7 +47,7 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Handlers
                 request.ProgramId,
                 request.WorkoutId,
                 request.WeekNumber,
-                request.DayOfWeek
+                request.DayNumber   
             ), cancellationToken);
 
             if (!command.Success)

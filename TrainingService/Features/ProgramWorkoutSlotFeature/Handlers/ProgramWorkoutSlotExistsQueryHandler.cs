@@ -18,7 +18,7 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Handlers
         public async Task<RequestResponse<bool>> Handle(ProgramWorkoutSlotExistsQuery request, CancellationToken cancellationToken)
         {
             var exists = await _programWorkoutSlotRepo.GetAll()
-                .AnyAsync(pws => pws.ProgramId == request.ProgramId && pws.WeekNumber == request.WeekNumber && pws.DayNumber == request.DayOfWeek, cancellationToken);
+                .AnyAsync(pws => pws.ProgramId == request.ProgramId && pws.WeekNumber == request.WeekNumber && pws.DayNumber == request.DayNumber, cancellationToken);
             return RequestResponse<bool>.Ok(exists);
         }
     }
