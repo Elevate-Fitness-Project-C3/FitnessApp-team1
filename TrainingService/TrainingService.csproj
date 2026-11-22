@@ -52,4 +52,8 @@
     <Folder Include="Features\Workouts\UpdateWorkout\Commands\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\FitnessApp.Auth\FitnessApp.Auth.csproj" />
+  </ItemGroup>
+
 </Project>
