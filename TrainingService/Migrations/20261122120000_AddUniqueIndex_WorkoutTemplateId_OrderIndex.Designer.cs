@@ -12,7 +12,7 @@ using TrainingService.Infrastructure.Persistence;
 namespace TrainingService.Migrations
 {
     [DbContext(typeof(TrainingDbContext))]
-    [Migration("20261121182304_AddUniqueIndex_WorkoutTemplateId_OrderIndex")]
+    [Migration("20261122120000_AddUniqueIndex_WorkoutTemplateId_OrderIndex")]
     partial class AddUniqueIndex_WorkoutTemplateId_OrderIndex
     {
         /// <inheritdoc />

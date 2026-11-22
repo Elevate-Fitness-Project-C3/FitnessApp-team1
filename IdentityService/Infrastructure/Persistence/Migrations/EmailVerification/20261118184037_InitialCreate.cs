@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace IdentityService.Infrastructure.Persistence.Migrations
+namespace IdentityService.Infrastructure.Persistence.Migrations.EmailVerification
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

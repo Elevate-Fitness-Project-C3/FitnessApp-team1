@@ -1,4 +1,4 @@
-namespace IdentityService.Persistence.Seeding;
+namespace IdentityService.Infrastructure.Persistence.Seeding;
 
 public class RoleSeeder
 {

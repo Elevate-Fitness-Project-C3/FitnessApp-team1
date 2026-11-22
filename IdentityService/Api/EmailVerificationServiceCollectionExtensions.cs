@@ -1,6 +1,6 @@
 using IdentityService.Application.EmailVerification;
 using IdentityService.Infrastructure.Email;
-using IdentityService.Infrastructure.Persistence;
+using IdentityService.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

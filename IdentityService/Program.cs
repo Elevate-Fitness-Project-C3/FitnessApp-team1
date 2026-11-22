@@ -5,9 +5,8 @@ using IdentityService.Identity.User_Login.Endpoints;
 using IdentityService.Identity.User_Registration.Commands;
 using IdentityService.Identity.User_Registration.EndPoint;
 using IdentityService.Identity.User_Registration.Validation;
-using IdentityService.Infrastructure.Persistence;
-using IdentityService.Persistence;
-using IdentityService.Persistence.Seeding;
+using IdentityService.Infrastructure.Persistence.Contexts;
+using IdentityService.Infrastructure.Persistence.Seeding;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,29 +45,34 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 
 var app = builder.Build();
 
+var applyMigrationsOnStartup = app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup");
+
 await using (var scope = app.Services.CreateAsyncScope())
 {
-    var dbContext = scope.ServiceProvider
+    var appDbContext = scope.ServiceProvider
         .GetRequiredService<AppDbContext>();
 
-    if (app.Configuration.GetValue<bool>(
-        "Database:ApplyMigrationsOnStartup"))
+    if (applyMigrationsOnStartup)
     {
-        await dbContext.Database.MigrateAsync();
+        await appDbContext.Database.MigrateAsync();
     }
 
     var roleSeeder = scope.ServiceProvider
         .GetRequiredService<RoleSeeder>();
 
     await roleSeeder.SeedRolesAsync();
-}
 
+    if (applyMigrationsOnStartup)
+    {
+        var emailVerificationDbContext = scope.ServiceProvider
+            .GetRequiredService<EmailVerificationDbContext>();
+
+        await emailVerificationDbContext.Database.MigrateAsync();
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {
-    using var scope = app.Services.CreateScope();
-    scope.ServiceProvider.GetRequiredService<EmailVerificationDbContext>().Database.Migrate();
-
     app.MapSwagger().AllowAnonymous();
     app.MapSwaggerUI().AllowAnonymous();
 }

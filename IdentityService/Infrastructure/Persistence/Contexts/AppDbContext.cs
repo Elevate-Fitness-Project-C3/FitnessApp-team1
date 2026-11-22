@@ -1,6 +1,6 @@
 ﻿
 
-namespace IdentityService.Persistence
+namespace IdentityService.Infrastructure.Persistence.Contexts
 {
     public class AppDbContext : IdentityDbContext<AppUser>
     {

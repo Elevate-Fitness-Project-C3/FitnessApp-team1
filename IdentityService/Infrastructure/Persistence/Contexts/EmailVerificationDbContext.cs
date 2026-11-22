@@ -1,7 +1,8 @@
 using IdentityService.Domain;
+using IdentityService.Infrastructure.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityService.Infrastructure.Persistence;
+namespace IdentityService.Infrastructure.Persistence.Contexts;
 
 /// <summary>
 /// Standalone so ID-02 doesn't depend on ID-01. To merge into your existing DbContext later:

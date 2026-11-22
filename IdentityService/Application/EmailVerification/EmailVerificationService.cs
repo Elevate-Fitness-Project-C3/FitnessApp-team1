@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using IdentityService.Domain;
-using IdentityService.Infrastructure.Persistence;
+using IdentityService.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

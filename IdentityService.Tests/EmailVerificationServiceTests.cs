@@ -1,7 +1,7 @@
 using Xunit;
 using IdentityService.Application.EmailVerification;
 using IdentityService.Infrastructure.Email;
-using IdentityService.Infrastructure.Persistence;
+using IdentityService.Infrastructure.Persistence.Contexts;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
