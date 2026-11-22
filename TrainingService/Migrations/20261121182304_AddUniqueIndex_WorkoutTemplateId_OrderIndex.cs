@@ -1,38 +1,70 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TrainingService.Migrations
+namespace TrainingService.Migrations;
+
+public partial class AddUniqueIndex_WorkoutTemplateId_OrderIndex : Migration
 {
-    /// <inheritdoc />
-    public partial class AddUniqueIndex_WorkoutTemplateId_OrderIndex : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropIndex(
-                name: "IX_WorkoutExercises_WorkoutTemplateId",
-                table: "WorkoutExercises");
+        migrationBuilder.Sql("""
+            IF OBJECT_ID(N'dbo.WorkoutExercises', N'U') IS NOT NULL
+            BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM sys.indexes
+                    WHERE object_id = OBJECT_ID(N'dbo.WorkoutExercises')
+                      AND name = N'IX_WorkoutExercises_WorkoutTemplateId'
+                )
+                BEGIN
+                    DROP INDEX [IX_WorkoutExercises_WorkoutTemplateId]
+                    ON [dbo].[WorkoutExercises];
+                END
 
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkoutExercises_WorkoutTemplateId_OrderIndex",
-                table: "WorkoutExercises",
-                columns: new[] { "WorkoutTemplateId", "OrderIndex" },
-                unique: true,
-                filter: "[IsDeleted] = 0");
-        }
+                IF NOT EXISTS (
+                    SELECT 1 FROM sys.indexes
+                    WHERE object_id = OBJECT_ID(N'dbo.WorkoutExercises')
+                      AND name = N'IX_WorkoutExercises_WorkoutTemplateId_OrderIndex'
+                )
+                BEGIN
+                    CREATE UNIQUE INDEX
+                        [IX_WorkoutExercises_WorkoutTemplateId_OrderIndex]
+                    ON [dbo].[WorkoutExercises]
+                        ([WorkoutTemplateId], [OrderIndex])
+                    WHERE [IsDeleted] = 0;
+                END
+            END
+            """);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropIndex(
-                name: "IX_WorkoutExercises_WorkoutTemplateId_OrderIndex",
-                table: "WorkoutExercises");
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.Sql("""
+            IF OBJECT_ID(N'dbo.WorkoutExercises', N'U') IS NOT NULL
+            BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM sys.indexes
+                    WHERE object_id = OBJECT_ID(N'dbo.WorkoutExercises')
+                      AND name = N'IX_WorkoutExercises_WorkoutTemplateId_OrderIndex'
+                )
+                BEGIN
+                    DROP INDEX
+                        [IX_WorkoutExercises_WorkoutTemplateId_OrderIndex]
+                    ON [dbo].[WorkoutExercises];
+                END
 
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkoutExercises_WorkoutTemplateId",
-                table: "WorkoutExercises",
-                column: "WorkoutTemplateId");
-        }
+                IF NOT EXISTS (
+                    SELECT 1 FROM sys.indexes
+                    WHERE object_id = OBJECT_ID(N'dbo.WorkoutExercises')
+                      AND name = N'IX_WorkoutExercises_WorkoutTemplateId'
+                )
+                BEGIN
+                    CREATE INDEX
+                        [IX_WorkoutExercises_WorkoutTemplateId]
+                    ON [dbo].[WorkoutExercises] ([WorkoutTemplateId]);
+                END
+            END
+            """);
     }
 }

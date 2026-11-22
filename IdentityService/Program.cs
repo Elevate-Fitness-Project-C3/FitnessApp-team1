@@ -54,7 +54,7 @@ await using (var scope = app.Services.CreateAsyncScope())
     if (app.Configuration.GetValue<bool>(
         "Database:ApplyMigrationsOnStartup"))
     {
-        //await dbContext.Database.MigrateAsync();
+        await dbContext.Database.MigrateAsync();
     }
 
     var roleSeeder = scope.ServiceProvider
@@ -62,6 +62,7 @@ await using (var scope = app.Services.CreateAsyncScope())
 
     await roleSeeder.SeedRolesAsync();
 }
+
 
 if (app.Environment.IsDevelopment())
 {
