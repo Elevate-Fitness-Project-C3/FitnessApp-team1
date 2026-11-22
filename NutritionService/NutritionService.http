@@ -1,6 +1,71 @@
 @NutritionService_HostAddress = http://localhost:5290
 
-GET {{NutritionService_HostAddress}}/weatherforecast/
+### 1. Get current nutrition preference (unconfigured returns prompt)
+GET {{NutritionService_HostAddress}}/api/nutrition/preferences/me
 Accept: application/json
+
+###
+
+### 2. Set nutrition goal to Maintain (FIT-162) - returns { success: true, message: "..." }
+PUT {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Content-Type: application/json
+
+{
+  "goal": "Maintain"
+}
+
+###
+
+### 3. Get current nutrition preference after setting (FIT-163)
+GET {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Accept: application/json
+
+###
+
+### 4. Update nutrition goal to GradualLoss
+PUT {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Content-Type: application/json
+
+{
+  "goal": "GradualLoss"
+}
+
+###
+
+### 5. Update nutrition goal to GradualGain with custom X-User-Id header
+PUT {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Content-Type: application/json
+X-User-Id: 22222222-2222-2222-2222-222222222222
+
+{
+  "goal": "GradualGain"
+}
+
+###
+
+### 6. Get nutrition preference for custom user via X-User-Id header
+GET {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Accept: application/json
+X-User-Id: 22222222-2222-2222-2222-222222222222
+
+###
+
+### 7. Test Validation - Invalid Goal
+PUT {{NutritionService_HostAddress}}/api/nutrition/preferences/me
+Content-Type: application/json
+
+{
+  "goal": 999
+}
+
+###
+
+### 8. Test POST alias endpoint
+POST {{NutritionService_HostAddress}}/api/nutrition/preferences
+Content-Type: application/json
+
+{
+  "goal": "Maintain"
+}
 
 ###
