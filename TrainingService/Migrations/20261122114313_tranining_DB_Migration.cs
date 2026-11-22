@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TrainingService.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateTrainingDbSchema : Migration
+    public partial class tranining_DB_Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

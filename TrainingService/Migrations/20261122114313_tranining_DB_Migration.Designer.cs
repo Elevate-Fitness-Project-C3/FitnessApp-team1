@@ -12,8 +12,8 @@ using TrainingService.Infrastructure.Persistence;
 namespace TrainingService.Migrations
 {
     [DbContext(typeof(TrainingDbContext))]
-    [Migration("20261122074014_UpdateTrainingDbSchema")]
-    partial class UpdateTrainingDbSchema
+    [Migration("20261122114313_tranining_DB_Migration")]
+    partial class tranining_DB_Migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
