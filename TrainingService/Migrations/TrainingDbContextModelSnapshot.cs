@@ -94,9 +94,10 @@ namespace TrainingService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProgramId");
-
                     b.HasIndex("WorkoutId");
+
+                    b.HasIndex("ProgramId", "WeekNumber", "DayNumber")
+                        .IsUnique();
 
                     b.ToTable("ProgramWorkoutSlots");
                 });

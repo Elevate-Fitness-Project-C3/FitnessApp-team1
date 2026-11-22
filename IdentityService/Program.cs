@@ -3,7 +3,6 @@ using IdentityService.Identity.User_Registration.Commands;
 using IdentityService.Identity.User_Registration.EndPoint;
 using IdentityService.Identity.User_Registration.Validation;
 using IdentityService.Persistence;
-using IdentityService.Persistence.Seeding;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -24,12 +23,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
+await using (var scope = app.Services.CreateAsyncScope())
 {
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<AppDbContext>();
+
+    if (app.Configuration.GetValue<bool>(
+        "Database:ApplyMigrationsOnStartup"))
+    {
+        //await dbContext.Database.MigrateAsync();
+    }
+
     var roleManager = scope.ServiceProvider
         .GetRequiredService<RoleManager<IdentityRole>>();
 
-    await RoleSeeder.SeedRolesAsync(roleManager);
+    //await RoleSeeder.SeedRolesAsync(roleManager);
 }
 
 // Configure the HTTP request pipeline.

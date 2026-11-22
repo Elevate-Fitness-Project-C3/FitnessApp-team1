@@ -2,6 +2,6 @@ namespace TrainingService.Domain.Enums;
 
 public enum AccessTier
 {
-    Free,
-    Premium
+    Free = 0,
+    Premium = 1
 }
