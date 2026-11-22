@@ -17,6 +17,3 @@ namespace TrainingService.Domain.IRepositories
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
-
-
-}
