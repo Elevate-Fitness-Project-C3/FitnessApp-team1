@@ -15,6 +15,7 @@ public class TrainingDbContext(DbContextOptions<TrainingDbContext> options) : Db
     public DbSet<UserTrainingProgram> UserTrainingPrograms { get; set; }
     public DbSet<WorkoutSession> WorkoutSessions { get; set; }
     public DbSet<SessionExercise> SessionExercises { get; set; }
+    public DbSet<FitnessProfile> FitnessProfiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

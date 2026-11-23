@@ -45,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\SetTrainingRefrence\Orchestrator\" />
     <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Commands\" />
     <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Commands\" />
     <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Commands\" />

@@ -62,6 +62,39 @@ namespace TrainingService.Migrations
                     b.ToTable("Exercises");
                 });
 
+            modelBuilder.Entity("TrainingService.Domain.Entities.FitnessProfile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AvailableDaysPerWeek")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TrainingExperienceLevel")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FitnessProfiles");
+                });
+
             modelBuilder.Entity("TrainingService.Domain.Entities.ProgramWorkoutSlot", b =>
                 {
                     b.Property<Guid>("Id")
