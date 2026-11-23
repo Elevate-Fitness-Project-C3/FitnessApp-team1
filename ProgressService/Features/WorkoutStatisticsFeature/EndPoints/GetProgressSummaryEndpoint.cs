@@ -15,7 +15,7 @@ namespace ProgressService.Features.WorkoutStatisticsFeature.EndPoints
                 ClaimsPrincipal user,
                 IMediator mediator) =>
             {
-                if (!Guid.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
+                if (!Guid.TryParse(user.FindFirstValue("sub"), out var userId))
                     return Results.Json(EndpointResponse<ProgressSummaryViewModel>.Fail("Unauthorized", 401),statusCode: 401);
 
                 var result = await mediator.Send(new GetProgressSummaryQuery(userId));

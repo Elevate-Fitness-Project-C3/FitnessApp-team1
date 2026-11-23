@@ -29,18 +29,23 @@ namespace ProgressService.Features.WorkoutHistoryFeature.Handlers
             //3.Get the total count of completed workout records for the user :
             var totalCount = await userWorkoutRecords.CountAsync(cancellationToken);
 
-            //4.Paginate the records :
-            var paginatedRecords = await userWorkoutRecords
-                .OrderByDescending(x => x.CompletedAtUtc)
-                .ThenByDescending(x => x.Id)
-                .Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync(cancellationToken);
+            //4.Paginate the records & Map the records to DTOs :
+            var items = await userWorkoutRecords
+               .OrderByDescending(x => x.CompletedAtUtc)
+               .ThenByDescending(x => x.Id)
+               .Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize)
+               .Select(x => new WorkoutHistoryItemDto
+               {
+                   Id = x.Id,
+                   WorkoutSessionId = x.WorkoutSessionId,
+                   TrainingProgramId = x.TrainingProgramId,
+                   ProgramWorkoutSlotId = x.ProgramWorkoutSlotId,
+                   CompletedAtUtc = x.CompletedAtUtc
+               })
+               .ToListAsync(cancellationToken);
 
-            //5.Map the records to DTOs :
-            var items= paginatedRecords.Select(r => r.ToDto()).ToList();
-
-            //6.Return the paginated result :
+            //5.Return the paginated result :
             var page = PaginatedResult<WorkoutHistoryItemDto>.Create(items, totalCount, pageIndex, pageSize);
             return RequestResponse<PaginatedResult<WorkoutHistoryItemDto>>.Ok(page);
         }
