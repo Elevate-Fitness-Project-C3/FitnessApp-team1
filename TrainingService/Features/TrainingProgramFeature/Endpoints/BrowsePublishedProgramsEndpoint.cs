@@ -29,6 +29,7 @@ public static class BrowsePublishedProgramsEndpoint
             return Results.Json(response, statusCode: result.StatusCode);
         })
         .WithName("BrowsePublishedPrograms")
-        .WithTags("Programs");
+        .WithTags("Programs")
+        .AllowAnonymous();
     }
 }

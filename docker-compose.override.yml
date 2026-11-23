@@ -77,7 +77,7 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
       RABBITMQ_DEFAULT_VHOST: Elevate
     ports:
-      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:5673:5672"
       - "127.0.0.1:15673:15672"
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
