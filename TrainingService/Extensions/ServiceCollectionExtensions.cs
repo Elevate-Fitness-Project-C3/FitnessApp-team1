@@ -47,23 +47,7 @@ namespace TrainingService.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             return services;
         }
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
-        {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-            return services;
-        }
-        public static IEndpointRouteBuilder MapWorkoutsEndpoints(this IEndpointRouteBuilder app)
-        {
-            //app.MapCreateWorkoutEndpoint();
-            //app.MapGetWorkouts();      
-            //app.MapGetWorkout();        
-            //app.MapUpdateWorkoutEndpoint();
-            //app.MapDeleteWorkoutEndpoint();
-
-            return app;
-        }
         //public static IEndpointRouteBuilder MapExercisesEndpoints(this IEndpointRouteBuilder app)
         //{
         //    app.MapCreateExerciseEndpoint();

@@ -19,4 +19,4 @@ namespace TrainingService.Domain.IRepositories
 }
 
 
-}
+

@@ -19,21 +19,22 @@ namespace TrainingService.Features.Workouts.GetWorkoutById.Handlers
 
         public async Task<RequestResponse<WorkoutByIdDto>> Handle(GetWorkoutByIdQuery request, CancellationToken cancellationToken)
         {
-            var workout = await _workoutRepo.GetByIdAsync(request.WorkoutId);
+            var workout = await _workoutRepo.GetAll()
+                .AsNoTracking()
+                .Where(w => w.Id == request.WorkoutId)
+                .Select(w => new WorkoutByIdDto(
+                    w.Id,
+                    w.Title,
+                    w.Description,
+                    w.Difficulty,
+                    w.EstimatedDurationMinutes
+                ))
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (workout == null)
                 return RequestResponse<WorkoutByIdDto>.Fail("Workout not found.", 404);
-            
 
-            var dto = new WorkoutByIdDto(
-                workout.Id,
-                workout.Title,
-                workout.Description,
-                workout.Difficulty,
-                workout.EstimatedDurationMinutes
-            );
-
-            return RequestResponse<WorkoutByIdDto>.Ok(dto, "Workout retrieved successfully.");
+            return RequestResponse<WorkoutByIdDto>.Ok(workout, "Workout retrieved successfully.");
         }
     }
 }
