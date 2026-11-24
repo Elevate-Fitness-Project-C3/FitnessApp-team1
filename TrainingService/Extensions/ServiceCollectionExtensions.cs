@@ -4,10 +4,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TrainingService.Domain.IRepositories;
 using TrainingService.Features.Shared.Validation;
-using TrainingService.Features.ProgramWorkoutSlotFeature.Endpoints;
-using TrainingService.Features.TrainingProgramFeature.Endpoints;
 using TrainingService.Infrastructure.DataAccess;
 using TrainingService.Infrastructure.Persistence;
+using TrainingService.Features.TrainingProgramFeature.BrowseTrainingPrograms.Endpoints;
+using TrainingService.Features.TrainingProgramFeature.CreateTrainingProgram.Endpoints;
+using TrainingService.Features.ProgramWorkoutSlotFeature.Create.Endpoints;
 
 namespace TrainingService.Extensions;
 

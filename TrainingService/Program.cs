@@ -1,12 +1,11 @@
-
 using Microsoft.EntityFrameworkCore;
 using TrainingService.Extensions;
 using TrainingService.Features.TrainingPrograms;
 using TrainingService.Features.WorkoutExercises;
 using TrainingService.Features.Workouts;
-using TrainingService.Features.ProgramWorkoutSlotFeature.Endpoints;
 using TrainingService.Infrastructure.Persistence;
 using FitnessApp.Auth;
+using TrainingService.Features.ProgramWorkoutSlotFeature.Create.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +45,6 @@ if (!app.Environment.IsEnvironment("Testing") &&
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi().AllowAnonymous();
-
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint(
