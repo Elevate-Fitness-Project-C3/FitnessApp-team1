@@ -18,6 +18,10 @@ services:
     build:
       context: .
       dockerfile: Fitness_Profile_Service/Dockerfile
+    environment:
+      Jwt__Issuer: fitnessapp-team1
+      Jwt__Audience: fitnessapp-team1-clients
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
 
   trainingservice:
     image: fitness-team1-trainingservice
