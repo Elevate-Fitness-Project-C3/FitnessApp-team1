@@ -30,6 +30,10 @@
   <ItemGroup>
     <Folder Include="Features\completedworkoutRecordFeature\EndPoints\" />
     <Folder Include="Features\completedworkoutRecordFeature\Queries\" />
+    <Folder Include="Features\WeeklyStreakFeature\DTOs\" />
+    <Folder Include="Features\WeeklyStreakFeature\EndPoints\" />
+    <Folder Include="Features\WeeklyStreakFeature\Handlers\" />
+    <Folder Include="Features\WeeklyStreakFeature\Queries\" />
   </ItemGroup>
 
 </Project>
