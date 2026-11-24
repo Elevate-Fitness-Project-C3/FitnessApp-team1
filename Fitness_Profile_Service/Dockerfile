@@ -9,7 +9,6 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BuildingBlocks/FitnessApp.Auth/FitnessApp.Auth.csproj", "BuildingBlocks/FitnessApp.Auth/"]
 COPY ["Fitness_Profile_Service/FitnessProfileService.csproj", "Fitness_Profile_Service/"]
 RUN dotnet restore "./Fitness_Profile_Service/FitnessProfileService.csproj"
 COPY . .

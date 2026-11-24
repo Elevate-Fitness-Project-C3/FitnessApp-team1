@@ -2,52 +2,106 @@
 services:
   identityservice:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=IdentityDb;User Id=sa;Password=${SQL_SA_PASSWORD};TrustServerCertificate=True
-      - Email__Smtp__Host=smtp.resend.com
-      - Email__Smtp__Port=587
-      - Email__Smtp__Username=resend
-      - Email__Smtp__Password=${RESEND_API_KEY}
-      - Email__From=${RESEND_FROM:-onboarding@resend.dev}
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      Database__ApplyMigrationsOnStartup: "true"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=IdentityDb;User Id=sa;Password=${SQL_SA_PASSWORD:?SQL_SA_PASSWORD must be set};TrustServerCertificate=True"
+      Email__Smtp__Host: mailhog
+      Email__Smtp__Port: "1025"
+      Jwt__Secret: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
     ports:
-      - "5002:8080"
+      - "127.0.0.1:5001:8080"
     depends_on:
       sqlserver:
         condition: service_healthy
       mailhog:
         condition: service_started
 
+  fitnessprofileservice:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+    ports:
+      - "127.0.0.1:5002:8080"
+
   trainingservice:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=TrainingDb;User Id=sa;Password=${SQL_SA_PASSWORD};TrustServerCertificate=True
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      Database__ApplyMigrationsOnStartup: "true"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=TrainingDb;User Id=sa;Password=${SQL_SA_PASSWORD:?SQL_SA_PASSWORD must be set};TrustServerCertificate=True"
     ports:
-      - "5003:8080"
+      - "127.0.0.1:5003:8080"
     depends_on:
       sqlserver:
         condition: service_healthy
 
-  sqlserver:
+  progressservice:
     environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: ${SQL_SA_PASSWORD:?SQL_SA_PASSWORD is required} 
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=ProgressDb;User Id=sa;Password=${SQL_SA_PASSWORD:?SQL_SA_PASSWORD must be set};TrustServerCertificate=True"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__VHost: Elevate
+      RabbitMq__Username: guest
+      RabbitMq__Password: guest
     ports:
-      - "127.0.0.1:11434:1433"
+      - "127.0.0.1:5004:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  nutritionservice:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__Elevate_NutritionDb: "Server=sqlserver,1433;Database=Elevate_NutritionDb;User Id=sa;Password=${SQL_SA_PASSWORD:?SQL_SA_PASSWORD must be set};TrustServerCertificate=True"
+    ports:
+      - "127.0.0.1:5005:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  paymentservice:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+    ports:
+      - "127.0.0.1:5006:8080"
+
+  rabbitmq:
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: Elevate
+    ports:
+      - "127.0.0.1:5673:5672"
+      - "127.0.0.1:15673:15672"
     healthcheck:
-      test:
-        [
-           "CMD-SHELL",
-           "/opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1",
-        ]
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 20s
 
   mailhog:
-    image: mailhog/mailhog
     ports:
       - "127.0.0.1:8025:8025"
       - "127.0.0.1:1025:1025"
+
+  sqlserver:
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SQL_SA_PASSWORD:?SQL_SA_PASSWORD must be set}"
+    ports:
+      - "127.0.0.1:11434:1433"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - '/opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -U sa -P "$$MSSQL_SA_PASSWORD" -C -b -l 3 -Q "SELECT 1" >/dev/null || exit 1'
+      interval: 10s
+      timeout: 6s
+      retries: 20
+      start_period: 60s

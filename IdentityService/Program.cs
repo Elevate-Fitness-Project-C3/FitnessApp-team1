@@ -1,44 +1,100 @@
+using FluentValidation;
 using FitnessApp.Auth;
 using IdentityService.Api;
-using IdentityService.Infrastructure.Persistence;
+using IdentityService.Identity.User_Login.Endpoints;
+using IdentityService.Identity.User_Registration.Commands;
+using IdentityService.Identity.User_Registration.EndPoint;
+using IdentityService.Identity.User_Registration.Validation;
+using IdentityService.Infrastructure.Persistence.Contexts;
+using IdentityService.Infrastructure.Persistence.Seeding;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEmailVerification(builder.Configuration);
 builder.Services.AddFitnessAuth(builder.Configuration);
 
+builder.Services.AddRateLimiter(config =>
+{
+    config.AddFixedWindowLimiter("fixed", options =>
+    {
+        options.Window = TimeSpan.FromMinutes(10);
+        options.PermitLimit = 5;
+    });
+});
+
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterViewModelValidation>();
+builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<RoleSeeder>();
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.AllowedForNewUsers = true;
+    options.SignIn.RequireConfirmedEmail = true;
+})
+.AddEntityFrameworkStores<AppDbContext>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+var applyMigrationsOnStartup = app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup");
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var appDbContext = scope.ServiceProvider
+        .GetRequiredService<AppDbContext>();
+
+    if (applyMigrationsOnStartup)
+    {
+        await appDbContext.Database.MigrateAsync();
+    }
+
+    var roleSeeder = scope.ServiceProvider
+        .GetRequiredService<RoleSeeder>();
+
+    await roleSeeder.SeedRolesAsync();
+
+    if (applyMigrationsOnStartup)
+    {
+        var emailVerificationDbContext = scope.ServiceProvider
+            .GetRequiredService<EmailVerificationDbContext>();
+
+        await emailVerificationDbContext.Database.MigrateAsync();
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
-    // Dev only: apply migrations automatically so local runs "just work".
-    using var scope = app.Services.CreateScope();
-    scope.ServiceProvider.GetRequiredService<EmailVerificationDbContext>().Database.Migrate();
-
     app.MapSwagger().AllowAnonymous();
     app.MapSwaggerUI().AllowAnonymous();
 }
 
-// Local dev runs use HTTP (Swagger/MailHog). The https launch profile advertises
-// port 7127 but does not bind it without a dev certificate, so redirecting there
-// breaks POSTs from Swagger UI. Only redirect outside Development.
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+
+app.UseRateLimiter();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapEmailVerificationEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapDevFakeRegistration();
-    // TODO: remove when ID-03 login issues real tokens.
     app.MapDevTokenEndpoint();
 }
+
+await app.RegisterUser();
+app.UserLogin();
 
 app.Run();
