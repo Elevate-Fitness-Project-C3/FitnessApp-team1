@@ -25,9 +25,25 @@
 
             if ( await _userManger.FindByEmailAsync(user.Email) == null)
             {
-                await _userManger.CreateAsync(user, request.password);
-                await _userManger.AddToRoleAsync(user, "User");
-                return true;
+                var creatingUserResult = await _userManger.CreateAsync(user, request.password);
+
+                if (creatingUserResult.Succeeded)
+                {
+                   var addingRoleResult = await _userManger.AddToRoleAsync(user, "User");
+                    if (addingRoleResult.Succeeded)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        
+                       await _userManger.DeleteAsync(user);
+                       return false;
+                        
+                    }
+                    
+                }
+                
             }
             return false;
         }

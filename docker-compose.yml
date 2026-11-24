@@ -1,5 +1,4 @@
-# All 6 ASP.NET Core APIs + SQL Server. No Compose profiles: F5 can find every service.
-# Local development only. Override contains ports, environment and SQL readiness.
+
 name: fitnessapp-team1
 
 services:
@@ -8,6 +7,11 @@ services:
     build:
       context: .
       dockerfile: IdentityService/Dockerfile
+    environment:
+      Verification__HmacKey: ${VERIFICATION_HMAC_KEY:?VERIFICATION_HMAC_KEY is required}
+      Jwt__Issuer: fitnessapp-team1
+      Jwt__Audience: fitnessapp-team1-clients
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
 
   fitnessprofileservice:
     image: fitness-team1-fitnessprofileservice
@@ -20,6 +24,10 @@ services:
     build:
       context: .
       dockerfile: TrainingService/Dockerfile
+    environment:
+      Jwt__Issuer: fitnessapp-team1
+      Jwt__Audience: fitnessapp-team1-clients
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
 
   progressservice:
     image: fitness-team1-progressservice
@@ -32,6 +40,10 @@ services:
     build:
       context: .
       dockerfile: NutritionService/Dockerfile
+    environment:
+      Jwt__Issuer: fitnessapp-team1
+      Jwt__Audience: fitnessapp-team1-clients
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
 
   paymentservice:
     image: fitness-team1-paymentservice
@@ -39,8 +51,13 @@ services:
       context: .
       dockerfile: PaymentService/Dockerfile
 
+  rabbitmq:
+    image: rabbitmq:4-management
+
+  mailhog:
+    image: mailhog/mailhog
+
   sqlserver:
-    # Original Team 1 pinned SQL Server 2022 image.
     image: mcr.microsoft.com/mssql/server@sha256:4525e3efac9f3e241cb003bb2ff2a82818b502f37e12049d788b1a9fa7e13b7f
     volumes:
       - sql-data:/var/opt/mssql

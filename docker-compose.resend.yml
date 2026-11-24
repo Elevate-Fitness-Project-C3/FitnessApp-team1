@@ -1,0 +1,8 @@
+services:
+  identityservice:
+    environment:
+      - Email__Smtp__Host=smtp.resend.com
+      - Email__Smtp__Port=587
+      - Email__Smtp__Username=resend
+      - Email__Smtp__Password=${RESEND_API_KEY:?RESEND_API_KEY is required}
+      - Email__From=${RESEND_FROM:-onboarding@resend.dev}
