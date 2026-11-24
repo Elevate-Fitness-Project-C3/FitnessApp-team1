@@ -63,6 +63,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: "8080"
       ConnectionStrings__Elevate_NutritionDb: "Server=sqlserver,1433;Database=Elevate_NutritionDb;User Id=sa;Password=${SQL_SA_PASSWORD:?SQL_SA_PASSWORD must be set};TrustServerCertificate=True"
+      FitnessProfile__BaseUrl: "http://fitnessprofileservice:8080"
     ports:
       - "127.0.0.1:5005:8080"
     depends_on:
