@@ -1,4 +1,5 @@
 ﻿using TrainingService.Domain.Enums;
+using TrainingService.Features.Shared;
 
 namespace TrainingService.DTOs.BrowseTrainingProgramDetails
 {
@@ -14,6 +15,6 @@ namespace TrainingService.DTOs.BrowseTrainingProgramDetails
         public AccessTier AccessTier { get; set; }
         public bool IsLocked { get; set; }
 
-        public List<ProgramWorkoutSlotDto> WorkoutSlots { get; set; } = new();
+        public PaginatedResult<ProgramWorkoutSlotDto>? WorkoutSlots { get; set; }
     }
 }

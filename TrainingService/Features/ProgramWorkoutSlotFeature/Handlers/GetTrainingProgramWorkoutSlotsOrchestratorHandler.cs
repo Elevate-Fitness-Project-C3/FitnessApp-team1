@@ -19,6 +19,7 @@ namespace TrainingService.Features.ProgramWorkoutSlotFeature.Handlers
          request.TrainingProgramId,
          request.PageNumber,
          request.PageSize), ct);
+
             if (!slots.Success)
                 return RequestResponse<PaginatedResult<ProgramWorkoutSlotDto>>
                     .Fail(slots.Message, slots.StatusCode);

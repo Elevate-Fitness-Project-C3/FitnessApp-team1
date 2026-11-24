@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using TrainingService.DTOs.BrowseTrainingProgramDetails;
+using TrainingService.Features.ProgramWorkoutSlotFeature.Orchestrators;
 using TrainingService.Features.Shared;
 using TrainingService.Features.TrainingProgramFeature.BrowseTrainingProgramDetials.Orchestrators;
 using TrainingService.Features.TrainingProgramFeature.BrowseTrainingProgramDetials.Queries;
@@ -13,16 +14,36 @@ namespace TrainingService.Features.TrainingProgramFeature.BrowseTrainingProgramD
         public BrowseTrainingProgramDetialsOrchestratorHandler(IMediator mediator) =>
             _mediator = mediator;
 
-        public async Task<RequestResponse<TrainingProgramDetailsDto>> Handle(BrowseTrainingProgramDetialsOrchestrator request , CancellationToken ct)
+        public async Task<RequestResponse<TrainingProgramDetailsDto>> Handle(
+            BrowseTrainingProgramDetialsOrchestrator request,
+            CancellationToken ct)
         {
-            var trainingProgram =await _mediator.Send(new GetTrainingProgramDetainlsQuery(request.TrainingProgramId),ct);
+            var program = await _mediator.Send(
+                new GetTrainingProgramDetainlsQuery(request.TrainingProgramId), ct);
 
-            if (trainingProgram.Data == null)
-                return RequestResponse<TrainingProgramDetailsDto>.Fail(trainingProgram.Message, trainingProgram.StatusCode);
+            if (!program.Success)
+                return RequestResponse<TrainingProgramDetailsDto>
+                    .Fail(program.Message, program.StatusCode);
+            
 
-            var trainingProgramWorkoutSlots = await _mediator.Send(new GetTrainingProgramWoekoutSlotsOrchestrator(request.TrainingProgramId));
+            if (program.Data == null)
+                return RequestResponse<TrainingProgramDetailsDto>
+                    .Fail("Program data is missing.", 500);
 
-            return RequestResponse<TrainingProgramDetailsDto>.Fail("can't get detials.");
+            var slots = await _mediator.Send(new GetTrainingProgramWorkoutSlotsOrchestrator
+                (request.TrainingProgramId, request.PageNumber, request.PageSize), ct);
+
+            if (!slots.Success)
+                return RequestResponse<TrainingProgramDetailsDto>
+                    .Fail(slots.Message, slots.StatusCode);
+
+            if (slots.Data == null)
+                return RequestResponse<TrainingProgramDetailsDto>
+                    .Fail("Workout slots data is missing.", 500);
+
+            program.Data.WorkoutSlots = slots.Data;
+
+            return RequestResponse<TrainingProgramDetailsDto>.Ok(program.Data);
         }
     }
 }
