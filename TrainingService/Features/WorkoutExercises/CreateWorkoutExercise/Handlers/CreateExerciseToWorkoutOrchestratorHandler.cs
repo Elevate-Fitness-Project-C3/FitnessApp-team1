@@ -40,8 +40,12 @@ namespace TrainingService.Features.WorkoutExercises.CreateWorkoutExercise.Handle
 
             var isUsedInPublished = await _mediator.Send( new IsWorkoutUsedInPublishedProgramQuery(request.WorkoutId),cancellationToken);
 
-            if (isUsedInPublished.Success && isUsedInPublished.Data)
+            if (!isUsedInPublished.Success)
+                return RequestResponse<Unit>.Fail(isUsedInPublished.Message, isUsedInPublished.StatusCode);
+
+            if (isUsedInPublished.Data)
                 return RequestResponse<Unit>.Fail("Cannot add exercises to a workout used in a published program.", 400);
+
 
             var duplicateOrderResult = await _mediator.Send(new IsWorkoutExerciseOrderDuplicateQuery(
                     request.OrderIndex,

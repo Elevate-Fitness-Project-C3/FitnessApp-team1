@@ -13,7 +13,7 @@ namespace TrainingService.Features.WorkoutExercises.DeleteWorkoutExercise.Contro
             {
                 var result = await mediator.Send(new DeleteWorkoutExerciseOrchestrator(id), ct);
 
-                var response = EndpointResponse<RequestResponse<Unit>>.FromResult(RequestResponse<RequestResponse<Unit>>.Ok(result));
+                var response = EndpointResponse<Unit>.FromResult(result);
                 return Results.Json(response, statusCode: response.StatusCode);
             })
                 .WithTags("Workouts")

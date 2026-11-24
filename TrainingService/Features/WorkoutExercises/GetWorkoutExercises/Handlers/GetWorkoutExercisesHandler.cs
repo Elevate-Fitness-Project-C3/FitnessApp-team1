@@ -26,6 +26,7 @@ namespace TrainingService.Features.WorkoutExercises.GetWorkoutExercises.Handlers
                   w.WorkoutExercises
                       .OrderBy(we => we.OrderIndex)
                       .Select(we => new WorkoutExerciseDto(
+                          we.Id,
                           we.ExerciseId,
                           we.Exercise.Name, 
                           we.OrderIndex,

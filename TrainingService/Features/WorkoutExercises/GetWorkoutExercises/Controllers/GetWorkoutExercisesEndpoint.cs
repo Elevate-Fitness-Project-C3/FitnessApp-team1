@@ -23,6 +23,7 @@ public static class GetWorkoutExercisesEndpoint
                 result.Data.WorkoutId,
                 result.Data.WorkoutTitle,
                 result.Data.Exercises.Select(e => new WorkoutExerciseItemVM(
+                    e.WorkoutExerciseId,
                     e.ExerciseId,
                     e.ExerciseName,
                     e.OrderIndex,

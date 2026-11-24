@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TrainingService.Domain.Enums;
 using TrainingService.Features.Shared;
 using TrainingService.Features.Workouts.GetAllWorkouts.Controllers.ViewModels;
 using TrainingService.Features.Workouts.GetAllWorkouts.Queries;
@@ -7,12 +8,12 @@ namespace TrainingService.Features.Workouts.GetAllWorkouts.Controllers
 {
     public static class GetAllWorkoutsEndpoint
     {
+
         public static void MapGetAllWorkoutsEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/api/workouts", async (int pageIndex, int pageSize, IMediator mediator, CancellationToken cancellationToken) =>
+            app.MapGet("/api/workouts", async (string? title,ExperienceLevel? difficulty,int pageIndex ,int pageSize , IMediator mediator, CancellationToken cancellationToken) =>
             {
-                var result = await mediator.Send(new GetAllWorkoutsQuery(pageIndex, pageSize), cancellationToken);
-
+                var result = await mediator.Send(new GetAllWorkoutsQuery(pageIndex, pageSize, title, difficulty), cancellationToken);
                 if (!result.Success || result.Data == null)
                 {
                     var failResponse = EndpointResponse<GetAllWorkoutsVM>.Fail(result.Message, result.StatusCode, result.Errors);
