@@ -8,6 +8,7 @@
   <Project Path="IdentityService/IdentityService.csproj" />
   <Project Path="IdentityService.Tests/IdentityService.Tests.csproj" />
   <Project Path="NutritionService/NutritionService.csproj" />
+  <Project Path="NutritionService.Tests/NutritionService.Tests.csproj" />
   <Project Path="PaymentService/PaymentService.csproj" />
   <Project Path="ProgressService/ProgressService.csproj" />
   <Project Path="TrainingService/TrainingService.csproj" />
