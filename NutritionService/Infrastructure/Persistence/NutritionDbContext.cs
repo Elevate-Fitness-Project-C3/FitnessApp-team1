@@ -11,6 +11,7 @@ public class NutritionDbContext : DbContext
     }
 
     public DbSet<NutritionPreference> NutritionPreferences => Set<NutritionPreference>();
+    public DbSet<Meal> Meals => Set<Meal>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -69,3 +69,128 @@ Content-Type: application/json
 }
 
 ###
+
+###############################################################################
+# MEAL CATALOG MANAGEMENT & DISCOVERY (NT-03)
+###############################################################################
+
+### 8. Browse active meals (paginated, empty/initial catalog)
+GET {{NutritionService_HostAddress}}/api/nutrition/meals?page=1&pageSize=10
+Accept: application/json
+
+###
+
+### 9. Create a Meal (Admin) - Breakfast (returns 201 Created with { id: "guid" })
+POST {{NutritionService_HostAddress}}/api/nutrition/meals
+Content-Type: application/json
+X-Role: Admin
+
+{
+  "name": "Oatmeal with Blueberries and Whey Protein",
+  "type": "Breakfast",
+  "calories": 420,
+  "proteinGrams": 32.5
+}
+
+###
+
+### 10. Create a Meal (Admin) - Lunch
+POST {{NutritionService_HostAddress}}/api/nutrition/meals
+Content-Type: application/json
+X-Role: Admin
+
+{
+  "name": "Grilled Chicken Breast with Brown Rice",
+  "type": "Lunch",
+  "calories": 580,
+  "proteinGrams": 48.0
+}
+
+###
+
+### 11. Create a Meal (Admin) - Snack
+POST {{NutritionService_HostAddress}}/api/nutrition/meals
+Content-Type: application/json
+X-Role: Admin
+
+{
+  "name": "Greek Yogurt with Almonds",
+  "type": "Snack",
+  "calories": 250,
+  "proteinGrams": 22.0
+}
+
+###
+
+### 12. Create a Meal Validation Failure - Negative Calories and Protein
+POST {{NutritionService_HostAddress}}/api/nutrition/meals
+Content-Type: application/json
+X-Role: Admin
+
+{
+  "name": "Invalid Meal",
+  "type": "Dinner",
+  "calories": -100,
+  "proteinGrams": -5.0
+}
+
+###
+
+### 13. Create a Meal Validation Failure - Empty Name and Invalid Type
+POST {{NutritionService_HostAddress}}/api/nutrition/meals
+Content-Type: application/json
+X-Role: Admin
+
+{
+  "name": "",
+  "type": "InvalidMealType",
+  "calories": 300,
+  "proteinGrams": 20.0
+}
+
+###
+
+### 14. Browse active meals with Search query
+GET {{NutritionService_HostAddress}}/api/nutrition/meals?search=Chicken&page=1&pageSize=10
+Accept: application/json
+
+###
+
+### 15. Browse active meals filtered by MealType
+GET {{NutritionService_HostAddress}}/api/nutrition/meals?type=Breakfast&page=1&pageSize=10
+Accept: application/json
+
+###
+
+### 16. Get Meal by Id (Replace GUID with an actual meal ID from create response)
+@SampleMealId = 00000000-0000-0000-0000-000000000000
+GET {{NutritionService_HostAddress}}/api/nutrition/meals/{{SampleMealId}}
+Accept: application/json
+
+###
+
+### 17. Update Meal details (Admin) - returns 200 OK with { success: true, message: "..." }
+PUT {{NutritionService_HostAddress}}/api/nutrition/meals/{{SampleMealId}}
+Content-Type: application/json
+X-Role: Admin
+
+{
+  "name": "Grilled Chicken Breast with Quinoa and Steamed Veggies",
+  "type": "Lunch",
+  "calories": 540,
+  "proteinGrams": 50.0
+}
+
+###
+
+### 18. Soft-deactivate Meal (Admin) - returns 204 NoContent
+DELETE {{NutritionService_HostAddress}}/api/nutrition/meals/{{SampleMealId}}
+X-Role: Admin
+
+###
+
+### 19. Verify deactivated meal is excluded from Browse
+GET {{NutritionService_HostAddress}}/api/nutrition/meals
+Accept: application/json
+
+###

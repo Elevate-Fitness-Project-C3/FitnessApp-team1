@@ -50,11 +50,13 @@ public class SetNutritionGoalCommandHandler : IRequestHandler<SetNutritionGoalCo
             var existing = await _repository
                 .FirstOrDefaultAsync(p => p.UserId == userId, asNoTracking: false, cancellationToken);
 
-            if (existing != null)
+            if (existing is null)
             {
-                existing.UpdateGoal(request.Goal, utcNow);
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                throw new InvalidOperationException("Failed to persist nutrition preference due to concurrent modification race condition.", ex);
             }
+
+            existing.UpdateGoal(request.Goal, utcNow);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         return true;

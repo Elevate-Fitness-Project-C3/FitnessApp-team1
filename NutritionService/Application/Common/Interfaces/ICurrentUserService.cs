@@ -4,4 +4,5 @@ public interface ICurrentUserService
 {
     Guid? UserId { get; }
     Guid GetRequiredUserId();
+    bool IsAdmin { get; }
 }
