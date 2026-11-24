@@ -1,6 +1,59 @@
-@Fitness_Profile_Service_HostAddress = http://localhost:5069
+@FitnessProfileService_HostAddress = http://localhost:5069
+@IdentityService_HostAddress = http://localhost:5190
+@UserId = 00000000-0000-0000-0000-000000000001
 
-GET {{Fitness_Profile_Service_HostAddress}}/weatherforecast/
-Accept: application/json
+# Get a dev token from IdentityService first, then paste it below.
+# POST {{IdentityService_HostAddress}}/api/dev/token
+# Content-Type: application/json
+#
+# {
+#   "userId": "{{UserId}}",
+#   "role": "User"
+# }
+
+@Token = paste-dev-token-here
+
+GET {{FitnessProfileService_HostAddress}}/api/profile/dev-check
+Authorization: Bearer {{Token}}
 
 ###
+
+POST {{FitnessProfileService_HostAddress}}/api/profile/onboarding
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+  "gender": "Male",
+  "dateOfBirth": "1998-05-14",
+  "fitnessGoal": "GainMuscle",
+  "physicalActivityLevel": "Intermediate",
+  "heightCm": 175.5,
+  "weightKg": 72.3,
+  "trainingExperienceLevel": "2 years",
+  "availableDaysPerWeek": 4
+}
+
+###
+
+GET {{FitnessProfileService_HostAddress}}/api/profile/me
+Authorization: Bearer {{Token}}
+
+###
+
+GET {{FitnessProfileService_HostAddress}}/api/profile/me/measurements
+Authorization: Bearer {{Token}}
+
+###
+
+POST {{FitnessProfileService_HostAddress}}/api/profile/me/measurements
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+  "heightCm": 175.5,
+  "weightKg": 71.8
+}
+
+###
+
+GET {{FitnessProfileService_HostAddress}}/openapi/v1.json
