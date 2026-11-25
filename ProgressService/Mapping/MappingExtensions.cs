@@ -1,7 +1,9 @@
 using ProgressService.Domain.Entities;
+using ProgressService.Features.WeeklyStreakFeature.DTOs;
 using ProgressService.Features.WorkoutHistoryFeature.DTOs;
 using ProgressService.Features.WorkoutStatisticsFeature.DTOs;
 using ProgressService.Shared;
+using ProgressService.ViewModels.WeeklyStreak;
 using ProgressService.ViewModels.WorkoutHistory;
 using ProgressService.ViewModels.WorkoutStatistics;
 
@@ -51,6 +53,16 @@ public static class MappingExtensions
         page.TotalCount,
         page.PageIndex,
         page.PageSize);
+
+
+    // ═══════════════════════════════════════════════════════
+    //  WeeklyStreak MAPPINGS
+    // ═══════════════════════════════════════════════════════
+    public static StreakViewModel ToViewModel(this StreakDto dto) => new()
+    {
+        CurrentStreak = dto.CurrentStreak,
+        LongestStreak = dto.LongestStreak
+    };
 
 
 }
