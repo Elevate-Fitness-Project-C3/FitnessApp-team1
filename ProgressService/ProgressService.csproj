@@ -32,4 +32,8 @@
     <Folder Include="Features\completedworkoutRecordFeature\Queries\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\FitnessApp.Auth\FitnessApp.Auth.csproj" />
+  </ItemGroup>
+
 </Project>

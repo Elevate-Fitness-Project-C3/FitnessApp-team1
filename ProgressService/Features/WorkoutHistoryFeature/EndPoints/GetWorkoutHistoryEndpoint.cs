@@ -17,7 +17,7 @@ namespace ProgressService.Features.WorkoutHistoryFeature.EndPoints
                 int pageIndex = 1,
                 int pageSize = 10) =>
             {
-                if (!Guid.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
+                if (!Guid.TryParse(user.FindFirstValue("sub"), out var userId))
                     return Results.Json(EndpointResponse<PaginatedResult<WorkoutHistoryItemViewModel>>.Fail("Unauthorized", 401),statusCode: 401);
 
                 var result = await mediator.Send(new GetWorkoutHistoryQuery(userId, pageIndex, pageSize));

@@ -1,16 +1,17 @@
 <Solution>
+  <Project Path="../ProgressService.Tests/ProgressService.Tests.csproj" Id="739ad092-ccc2-41a6-a710-12bf2323d529" />
+  <Project Path="BuildingBlocks/FitnessApp.Auth/FitnessApp.Auth.csproj" />
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
-  <Project Path="BuildingBlocks/FitnessApp.Auth/FitnessApp.Auth.csproj" />
   <Project Path="FitnessApp.Auth.Tests/FitnessApp.Auth.Tests.csproj" />
   <Project Path="Fitness_Profile_Service/FitnessProfileService.csproj" />
-  <Project Path="IdentityService/IdentityService.csproj" />
   <Project Path="IdentityService.Tests/IdentityService.Tests.csproj" />
+  <Project Path="IdentityService/IdentityService.csproj" />
   <Project Path="NutritionService/NutritionService.csproj" />
   <Project Path="NutritionService.Tests/NutritionService.Tests.csproj" />
   <Project Path="PaymentService/PaymentService.csproj" />
   <Project Path="ProgressService/ProgressService.csproj" />
-  <Project Path="TrainingService/TrainingService.csproj" />
   <Project Path="TrainingService.Tests/TrainingService.Tests.csproj" />
+  <Project Path="TrainingService/TrainingService.csproj" />
 </Solution>
