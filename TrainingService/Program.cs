@@ -23,6 +23,10 @@ builder.Services.AddInfrastructureServices();
 builder.Services.AddMediatRConfiguration();
 builder.Services.AddFitnessAuth(builder.Configuration);
 
+//fitness profile client
+builder.Services.AddFitnessProfileClient(builder.Configuration);
+
+
 var app = builder.Build();
 
 if (!app.Environment.IsEnvironment("Testing") &&
@@ -62,7 +66,6 @@ app.UseAuthorization();
 app.MapWorkoutsEndpoints();
 app.MapWorkoutExerciseEndpoints();
 app.MapTrainingProgramEndpoints();
-app.MapTrainingProgramsEndpoints();
 app.MapCreateProgramWorkoutSlotEndpoint();
 
 app.MapTrainingPreferencesEndpoint();

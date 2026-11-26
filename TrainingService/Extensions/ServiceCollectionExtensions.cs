@@ -2,9 +2,13 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TrainingService.Domain.IRepositories;
-using TrainingService.Features.Shared.Validation;
 using TrainingService.Features.ProgramWorkoutSlotFeature.Endpoints;
+using TrainingService.Features.Shared.Validation;
 using TrainingService.Features.TrainingProgramFeature.Endpoints;
+using TrainingService.Features.TrainingPrograms.ArchiveTrainingProgram.Controllers;
+using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Clients;
+using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Endpoints;
+using TrainingService.Features.TrainingPrograms.PublishTrainingProgram.Controllers;
 using TrainingService.Infrastructure.DataAccess;
 using TrainingService.Infrastructure.Persistence;
 
@@ -65,6 +69,12 @@ public static class ServiceCollectionExtensions
         app.MapBrowsePublishedProgramsEndpoint();
         app.MapCreateTrainingProgramEndpoint();
 
+        //publish and archive endpoints 
+        app.MapArchiveTrainingProgramEndpoint();
+        app.MapPublishTrainingProgramEndpoint();
+        //program recommendations endpoint
+        app.MapGetProgramRecommendationsEndpoint();
+
         return app;
     }
 
@@ -74,5 +84,24 @@ public static class ServiceCollectionExtensions
         app.MapCreateProgramWorkoutSlotEndpoint();
 
         return app;
+    }
+
+
+    public static IServiceCollection AddFitnessProfileClient(
+    this IServiceCollection services,
+    IConfiguration configuration)
+    {
+        services.AddHttpContextAccessor();
+        services.AddHttpClient<IFitnessProfileClient, FitnessProfileClient>(client =>
+        {
+            var baseUrl = configuration["FitnessProfileService:BaseUrl"]
+                ?? throw new InvalidOperationException("FitnessProfileService:BaseUrl is missing.");
+
+            client.BaseAddress = new Uri(baseUrl);
+            client.Timeout = TimeSpan.FromSeconds(
+                configuration.GetValue<int>("FitnessProfileService:TimeoutSeconds", 5));
+        });
+
+        return services;
     }
 }

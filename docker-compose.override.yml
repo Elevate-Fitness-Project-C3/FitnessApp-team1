@@ -35,7 +35,9 @@ services:
       ASPNETCORE_HTTP_PORTS: "8080"
       Database__ApplyMigrationsOnStartup: "true"
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=TrainingDb;User Id=sa;Password=${SQL_SA_PASSWORD:?SQL_SA_PASSWORD must be set};TrustServerCertificate=True"
-      FitnessProfile__BaseUrl: "http://fitnessprofileservice:8080"
+      FitnessProfileService__BaseUrl: "http://fitnessprofileservice:8080"
+      FitnessProfileService__TimeoutSeconds: "5"
+
     ports:
       - "127.0.0.1:5003:8080"
     depends_on:
