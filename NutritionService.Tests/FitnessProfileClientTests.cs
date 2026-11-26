@@ -145,6 +145,20 @@ public class FitnessProfileClientTests
     }
 
     [Fact]
+    public async Task GetTdeeAsync_WhenCallerCancels_ThrowsOperationCanceledException()
+    {
+        // Arrange
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        var (client, _) = CreateClient((_, ct) =>
+            Task.FromCanceled<HttpResponseMessage>(ct));
+
+        // Act & Assert
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => client.GetTdeeAsync(cts.Token));
+    }
+
+    [Fact]
     public async Task GetTdeeAsync_WhenProfileIncomplete_ReturnsIncompleteResult()
     {
         // Arrange

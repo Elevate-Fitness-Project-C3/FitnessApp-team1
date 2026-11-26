@@ -106,6 +106,10 @@ public class FitnessProfileClient : IFitnessProfileClient
 
             return FitnessProfileResult.Success(tdee.Value);
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
         catch (OperationCanceledException ex) when (!cancellationToken.IsCancellationRequested)
         {
             _logger.LogWarning(ex, "Request to Fitness Profile Service timed out after options limit.");
