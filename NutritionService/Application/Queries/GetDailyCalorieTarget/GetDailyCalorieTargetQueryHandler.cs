@@ -81,15 +81,16 @@ public class GetDailyCalorieTargetQueryHandler : IRequestHandler<GetDailyCalorie
         int rawTarget = baselineTdee + adjustment;
         // Apply minimum calorie floor for health safety
         int finalTarget = Math.Max(options.MinimumCalorieFloor, rawTarget);
+        int effectiveAdjustment = finalTarget - baselineTdee;
 
         _logger.LogInformation(
             "User {UserId}: Target calculated. TDEE={Tdee}, Goal={Goal}, Adjustment={Adjustment}, Floor={Floor}, FinalTarget={FinalTarget}",
-            userId, baselineTdee, preference.Goal, adjustment, options.MinimumCalorieFloor, finalTarget);
+            userId, baselineTdee, preference.Goal, effectiveAdjustment, options.MinimumCalorieFloor, finalTarget);
 
         return DailyCalorieTargetResponse.Available(
             targetCalories: finalTarget,
             baselineTdee: baselineTdee,
-            adjustment: adjustment,
+            adjustment: effectiveAdjustment,
             goal: preference.Goal
         );
     }

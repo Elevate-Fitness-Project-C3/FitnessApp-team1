@@ -95,7 +95,7 @@ public class CalorieTargetAdjustmentTests
         Assert.True(result.IsAvailable);
         Assert.Equal(1200, result.TargetCalories); // Clamped to health safety floor
         Assert.Equal(1400, result.BaselineTdee);
-        Assert.Equal(-500, result.Adjustment);
+        Assert.Equal(-200, result.Adjustment);
     }
 
     [Fact]
@@ -129,7 +129,7 @@ public class CalorieTargetAdjustmentTests
         Assert.True(result.IsAvailable);
         Assert.Equal(1200, result.TargetCalories);
         Assert.Equal(1050, result.BaselineTdee);
-        Assert.Equal(0, result.Adjustment);
+        Assert.Equal(150, result.Adjustment);
     }
 
     [Fact]
