@@ -4,10 +4,11 @@ using TrainingService.Domain.Entities;
 using TrainingService.Domain.Enums;
 using TrainingService.Domain.IRepositories;
 using TrainingService.Features.Shared;
-using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Clients;
+using TrainingService.Features.TrainingPrograms.Common.Clients.FitnessProfile;
+using TrainingService.Features.TrainingPrograms.Common.GetProgramScoringDetails.Queries;
+using TrainingService.Features.TrainingPrograms.Common.Rules;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Dtos;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Queries;
-using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Rules;
 
 namespace TrainingService.Features.TrainingPrograms.ProgramRecommendations.Handlers;
 
@@ -15,14 +16,16 @@ public class GetProgramRecommendationsHandler: IRequestHandler<GetProgramRecomme
 {
     private readonly IGenericRepository<TrainingProgram> _programRepo;
     private readonly IFitnessProfileClient _profileClient;
+    private readonly IMediator _mediator;
 
     public GetProgramRecommendationsHandler(
         IGenericRepository<TrainingProgram> programRepo,
-        IFitnessProfileClient profileClient) => (_programRepo, _profileClient) = (programRepo, profileClient);
+        IFitnessProfileClient profileClient,
+        IMediator mediator) => (_programRepo, _profileClient, _mediator) = (programRepo, profileClient, mediator);
 
     public async Task<RequestResponse<List<ProgramRecommendationDto>>> Handle(GetProgramRecommendationsQuery request, CancellationToken cancellationToken)
     {
-        UserProfileDto? profile;
+        UserProfileDto profile;
         try
         {
             profile = await _profileClient.GetProfileAsync(cancellationToken);
@@ -42,22 +45,37 @@ public class GetProgramRecommendationsHandler: IRequestHandler<GetProgramRecomme
         }
 
         // get all published programs from the repository
-        var publishedPrograms = await _programRepo
-            .GetAll()
-            .Where(p => p.Status == ProgramStatus.Published)
-            .ToListAsync(cancellationToken);
+        var programsResult = await _mediator.Send(new GetPublishedProgramsDetailsQuery(), cancellationToken);
 
-        // first with the highest match score, then with the least number of warnings, and finally alphabetically by title
-        var recommendations = publishedPrograms
-            .Select(p =>
-            {
-                var (score, warnings) = ProgramRecommendationRules.Calculate(p, profile);
-                return new ProgramRecommendationDto(p.Id, p.Title, score, warnings);
-            })
-            .OrderByDescending(r => r.MatchScore)   
-            .ThenBy(r => r.Warnings.Count)          
-            .ThenBy(r => r.Title)                   
-            .ToList();
+        if (!programsResult.Success)
+        {
+            return RequestResponse<List<ProgramRecommendationDto>>.Fail(
+                programsResult.Message, programsResult.StatusCode);
+        }
+
+        var recommendations = programsResult.Data
+             .Select(dto =>
+             {
+                 // Manual Mapping
+                 var programEntity = new TrainingProgram
+                 {
+                     Id = dto.ProgramId,
+                     Title = dto.Title,
+                     Goal = dto.Goal,
+                     RequiredLevel = dto.Level,   
+                     DaysPerWeek = dto.DaysPerWeek,
+                     Status = dto.Status,
+                     AccessTier = dto.AccessTier
+                 };
+
+                 var (score, warnings) = ProgramRecommendationRules.Calculate(programEntity, profile);
+
+                 return new ProgramRecommendationDto(dto.ProgramId, dto.Title, score, warnings);
+             })
+             .OrderByDescending(r => r.MatchScore)
+             .ThenBy(r => r.Warnings.Count)
+             .ThenBy(r => r.Title)
+             .ToList();
 
         return RequestResponse<List<ProgramRecommendationDto>>.Ok(recommendations);
     }
