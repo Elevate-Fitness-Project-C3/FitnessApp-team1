@@ -2,7 +2,7 @@
 using TrainingService.Domain.Enums;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Dtos;
 
-namespace TrainingService.Features.TrainingPrograms.ProgramRecommendations.Rules
+namespace TrainingService.Features.TrainingPrograms.Common.Rules
 {
     // we used tuple to return both score and warnings, but we can also create a class to hold both values if needed
     public class ProgramRecommendationRules

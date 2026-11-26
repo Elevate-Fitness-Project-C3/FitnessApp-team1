@@ -6,7 +6,7 @@ using TrainingService.Features.ProgramWorkoutSlotFeature.Endpoints;
 using TrainingService.Features.Shared.Validation;
 using TrainingService.Features.TrainingProgramFeature.Endpoints;
 using TrainingService.Features.TrainingPrograms.ArchiveTrainingProgram.Controllers;
-using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Clients;
+using TrainingService.Features.TrainingPrograms.Common.Clients.FitnessProfile;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Endpoints;
 using TrainingService.Features.TrainingPrograms.PublishTrainingProgram.Controllers;
 using TrainingService.Infrastructure.DataAccess;
