@@ -51,7 +51,6 @@
     <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Commands\" />
     <Folder Include="Features\Workouts\DeleteWorkout\Commands\" />
     <Folder Include="Features\Workouts\UpdateWorkout\Commands\" />
-    <Folder Include="Infrastructure\Clients\FitnessProfile\" />
   </ItemGroup>
 
   <ItemGroup>

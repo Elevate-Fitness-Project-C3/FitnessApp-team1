@@ -8,7 +8,7 @@ using TrainingService.Features.TrainingProgramFeature.Endpoints;
 using TrainingService.Features.TrainingPrograms.ArchiveTrainingProgram.Controllers;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Endpoints;
 using TrainingService.Features.TrainingPrograms.PublishTrainingProgram.Controllers;
-using TrainingService.Infrastructure.Clients;
+using TrainingService.Infrastructure.Clients.FitnessProfile;
 using TrainingService.Infrastructure.DataAccess;
 using TrainingService.Infrastructure.Persistence;
 

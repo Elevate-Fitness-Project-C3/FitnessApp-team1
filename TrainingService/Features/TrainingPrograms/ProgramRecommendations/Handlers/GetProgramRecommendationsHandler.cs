@@ -8,7 +8,7 @@ using TrainingService.Features.TrainingPrograms.Common.GetProgramScoringDetails.
 using TrainingService.Features.TrainingPrograms.Common.Rules;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Dtos;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Queries;
-using TrainingService.Infrastructure.Clients;
+using TrainingService.Infrastructure.Clients.FitnessProfile;
 
 namespace TrainingService.Features.TrainingPrograms.ProgramRecommendations.Handlers;
 
