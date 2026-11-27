@@ -1,6 +1,6 @@
 ﻿using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Dtos;
 
-namespace TrainingService.Features.TrainingPrograms.Common.Clients.FitnessProfile
+namespace TrainingService.Infrastructure.Clients
 {
     public interface IFitnessProfileClient
     {

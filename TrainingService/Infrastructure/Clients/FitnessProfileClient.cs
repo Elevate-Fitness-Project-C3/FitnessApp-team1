@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Dtos;
 
-namespace TrainingService.Features.TrainingPrograms.Common.Clients.FitnessProfile
+namespace TrainingService.Infrastructure.Clients
 {
     public class FitnessProfileClient : IFitnessProfileClient
     {
