@@ -10,15 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\TrainingPrograms\ProgramRecommendations\Rules\**" />
     <Compile Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <Compile Remove="Features\Workouts\CreateWorkout\Dtos\**" />
     <Compile Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <Content Remove="Features\TrainingPrograms\ProgramRecommendations\Rules\**" />
     <Content Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <Content Remove="Features\Workouts\CreateWorkout\Dtos\**" />
     <Content Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <EmbeddedResource Remove="Features\TrainingPrograms\ProgramRecommendations\Rules\**" />
     <EmbeddedResource Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <EmbeddedResource Remove="Features\Workouts\CreateWorkout\Dtos\**" />
     <EmbeddedResource Remove="Features\Workouts\CreateWorkout\Queries\**" />
+    <None Remove="Features\TrainingPrograms\ProgramRecommendations\Rules\**" />
     <None Remove="Features\WorkoutExercises\CreateWorkoutExercise\Dtos\**" />
     <None Remove="Features\Workouts\CreateWorkout\Dtos\**" />
     <None Remove="Features\Workouts\CreateWorkout\Queries\**" />
@@ -46,8 +50,6 @@
 
   <ItemGroup>
     <Folder Include="Features\SetTrainingRefrence\Orchestrator\" />
-    <Folder Include="Features\TrainingPrograms\ProgramRecommendations\Clients\" />
-    <Folder Include="Features\TrainingPrograms\ProgramRecommendations\Rules\" />
     <Folder Include="Features\WorkoutExercises\CreateWorkoutExercise\Commands\" />
     <Folder Include="Features\WorkoutExercises\DeleteWorkoutExercise\Commands\" />
     <Folder Include="Features\WorkoutExercises\UpdateWorkoutExercise\Commands\" />

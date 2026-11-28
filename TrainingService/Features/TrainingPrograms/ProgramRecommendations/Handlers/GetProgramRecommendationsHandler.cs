@@ -4,11 +4,11 @@ using TrainingService.Domain.Entities;
 using TrainingService.Domain.Enums;
 using TrainingService.Domain.IRepositories;
 using TrainingService.Features.Shared;
-using TrainingService.Features.TrainingPrograms.Common.Clients.FitnessProfile;
 using TrainingService.Features.TrainingPrograms.Common.GetProgramScoringDetails.Queries;
 using TrainingService.Features.TrainingPrograms.Common.Rules;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Dtos;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Queries;
+using TrainingService.Infrastructure.Clients;
 
 namespace TrainingService.Features.TrainingPrograms.ProgramRecommendations.Handlers;
 

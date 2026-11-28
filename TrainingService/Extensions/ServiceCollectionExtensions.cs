@@ -6,9 +6,11 @@ using TrainingService.Features.ProgramWorkoutSlotFeature.Endpoints;
 using TrainingService.Features.Shared.Validation;
 using TrainingService.Features.TrainingProgramFeature.Endpoints;
 using TrainingService.Features.TrainingPrograms.ArchiveTrainingProgram.Controllers;
-using TrainingService.Features.TrainingPrograms.Common.Clients.FitnessProfile;
+using TrainingService.Features.TrainingPrograms.PreviewProgramSelection.Controllers;
 using TrainingService.Features.TrainingPrograms.ProgramRecommendations.Endpoints;
 using TrainingService.Features.TrainingPrograms.PublishTrainingProgram.Controllers;
+using TrainingService.Features.TrainingPrograms.SelectTrainingProgram.Controllers;
+using TrainingService.Infrastructure.Clients;
 using TrainingService.Infrastructure.DataAccess;
 using TrainingService.Infrastructure.Persistence;
 
@@ -74,6 +76,10 @@ public static class ServiceCollectionExtensions
         app.MapPublishTrainingProgramEndpoint();
         //program recommendations endpoint
         app.MapGetProgramRecommendationsEndpoint();
+
+        //preview and selection program selection endpoint
+        app.MapPreviewProgramSelectionEndpoint();
+        app.MapSelectTrainingProgramEndpoint();
 
         return app;
     }
