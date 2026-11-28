@@ -11,7 +11,8 @@ public interface IUserEmailStore
 
 public interface IEmailSender
 {
-    Task SendVerificationCodeAsync(string toEmail, string code, CancellationToken ct = default);
+    Task SendVerificationCodeAsync(string toEmail, string code, string body, CancellationToken ct = default);
+    Task SendAsync(string toEmail, string subject, string body, CancellationToken ct = default);
 }
 
 public enum VerificationError

@@ -75,7 +75,10 @@ public sealed class EmailVerificationService(
     {
         try
         {
-            await emailSender.SendVerificationCodeAsync(email, code, ct);
+            var body = $"Your verification code is {code}.\n" +
+                       $"It expires in {_opt.ExpiryMinutes} minutes.\n" +
+                       "If you didn't create an account, you can ignore this email.";
+            await emailSender.SendVerificationCodeAsync(email, code, body, ct);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {

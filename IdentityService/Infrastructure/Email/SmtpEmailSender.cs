@@ -9,19 +9,22 @@ namespace IdentityService.Infrastructure.Email;
 
 public sealed class SmtpEmailSender(IOptions<EmailOptions> email, IOptions<VerificationOptions> verification) : IEmailSender
 {
-    public async Task SendVerificationCodeAsync(string toEmail, string code, CancellationToken ct = default)
+    public async Task SendVerificationCodeAsync(string toEmail, string code, string body, CancellationToken ct = default)
+    {
+        await SendAsync(toEmail, "Your verification code", body, ct);
+    }
+
+    public async Task SendAsync(string toEmail, string subject, string body, CancellationToken ct = default)
     {
         var o = email.Value;
 
         var message = new MimeMessage();
         message.From.Add(MailboxAddress.Parse(o.From));
         message.To.Add(MailboxAddress.Parse(toEmail));
-        message.Subject = "Your verification code";
+        message.Subject = subject;
         message.Body = new TextPart("plain")
         {
-            Text = $"Your verification code is {code}.\n" +
-                   $"It expires in {verification.Value.ExpiryMinutes} minutes.\n" +
-                   "If you didn't create an account, you can ignore this email."
+            Text = body
         };
 
         using var client = new SmtpClient();

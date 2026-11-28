@@ -1,4 +1,6 @@
-﻿namespace IdentityService.Identity.User_Registration.Commands
+﻿using IdentityService.Application.EmailVerification;
+
+namespace IdentityService.Identity.User_Registration.Commands
 {
     public record RegisterUserCommand
         (string userName, string email, string password, string confirmPassword) : IRequest<bool>;
@@ -6,9 +8,11 @@
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, bool>
     {
         private readonly UserManager<AppUser> _userManger;
-        public RegisterUserCommandHandler(UserManager<AppUser> userManger)
+        private readonly IEmailVerificationService _emailVerificationService;
+        public RegisterUserCommandHandler(UserManager<AppUser> userManger, IEmailVerificationService emailVerificationService)
         {
             _userManger = userManger;
+            _emailVerificationService = emailVerificationService;
         }
         public async Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
@@ -32,6 +36,10 @@
                    var addingRoleResult = await _userManger.AddToRoleAsync(user, "User");
                     if (addingRoleResult.Succeeded)
                     {
+                        if (Guid.TryParse(user.Id, out var userId) && !string.IsNullOrWhiteSpace(user.Email))
+                        {
+                            await _emailVerificationService.IssueAsync(userId, user.Email, cancellationToken);
+                        }
                         return true;
                     }
                     else

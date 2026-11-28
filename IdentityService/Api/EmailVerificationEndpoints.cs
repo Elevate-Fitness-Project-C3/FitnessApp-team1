@@ -43,13 +43,16 @@ public static class EmailVerificationEndpoints
     /// <summary>Development only: stands in for registration until ID-01 is wired.</summary>
     public static IEndpointRouteBuilder MapDevFakeRegistration(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/dev/fake-register", async (FakeRegisterRequest req, InMemoryUserEmailStore store,
+        app.MapPost("/api/dev/fake-register", async (FakeRegisterRequest req, IUserEmailStore store,
             IEmailVerificationService svc, CancellationToken ct) =>
         {
             if (req is null || string.IsNullOrWhiteSpace(req.Email))
                 return Results.BadRequest(new { error = "email_required", detail = "A non-empty email is required." });
 
-            var userId = store.Add(req.Email);
+            if (store is not InMemoryUserEmailStore inMemoryStore)
+                return Results.Problem("Dev fake registration requires InMemoryUserEmailStore.", statusCode: 500);
+
+            var userId = inMemoryStore.Add(req.Email);
             await svc.IssueAsync(userId, req.Email, ct);
             return Results.Accepted();
         }).AllowAnonymous();

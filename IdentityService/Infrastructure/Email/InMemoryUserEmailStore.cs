@@ -3,7 +3,6 @@ using IdentityService.Application.EmailVerification;
 
 namespace IdentityService.Infrastructure.Email;
 
-/// <summary>Fake user store so ID-02 works before ID-01 is wired. Replace with the real one.</summary>
 public sealed class InMemoryUserEmailStore : IUserEmailStore
 {
     private readonly ConcurrentDictionary<string, UserEmailInfo> _byEmail = new();

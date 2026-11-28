@@ -30,9 +30,7 @@ public static class EmailVerificationServiceCollectionExtensions
         services.AddScoped<IEmailVerificationService, EmailVerificationService>();
         services.AddScoped<IEmailSender, SmtpEmailSender>(); // swap for LoggingEmailSender if you want no SMTP
 
-        // Fake user store: replace with the real one when wiring registration.
-        services.AddSingleton<InMemoryUserEmailStore>();
-        services.AddSingleton<IUserEmailStore>(sp => sp.GetRequiredService<InMemoryUserEmailStore>());
+        services.AddScoped<IUserEmailStore, IdentityUserEmailStore>();
 
         return services;
     }

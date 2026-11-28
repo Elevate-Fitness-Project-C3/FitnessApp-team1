@@ -15,7 +15,7 @@ public sealed class CapturingEmailSender : IEmailSender
     public List<(string To, string Code)> Sent { get; } = [];
     public string LastCode => Sent[^1].Code;
 
-    public Task SendVerificationCodeAsync(string toEmail, string code, CancellationToken ct = default)
+    public Task SendVerificationCodeAsync(string toEmail, string code, string body, CancellationToken ct = default)
     {
         lock (Sent) Sent.Add((toEmail, code));
         return Task.CompletedTask;

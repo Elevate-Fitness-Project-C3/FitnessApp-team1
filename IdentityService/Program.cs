@@ -1,14 +1,20 @@
-using FluentValidation;
 using FitnessApp.Auth;
+using FluentValidation;
 using IdentityService.Api;
+using IdentityService.Application;
+using IdentityService.Application.Emails;
+using IdentityService.Application.Sessions;
 using IdentityService.Identity.User_Login.Endpoints;
 using IdentityService.Identity.User_Registration.Commands;
 using IdentityService.Identity.User_Registration.EndPoint;
 using IdentityService.Identity.User_Registration.Validation;
+using IdentityService.Infrastructure.Emails;
 using IdentityService.Infrastructure.Persistence.Contexts;
 using IdentityService.Infrastructure.Persistence.Seeding;
+using IdentityService.Infrastructure.Sessions;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +37,9 @@ builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ResetPasswordDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        sql => sql.MigrationsHistoryTable("__EFMigrationsHistory_ResetPassword")));
 
 builder.Services.AddScoped<RoleSeeder>();
 
@@ -42,6 +51,15 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = true;
 })
 .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.Configure<PasswordResetOptions>(builder.Configuration.GetSection("PasswordReset"));
+builder.Services.AddSingleton<EmailQueue>();
+builder.Services.AddSingleton<IEmailQueue>(sp => sp.GetRequiredService<EmailQueue>());
+builder.Services.AddSingleton<IEmailQueueReader>(sp => sp.GetRequiredService<EmailQueue>());
+builder.Services.AddHostedService<EmailBackgroundService>();
+builder.Services.AddScoped<IRefreshSessionRevoker, RefreshSessionRevoker>();
+builder.Services.AddScoped<PasswordResetService>();
+builder.Services.TryAddSingleton(TimeProvider.System);
 
 var app = builder.Build();
 
@@ -68,6 +86,11 @@ await using (var scope = app.Services.CreateAsyncScope())
             .GetRequiredService<EmailVerificationDbContext>();
 
         await emailVerificationDbContext.Database.MigrateAsync();
+
+        var resetPasswordDbContext = scope.ServiceProvider
+            .GetRequiredService<ResetPasswordDbContext>();
+
+        await resetPasswordDbContext.Database.MigrateAsync();
     }
 }
 
@@ -87,6 +110,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapEmailVerificationEndpoints();
+app.MapPasswordResetEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
